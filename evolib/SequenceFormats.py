@@ -1,11 +1,16 @@
-#from VCFRowClasses import VAR, MONO
-
 from VCFrow import ROW_BASECLASS
 from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
 
-from NxtGenTools import PositionTranslate
 
 class VariantCallFormat():
+    """
+    Usage:
+    
+        >>> from SequenceFormats import VariantCallFormat
+        >>> myVCF = VariantCallFormat("data.vcf")
+        >>> for bp in myVCF:
+        >>>     print bp['CHROM'], bp['POS'], bp['REF'], bp.genotypes(), bp.heterozygosity()
+    """
     
     def __init__(self, file_name):
         
@@ -17,9 +22,11 @@ class VariantCallFormat():
         
         self.chromosome_info = dict(self.chr_info())
         
+        
     def __iter__(self):
         for row in self.row_iter():
             yield row
+            
     
     def row_iter(self):
         
@@ -34,6 +41,7 @@ class VariantCallFormat():
                 v_col_row = ROW_BASECLASS(v_col)
                 
                 yield v_col_row
+                
                 
     def chr_info(self):
         
@@ -70,9 +78,11 @@ class VariantCallFormat():
                     
         return chromosomes
     
+    
     def get_header(self, file_name):
         
         file = open(file_name, 'r')
+        
         for line in file:
             if line.startswith('#') is False:
                 break
@@ -80,18 +90,11 @@ class VariantCallFormat():
                 pass
             else:
                 header = line[1:].rstrip().split('\t')
+                
         file.close()
         
         return header
     
-    #def get_row(self, value_list):
-    #    
-    #    if len(value_list) > 8 and str(value_list[4]) != '.':
-    #        row = VAR(value_list)
-    #    else:
-    #        row = MONO(value_list)
-    #    
-    #    return row
     
     def get_columns(self, value_list, col_classes, header):
         
@@ -110,56 +113,3 @@ class VariantCallFormat():
                 column_list.append(ColClass)
         
         return column_list
-
-
-
-if __name__ == '__main__':
-    
-    filename = '/home/mist/Documents/Codes/evolib/contig_glauca_ref.txt'
-    dictionary = dict([(i.split()[0], i.split()[1]) for i in open(filename, 'r')])
-    
-    minGQ, minDP = 30, 6
-    
-    fileA = '/home/mist/Documents/Codes/evolib/A.vcf'
-    fileBC = '/home/mist/Documents/Codes/evolib/BC.vcf'
-    fileD = '/home/mist/Documents/Codes/evolib/D.vcf'
-    
-    fileAP = '/home/mist/Documents/Codes/evolib/pavyA.vcf'
-    
-    vcfA = VariantCallFormat(fileA)
-    vcfBC = VariantCallFormat(fileBC)
-    vcfD = VariantCallFormat(fileD)
-    
-    pavyA = VariantCallFormat(fileAP)
-    
-    for row in vcfA:
-        chrom = row['CHROM']
-        het = row.heterozygosity()#minGQ = minGQ, minDP = minDP)
-        
-        if het != 0.0:
-            print 'Norway', chrom.replace('lcl|', ''), het
-    
-    for row in pavyA:
-        chrom = row['CHROM'].split('_')[1]
-        het = row.heterozygosity()#minGQ = minGQ, minDP = minDP)
-        
-        if het != 0.0:
-            print 'NorwayPavy', dictionary[chrom], het
-    
-    """        
-    for row in vcfBC:
-        chrom = row['CHROM']
-        het = row.heterozygosity(minGQ = minGQ, minDP = minDP)
-        
-        if het != 0.0:
-            print 'Brewer', chrom, het
-            
-    for row in vcfD:
-        chrom = row['CHROM']
-        het = row.heterozygosity(minGQ = minGQ, minDP = minDP)
-        
-        if het != 0.0:
-            print 'Jezo', chrom, het
-    """
-    
-    
