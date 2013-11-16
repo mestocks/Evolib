@@ -17,7 +17,7 @@ def multi_row_iter(*args):
             vcfII = VariantCallFormat('BCedit.vcf')
             vcfIII = VariantCallFormat('Dedit.vcf')
             
-            for I, II, III in gnrtr2(vI, vII, vIII, ref_chrs):
+            for I, II, III in multi_row_iter(vI, vII, vIII, ref_chrs):
             
                  if I is not None:
                      print I['CHROM'], I['POS'],
