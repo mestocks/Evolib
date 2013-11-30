@@ -76,7 +76,12 @@ class INFO(COL_BASECLASS):
         return self.value[index]
     
     def _parse(self, chr_value):
-        
+        """ 
+        Each INFO entry is delimited by ';'. Each entry consist of the descriptor and 
+        value separated by '='. E.g:
+        INFO
+        DP=1;AF=0;AC1=0;DP4=1,0,0,0;MQ=25;FQ=-24.3
+        """
         value = dict([tuple(i.split('=')) for i in chr_value.split(';') if '=' in i])
         value = self._DP(value)
         value = self._EFF(value)
