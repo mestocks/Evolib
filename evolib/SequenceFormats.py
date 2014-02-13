@@ -4,7 +4,14 @@ from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAM
 
 class VariantCallFormat():
     """
+    
     Usage:
+    
+    VariantCallFormat(filename)
+    
+    Returns a VCF class. Each row is represented by a <ROWCLASS>, with each column represented by a <COLCLASS>.
+    
+    Example:
     
         >>> from SequenceFormats import VariantCallFormat
         >>> myVCF = VariantCallFormat("data.vcf")
