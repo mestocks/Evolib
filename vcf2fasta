@@ -1,0 +1,41 @@
+#! /bin/bash
+
+# vcf2fasta [options] file_name
+
+# -d the minimum accepted depth for each sample
+#    at each base (default d=0). Assumes that the depth scores 
+#    for each sample are given in the vcf file 
+#    (i.e. DP is given for each sample).
+# -f the number of bases printed per line in fasta
+#    format (default f=70).
+# -o output directory (default o="").
+# -p prefix for samples (default p="").
+# -x a file containing grep-interpretable expressions
+#    for samples to exclude from the resulting fasta file.
+
+# Parse arguments.
+d=0
+f=70
+o=""
+p=""
+x=""
+while getopts "d:f:o:p:x:" opt; do
+    case $opt in
+        d) d=${OPTARG}
+            ;;
+	f) f=${OPTARG}
+	    ;;
+	o) o=${OPTARG}
+	    ;;
+	p) p=${OPTARG}
+	    ;;
+	x) x=${OPTARG}
+	    ;;
+    esac 
+done
+
+# The last argument is the file name.
+eval file=\${$#}
+
+# Pipe vcf file to awk (minus the preamble) for processing.
+grep "^#" -v $file | awk -f lib-vcf2fasta.awk -v minDP=$d prefix=$p | grep -f $x -v | sort | awk -v fold=$f -v out=$o -- ' { split($1,name,"_"); locus = name[2]; print $1"\n"$2 | "fold -w "fold" > "out"Pa_"locus".fsa" } '
