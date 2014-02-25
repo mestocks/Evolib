@@ -44,8 +44,9 @@ class VariantCallFormat():
             if line.startswith('#') is False:
                 
                 value_list = line.rstrip().split('\t')
-                v_col = self.get_columns(value_list, self.col_classes, self.header)
-                v_col_row = ROW_BASECLASS(v_col)
+                #v_col = self.get_columns(value_list, self.col_classes, self.header)
+                #v_col_row = ROW_BASECLASS(v_col)
+                v_col_row = ROW_BASECLASS(value_list, self.col_classes, self.header)
                 
                 yield v_col_row
                 

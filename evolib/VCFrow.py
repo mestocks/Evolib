@@ -1,5 +1,30 @@
 class ROW_BASECLASS(list):
     
+    def __init__(self, values, classes, header):
+        
+        self.classes = classes
+        self.header = header
+        self.values = values
+        self.lookupindex = dict([(key, index) for index, key in enumerate(self.header)])
+        
+        return list.__init__(self, values)
+    
+    def __getitem__(self, index):
+        
+        if isinstance(index, str):
+            index = self.lookupindex[index]
+            
+        value = self.classes[index](self.values[index])
+        
+        return value
+
+
+class ROW_BASECLASS_OLD(list):
+    """
+    New design:
+    
+    
+    """
     def __str__(self):
         return '\t'.join(map(str, self))
     
