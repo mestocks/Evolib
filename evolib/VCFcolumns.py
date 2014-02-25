@@ -66,14 +66,36 @@ class FILTER(COL_BASECLASS):
 class INFO(COL_BASECLASS):
     __slots__ = ['col_name', 'chr_value', 'value']
     col_name = 'INFO'
+    """
+    
+    """
     
     def __init__(self, value):
         self.chr_value = value
-        self.value = self._parse(value)
-    
+        self.value = value
+        #self.value = self._parse(value)
+
     def __getitem__(self, index):
-        
-        return self.value[index]
+        """
+        The actually parsing of the INFO line only occurs when 
+        __getitem__ is called. This is to save on unnecesary 
+        processing of the VCF file that occurs when not all 
+        columns are used. The same also applies to each item 
+        within INFO.
+        """
+        if isinstance(self.value, str):
+            self.value = self._parse(self.chr_value)
+
+        INFO_parse = {'DP': self._DP, 
+                      'MQ': self._MQ}
+
+        if index in INFO_parse.keys():
+            self.value = INFO_parse[index](self.value)
+
+        value = self.value[index]
+
+        return value
+    
     
     def _parse(self, chr_value):
         """ 
@@ -83,9 +105,9 @@ class INFO(COL_BASECLASS):
         DP=1;AF=0;AC1=0;DP4=1,0,0,0;MQ=25;FQ=-24.3
         """
         value = dict([tuple(i.split('=')) for i in chr_value.split(';') if '=' in i])
-        value = self._DP(value)
-        value = self._EFF(value)
-        value = self._MQ(value)
+        #value = self._DP(value)
+        #value = self._EFF(value)
+        #value = self._MQ(value)
         
         return value
     
@@ -98,12 +120,12 @@ class INFO(COL_BASECLASS):
         
         return value
     
-    def _EFF(self, value):
-        
-        if 'EFF' in value.keys():
-            value['EFF'] = EFF(value['EFF'])
-        
-        return value
+    #def _EFF(self, value):
+    #    
+    #    if 'EFF' in value.keys():
+    #        value['EFF'] = EFF(value['EFF'])
+    #    
+    #    return value
     
     def _MQ(self, value):
         
