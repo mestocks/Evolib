@@ -73,11 +73,10 @@ class INFO(COL_BASECLASS):
     def __init__(self, value):
         self.chr_value = value
         self.value = value
-        #self.value = self._parse(value)
 
     def __getitem__(self, index):
         """
-        The actually parsing of the INFO line only occurs when 
+        The actual parsing of the INFO line only occurs when 
         __getitem__ is called. This is to save on unnecesary 
         processing of the VCF file that occurs when not all 
         columns are used. The same also applies to each item 
@@ -105,9 +104,6 @@ class INFO(COL_BASECLASS):
         DP=1;AF=0;AC1=0;DP4=1,0,0,0;MQ=25;FQ=-24.3
         """
         value = dict([tuple(i.split('=')) for i in chr_value.split(';') if '=' in i])
-        #value = self._DP(value)
-        #value = self._EFF(value)
-        #value = self._MQ(value)
         
         return value
     
@@ -119,13 +115,6 @@ class INFO(COL_BASECLASS):
                 pass
         
         return value
-    
-    #def _EFF(self, value):
-    #    
-    #    if 'EFF' in value.keys():
-    #        value['EFF'] = EFF(value['EFF'])
-    #    
-    #    return value
     
     def _MQ(self, value):
         
@@ -151,58 +140,59 @@ class FORMAT(COL_BASECLASS):
 class SAMPLE(COL_BASECLASS):
     __slots__ = ['col_name', 'chr_value', 'value']
     
-    def __init__(self, value, format):
+    def __init__(self, value, format_value):
         self.chr_value = value
-        self.value = self._parse(value, format)
+        self.value = value
+        self.format_value = format_value
     
     def __getitem__(self, key):
+
+        if isinstance(self.value, str):
+            self.value = self._parse(self.chr_value, self.format_value)
+            
+        SAMPLE_parse = {'DP': self._DP, 
+                        'GT': self._GT, 
+                        'GQ': self._GQ, 
+                        'PL': self._PL}
+        
+        if key in SAMPLE_parse.keys():
+            item = self.value[key]
+            if isinstance(item, str):
+                self.value[key] = SAMPLE_parse[key](item)
+
         return self.value[key]
         
     def _parse(self, chr_value, format):
         
         list_value = chr_value.split(':')
         value = dict(zip(format, list_value))
-        value = self._GQ(value)
-        value = self._GT(value)
-        value = self._PL(value)
-        value = self._DP(value)
         
         return value
     
-    def _DP(self, value):
-        
-        if 'DP' in value.keys():
-            value['DP'] = int(value['DP'])
-        
-        return value
+    def _DP(self, item):
+        return int(item)
     
-    def _GQ(self, value):
-        
-        if 'GQ' in value.keys():
-            value['GQ'] = int(value['GQ'])
-        
-        return value
-    
-    def _GT(self, value):
+    def _GT(self, item):
         
         sep = '/'
+        if '|' in item:
+            sep = '|'
+        item = map(int, item.split(sep))
         
-        if 'GT' in value.keys():
-            if '|' in value['GT']:
-                sep = '|'
-            value['GT'] = map(int, value['GT'].split(sep))
-        
-        return value
+        return item
     
-    def _PL(self, value):
-        
-        if 'PL' in value.keys():
-            try:
-                value['PL'] = int(value['PL'])
-            except ValueError:
-                value['PL'] = map(int, value['PL'].split(','))
+    def _GQ(self, item):        
+        return int(item)
     
-        return value
+
+    def _PL(self, item):
+
+        try:
+            item = int(item)
+        except ValueError:
+            item = map(int, item.split(','))
+    
+        return item
     
     
     
@@ -218,7 +208,8 @@ class SAMPLE(COL_BASECLASS):
         #findZero = PL.index(0)
         #gCall = genotypeCombinations[findZero]
         #print self.value
-        gCall = (possibleAlleles[self.value['GT'][0]], possibleAlleles[self.value['GT'][1]])
+        GT = self['GT']
+        gCall = (possibleAlleles[GT[0]], possibleAlleles[GT[1]])
         
         return gCall
 

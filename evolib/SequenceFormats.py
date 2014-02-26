@@ -1,4 +1,4 @@
-from VCFrow import ROW_BASECLASS
+from VCFrow import ROW_BASECLASS, ROW_BASECLASS_OLD
 from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
 
 
@@ -44,8 +44,6 @@ class VariantCallFormat():
             if line.startswith('#') is False:
                 
                 value_list = line.rstrip().split('\t')
-                #v_col = self.get_columns(value_list, self.col_classes, self.header)
-                #v_col_row = ROW_BASECLASS(v_col)
                 v_col_row = ROW_BASECLASS(value_list, self.col_classes, self.header)
                 
                 yield v_col_row
@@ -102,8 +100,10 @@ class VariantCallFormat():
         file.close()
         
         return header
+
+####################
     
-    
+"""
     def get_columns(self, value_list, col_classes, header):
         
         column_list = []
@@ -121,3 +121,4 @@ class VariantCallFormat():
                 column_list.append(ColClass)
         
         return column_list
+"""
