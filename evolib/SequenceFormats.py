@@ -123,6 +123,12 @@ class VariantCallFormat():
         return column_list
 """
 
+class SequenceTable(list):
+    
+    def __init__(self, seqs, ids = None, npops = 1):
+        pass
+        
+
 class FastaFormat():
     """
     Example usage:
