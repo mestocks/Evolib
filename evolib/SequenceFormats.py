@@ -123,13 +123,80 @@ class VariantCallFormat():
         return column_list
 """
 
-class SequenceTable(list):
+class IOPolyTable(list):
     
-    def __init__(self, seqs, ids = None, npops = 1):
-        pass
+    def __init__(self, seqs):
         
+        self.IOseqs = None
+        
+        self.DNA = ['A', 'T', 'C', 'G']
+        other_chrs = ['N', '-']
+        unique_chrs = set(''.join(seqs).upper())
+        
+        if unique_chrs <= set(['1', '0']):
+            self.IOseqs = [map(int, list(i)) for i in seqs]
+        elif unique_chrs <= set(self.DNA + other_chrs):
+            self.IOseqs = self.DNA_to_IO(seqs)
+        else:
+            raise TypeError, 'Unusual characters in sequences.'
 
-class FastaFormat():
+    def __getitem__(self, index):
+        return self.IOseqs[index]
+
+    def __len__(self):
+        return len(self.IOseqs)
+        
+    def DNA_to_IO(self, dna):
+
+        length = len(dna[0])
+        samples = len(dna)
+        
+        IO = []
+        for base in range(length):
+            base_seqs = ''
+            baseIO = []
+            for sam in range(samples):
+                base_seqs += dna[sam][base]
+                
+            if len(set(base_seqs)) == 2 and set(base_seqs) <= set(self.DNA):
+                minor, major = self.minor_major_allele(base_seqs)
+                for i in base_seqs:
+                    if i == major:
+                        baseIO.append(0)
+                    elif i == minor:
+                        baseIO.append(1)
+                IO.append(baseIO)
+
+        return IO
+
+    def minor_major_allele(self, seq):
+        
+        useq = list(set(seq))
+        counts = [(seq.count(i), i) for i in useq]
+        counts.sort()
+        minor = counts[0][1]
+        major = counts[1][1]
+        
+        return minor, major
+
+class StatMethods():
+    
+    def seg_sites(self):
+        return len(self.IOtable)
+    
+    def nsamples(self):
+        return len(self.IOtable[0])
+    
+    def thetaw(self):
+        
+        s = self.seg_sites()
+        n = self.nsamples()
+        a1 = sum(1.0 / i for i in range(1, n))
+        tw = s / a1
+
+        return tw
+
+class FastaFormat(StatMethods):
     """
     Example usage:
     
@@ -200,6 +267,7 @@ class FastaFormat():
         
         self.sequences = seq_table
         self.ids = seq_names
+        self.IOtable = IOPolyTable(seq_table)
 
     def _fromSequence(self, ids, seqs):
         
