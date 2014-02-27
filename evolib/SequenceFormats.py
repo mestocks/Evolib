@@ -9,7 +9,8 @@ class VariantCallFormat():
     
     VariantCallFormat(filename)
     
-    Returns a VCF class. Each row is represented by a <ROWCLASS>, with each column represented by a <COLCLASS>.
+    Returns a VCF class. Each row is represented by a <ROWCLASS>, 
+    with each column represented by a <COLCLASS>.
     
     Example:
     
@@ -134,7 +135,12 @@ class IOPolyTable(list):
         unique_chrs = set(''.join(seqs).upper())
         
         if unique_chrs <= set(['1', '0']):
-            self.IOseqs = [map(int, list(i)) for i in seqs]
+            nsam, s = len(seqs), len(seqs[0])
+            self.IOseqs = [[] for l in range(s)]
+            for base in range(s):
+                for ind in range(nsam):
+                    self.IOseqs[base].append(int(seqs[ind][base]))
+
         elif unique_chrs <= set(self.DNA + other_chrs):
             self.IOseqs = self.DNA_to_IO(seqs)
         else:
@@ -195,6 +201,13 @@ class StatMethods():
         tw = s / a1
 
         return tw
+
+class msFormat(StatMethods):
+    
+    def __init__(self, iteration):
+        lines = [i for i in iteration.split('\n')[2:] if i != '']
+        self.IOtable =  IOPolyTable(lines)
+
 
 class FastaFormat(StatMethods):
     """
