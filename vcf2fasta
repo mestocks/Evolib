@@ -3,13 +3,13 @@
 # vcf2fasta [options] file_name
 
 # -d the minimum accepted depth for each sample
-#    at each base (default d=0). Assumes that the depth scores 
+#    at each base (default: -d 0). Assumes that the depth scores 
 #    for each sample are given in the vcf file 
 #    (i.e. DP is given for each sample).
 # -f the number of bases printed per line in fasta
-#    format (default f=70).
-# -o output directory (default o="").
-# -p prefix for samples (default p="").
+#    format (default: -f 70).
+# -o output directory (default: -o "").
+# -p prefix for samples (default: -p "").
 # -x a file containing grep-interpretable expressions
 #    for samples to exclude from the resulting fasta file.
 

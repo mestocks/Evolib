@@ -158,13 +158,17 @@ class IOPolyTable(list):
         samples = len(dna)
         
         IO = []
+        self.length = 0
         for base in range(length):
             base_seqs = ''
             baseIO = []
             for sam in range(samples):
-                base_seqs += dna[sam][base]
+                base_seqs += dna[sam][base].upper()
                 
-            if len(set(base_seqs)) == 2 and set(base_seqs) <= set(self.DNA):
+            if len(set(base_seqs)) == 1 and set(base_seqs) <= set(self.DNA):
+                self.length += 1
+            elif len(set(base_seqs)) == 2 and set(base_seqs) <= set(self.DNA):
+                self.length += 1
                 minor, major = self.minor_major_allele(base_seqs)
                 for i in base_seqs:
                     if i == major:
@@ -172,6 +176,8 @@ class IOPolyTable(list):
                     elif i == minor:
                         baseIO.append(1)
                 IO.append(baseIO)
+            #elif 'N' in base_seqs:# set(base_seqs) <= set(self.DNA) is False:
+            #    self.length += 1
 
         return IO
 
@@ -307,3 +313,6 @@ class FastaFormat(StatMethods):
             ids.append(id1)
             
         return ids
+    
+    def length(self):
+        return self.IOtable.length
