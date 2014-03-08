@@ -36,6 +36,7 @@ done
 
 # The last argument is the file name.
 eval file=\${$#}
+echo $file
 
 # Pipe vcf file to awk (minus the preamble) for processing.
 grep "^#" -v $file | awk -f lib-vcf2fasta.awk -v minDP=$d prefix=$p | grep -f $x -v | sort | awk -v fold=$f -v out=$o -- ' { split($1,name,"_"); locus = name[2]; print $1"\n"$2 | "fold -w "fold" > "out"Pa_"locus".fsa" } '

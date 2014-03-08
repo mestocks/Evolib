@@ -1,0 +1,60 @@
+#! /bin/bash
+
+usage="$(basename "$0") -- a command line histogram calculator
+
+Usage: 
+      $(basename "$0") -m min -n max -b nbins [-i file -c col_num]
+
+ -b   the number of bins in the histogram
+ -c   the column to calculate the histogram for (default: 1)
+ -i   file containing the data (default: stdin)
+ -m   the minimum value
+ -n   the maximum value
+
+Example:
+      # If you had data in a file called 'mydata.txt' that ranged 
+      # between 0 and 1 then you could bin and generate a 100 bin 
+      # histogram with bin sizes of 0.01 by using this command:
+
+        $ $(basename "$0") -m 0 -n 1 -b 100 -i mydata.txt
+
+      # You could also do the same by piping to $(basename "$0"):
+
+        $ cat mydata.txt | $(basename "$0") -m 0 -n 1 -b 100
+"
+c=1
+i="stdin"
+
+b="NULL"
+m="NULL"
+n="NULL"
+while getopts "b:c:hi:m:n:" opt; do
+    case $opt in
+	b) b=${OPTARG}
+	    ;;
+	c) c=${OPTARG}
+	    ;;
+	h) echo "$usage"
+	    exit
+	    ;;
+	i) i=${OPTARG}
+	    ;;
+	m) m=${OPTARG}
+	    ;;
+	n) n=${OPTARG}
+	    ;;
+    esac
+done
+
+if [ $b == "NULL" ] || [ $m == "NULL" ] || [ $n == "NULL" ]; then
+    echo "Options -b, -m and -n are required."
+    echo ""
+    echo "$usage"
+    exit
+fi
+
+if [ $i == "stdin" ]; then
+     while read input; do cat; done | awk -f lib-hgram.awk -v nbreaks=$b -v c=$c -v min=$m -v max=$n
+else
+    cat $i | awk -f lib-hgram.awk -v nbreaks=$b -v c=$c -v min=$m -v max=$n
+fi

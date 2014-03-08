@@ -164,10 +164,20 @@ class IOPolyTable(list):
             baseIO = []
             for sam in range(samples):
                 base_seqs += dna[sam][base].upper()
+
+            if 'N' in base_seqs or '-' in base_seqs:
+                missing_data = True
                 
-            if len(set(base_seqs)) == 1 and set(base_seqs) <= set(self.DNA):
-                self.length += 1
-            elif len(set(base_seqs)) == 2 and set(base_seqs) <= set(self.DNA):
+            number_of_alleles = len(set(base_seqs) & set(self.DNA))
+            
+            if number_of_alleles == 0:
+                pass
+            elif number_of_alleles == 1:
+                if missing_data is True:
+                    self.length += 1
+                elif missing_data is False:
+                    self.length += 1
+            elif number_of_alleles == 2:
                 self.length += 1
                 minor, major = self.minor_major_allele(base_seqs)
                 for i in base_seqs:
@@ -176,6 +186,8 @@ class IOPolyTable(list):
                     elif i == minor:
                         baseIO.append(1)
                 IO.append(baseIO)
+            else:
+                print base_seqs
             #elif 'N' in base_seqs:# set(base_seqs) <= set(self.DNA) is False:
             #    self.length += 1
 
