@@ -1,0 +1,24 @@
+#! /bin/bash
+
+usage="$(basename "$0")
+
+Usage:
+      $(basename "$0") -d focus_col -e factor_col -f function
+
+"
+
+while getopts "d:e:f:" opt; do
+    case $opt in
+	d) FOCUS=${OPTARG}
+	    ;;
+	e) FACTOR=${OPTARG}
+	    ;;
+	f) FUN=${OPTARG}
+	    ;;
+	h) echo "$usage"
+	    exit
+	    ;;
+    esac
+done
+
+while read input; do cat; done | awk -f lib-tawkapply.awk -v d=$FOCUS -v e=$FACTOR -v f=FUN
