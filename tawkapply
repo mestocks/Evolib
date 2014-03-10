@@ -21,4 +21,4 @@ while getopts "d:e:f:" opt; do
     esac
 done
 
-while read input; do cat; done | awk -f lib-tawkapply.awk -v d=$FOCUS -v e=$FACTOR -v f=FUN
+while read input; do cat; done | awk -f lib-tawkapply.awk -v d=$FOCUS -v e=$FACTOR -v f=$FUN
