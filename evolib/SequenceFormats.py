@@ -124,7 +124,90 @@ class VariantCallFormat():
         return column_list
 """
 
+"""
+m x n
+
+      [00, 01,... 0n],
+      [10, 11,... 1n],
+      ...
+      [m0, m1,... mn]]
+
+n x m
+
+      [00, 01,... 1m],
+      [10, 11,... 1m],
+      ...
+      [n0, n1,... nm]]
+
+for sample in fasta:
+   for base in sample:
+      
+IO += 'AAATAATTAAA'
+
+"""
+
+def loopByColumn(array):
+    m = len(array)
+    n = len(array[0])
+    
+    for j in range(n):
+        column = ''
+        for i in range(m):
+            item = array[i][j]
+            column += item
+        
+        yield column
+
+def minor_major_allele(seq):
+        
+        useq = list(set(seq))
+        counts = [(seq.count(i), i) for i in useq]
+        counts.sort()
+        minor = counts[0][1]
+        major = counts[1][1]
+        
+        return minor, major
+
+def binarizeDNA(DNA):
+    
+    bases = set(['A', 'T', 'C', 'G'])
+    uDNA = set(DNA)
+    
+    assert uDNA <= bases
+    
+    if len(uDNA) == 1:
+        robotDNA = DNA.replace(DNA[0], '0')
+    else:
+        minor, major = minor_major_allele(DNA)
+        robotDNA = DNA.replace(minor, '1')
+        robotDNA = robotDNA.replace(major, '0')
+    
+    return robotDNA
+
 class IOPolyTable(list):
+    
+    def add_sample(self, item):
+        nsamples = len(item)
+        for i in range(nsamples):
+            try:
+                self[i] += item[i]
+            except IndexError:
+                self.append(item[i])
+
+class Site(list):
+    
+    def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
+        return set(self) <= set(dna)
+
+class SeqTable(list):
+    
+    def seqsBySite(self):
+        
+        for site in loopByColumn(self):
+            yield site
+    
+
+class IOPolyTable_old(list):
     
     def __init__(self, seqs):
         
@@ -174,20 +257,23 @@ class IOPolyTable(list):
                 pass
             elif number_of_alleles == 1:
                 if missing_data is True:
-                    self.length += 1
+                    pass
                 elif missing_data is False:
                     self.length += 1
             elif number_of_alleles == 2:
-                self.length += 1
-                minor, major = self.minor_major_allele(base_seqs)
-                for i in base_seqs:
-                    if i == major:
-                        baseIO.append(0)
-                    elif i == minor:
-                        baseIO.append(1)
-                IO.append(baseIO)
+                if missing_data is True:
+                    pass
+                elif missing_data is False:
+                    self.length += 1
+                    minor, major = self.minor_major_allele(base_seqs)
+                    for i in base_seqs:
+                        if i == major:
+                            baseIO.append(0)
+                        elif i == minor:
+                            baseIO.append(1)
+                    IO.append(baseIO)
             else:
-                print base_seqs
+                pass
             #elif 'N' in base_seqs:# set(base_seqs) <= set(self.DNA) is False:
             #    self.length += 1
 
@@ -224,7 +310,9 @@ class msFormat(StatMethods):
     
     def __init__(self, iteration):
         lines = [i for i in iteration.split('\n')[2:] if i != '']
-        self.IOtable =  IOPolyTable(lines)
+        self.IOtable =  IOPolyTable()
+        for line in lines:
+            self.IOtable.add_sample(line)
 
 
 class FastaFormat(StatMethods):
@@ -295,10 +383,15 @@ class FastaFormat(StatMethods):
         step2 = step1.split('\n>')
         seq_table = [part.partition('\n')[2].replace('\n','') for part in step2]
         seq_names = [part.partition('\n')[0].replace('>', '') for part in step2]
-        
-        self.sequences = seq_table
         self.ids = seq_names
-        self.IOtable = IOPolyTable(seq_table)
+        
+        self.sequences = SeqTable(seq_table)
+        
+        self.IOtable = IOPolyTable()
+        for site in self.sequences.seqsBySite():
+            if 'N' not in site and len(set(site)) == 2:
+                siteIO = binarizeDNA(site)
+                self.IOtable.append(siteIO)
 
     def _fromSequence(self, ids, seqs):
         
@@ -307,7 +400,7 @@ class FastaFormat(StatMethods):
             ids = self._create_ids(nseqs)
         
         self.ids = ids
-        self.sequences = seqs
+        self.sequences = SeqTable(seqs)
 
     def _create_ids(self, nseqs):
         """
