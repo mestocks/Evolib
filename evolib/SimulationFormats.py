@@ -1,4 +1,4 @@
-from SequenceFormats2 import msFormat
+from SequenceFormats import msFormat
 
 class msClass():
     
