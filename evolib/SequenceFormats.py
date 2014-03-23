@@ -1,321 +1,13 @@
-from VCFrow import ROW_BASECLASS, ROW_BASECLASS_OLD
-from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
+# Classes
+from lib.Stats import PopStats
+from lib.DNAmethods import IOPolyTable, SeqTable
 
+# Methods
+from lib.DNAmethods import minorMajorAllele, binarizeDNA
 
-class VariantCallFormat():
-    """
-    
-    Usage:
-    
-    VariantCallFormat(filename)
-    
-    Returns a VCF class. Each row is represented by a <ROWCLASS>, 
-    with each column represented by a <COLCLASS>.
-    
-    Example:
-    
-        >>> from SequenceFormats import VariantCallFormat
-        >>> myVCF = VariantCallFormat("data.vcf")
-        >>> for bp in myVCF:
-        >>>     print bp['CHROM'], bp['POS'], bp['REF'], bp.genotypes(), bp.heterozygosity()
-    """
-    
-    def __init__(self, file_name):
-        
-        self.file_name = file_name
-        self.header = self.get_header(file_name)
-        
-        nsamples = len(self.header) - 9
-        self.col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT] + [SAMPLE] * nsamples
-        
-        self.chromosome_info = dict(self.chr_info())
-        
-        
-    def __iter__(self):
-        for row in self.row_iter():
-            yield row
-            
-    
-    def row_iter(self):
-        
-        file = open(self.file_name, 'r')
-        
-        for line in file:
-            
-            if line.startswith('#') is False:
-                
-                value_list = line.rstrip().split('\t')
-                v_col_row = ROW_BASECLASS(value_list, self.col_classes, self.header)
-                
-                yield v_col_row
-                
-                
-    def chr_info(self):
-        
-        chromosomes = []
-        past_chrom = None
-        reverse = None
-        
-        file = open(self.file_name, 'r')
-        
-        for row in file:
-            
-            if row.startswith('#') is False:
-                
-                value_list = row.rstrip().split('\t')
-                chrom = value_list[0]
-                
-                if chrom != past_chrom:
-                    past_chrom = chrom
-                    past_pos = int(value_list[1])
-                    reverse = None
-                    add_info = (chrom, )
-                    
-                elif reverse is None:
-                    
-                    if past_pos < int(value_list[1]):
-                        reverse = False
-                        add_info += (reverse, )
-                        chromosomes.append(add_info)
-                        
-                    elif past_pos > int(value_list[1]):
-                        reverse = True
-                        add_info += (reverse, )
-                        chromosomes.append(add_info)
-                    
-        return chromosomes
-    
-    
-    def get_header(self, file_name):
-        
-        file = open(file_name, 'r')
-        
-        for line in file:
-            if line.startswith('#') is False:
-                break
-            elif line.startswith('##') is True:
-                pass
-            else:
-                header = line[1:].rstrip().split('\t')
-                
-        file.close()
-        
-        return header
+###### ######
 
-####################
-    
-"""
-    def get_columns(self, value_list, col_classes, header):
-        
-        column_list = []
-        
-        for index in range(8):
-            ColClass = col_classes[index](value_list[index])
-            column_list.append(ColClass)
-        
-        if len(header) > 8:
-            FormatColClass = col_classes[8](value_list[8])
-            column_list.append(FormatColClass)
-            for index in range(9, len(header)):
-                ColClass = col_classes[index](value_list[index], FormatColClass.value)
-                ColClass.col_name = header[index]
-                column_list.append(ColClass)
-        
-        return column_list
-"""
-
-"""
-m x n
-
-      [00, 01,... 0n],
-      [10, 11,... 1n],
-      ...
-      [m0, m1,... mn]]
-
-n x m
-
-      [00, 01,... 1m],
-      [10, 11,... 1m],
-      ...
-      [n0, n1,... nm]]
-
-for sample in fasta:
-   for base in sample:
-      
-IO += 'AAATAATTAAA'
-
-"""
-
-def loopByColumn(array):
-    m = len(array)
-    n = len(array[0])
-    
-    for j in range(n):
-        column = ''
-        for i in range(m):
-            item = array[i][j]
-            column += item
-        
-        yield column
-
-def minor_major_allele(seq):
-        
-        useq = list(set(seq))
-        counts = [(seq.count(i), i) for i in useq]
-        counts.sort()
-        minor = counts[0][1]
-        major = counts[1][1]
-        
-        return minor, major
-
-def binarizeDNA(DNA):
-    
-    bases = set(['A', 'T', 'C', 'G'])
-    uDNA = set(DNA)
-    
-    assert uDNA <= bases
-    
-    if len(uDNA) == 1:
-        robotDNA = DNA.replace(DNA[0], '0')
-    else:
-        minor, major = minor_major_allele(DNA)
-        robotDNA = DNA.replace(minor, '1')
-        robotDNA = robotDNA.replace(major, '0')
-    
-    return robotDNA
-
-class IOPolyTable(list):
-    
-    def add_sample(self, item):
-        nsamples = len(item)
-        for i in range(nsamples):
-            try:
-                self[i] += item[i]
-            except IndexError:
-                self.append(item[i])
-
-class Site(list):
-    
-    def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
-        return set(self) <= set(dna)
-
-class SeqTable(list):
-    
-    def seqsBySite(self):
-        
-        for site in loopByColumn(self):
-            yield site
-    
-
-class IOPolyTable_old(list):
-    
-    def __init__(self, seqs):
-        
-        self.IOseqs = None
-        
-        self.DNA = ['A', 'T', 'C', 'G']
-        other_chrs = ['N', '-']
-        unique_chrs = set(''.join(seqs).upper())
-        
-        if unique_chrs <= set(['1', '0']):
-            nsam, s = len(seqs), len(seqs[0])
-            self.IOseqs = [[] for l in range(s)]
-            for base in range(s):
-                for ind in range(nsam):
-                    self.IOseqs[base].append(int(seqs[ind][base]))
-
-        elif unique_chrs <= set(self.DNA + other_chrs):
-            self.IOseqs = self.DNA_to_IO(seqs)
-        else:
-            raise TypeError, 'Unusual characters in sequences.'
-
-    def __getitem__(self, index):
-        return self.IOseqs[index]
-
-    def __len__(self):
-        return len(self.IOseqs)
-        
-    def DNA_to_IO(self, dna):
-
-        length = len(dna[0])
-        samples = len(dna)
-        
-        IO = []
-        self.length = 0
-        for base in range(length):
-            base_seqs = ''
-            baseIO = []
-            for sam in range(samples):
-                base_seqs += dna[sam][base].upper()
-
-            if 'N' in base_seqs or '-' in base_seqs:
-                missing_data = True
-                
-            number_of_alleles = len(set(base_seqs) & set(self.DNA))
-            
-            if number_of_alleles == 0:
-                pass
-            elif number_of_alleles == 1:
-                if missing_data is True:
-                    pass
-                elif missing_data is False:
-                    self.length += 1
-            elif number_of_alleles == 2:
-                if missing_data is True:
-                    pass
-                elif missing_data is False:
-                    self.length += 1
-                    minor, major = self.minor_major_allele(base_seqs)
-                    for i in base_seqs:
-                        if i == major:
-                            baseIO.append(0)
-                        elif i == minor:
-                            baseIO.append(1)
-                    IO.append(baseIO)
-            else:
-                pass
-            #elif 'N' in base_seqs:# set(base_seqs) <= set(self.DNA) is False:
-            #    self.length += 1
-
-        return IO
-
-    def minor_major_allele(self, seq):
-        
-        useq = list(set(seq))
-        counts = [(seq.count(i), i) for i in useq]
-        counts.sort()
-        minor = counts[0][1]
-        major = counts[1][1]
-        
-        return minor, major
-
-class StatMethods():
-    
-    def seg_sites(self):
-        return len(self.IOtable)
-    
-    def nsamples(self):
-        return len(self.IOtable[0])
-    
-    def thetaw(self):
-        
-        s = self.seg_sites()
-        n = self.nsamples()
-        a1 = sum(1.0 / i for i in range(1, n))
-        tw = s / a1
-
-        return tw
-
-class msFormat(StatMethods):
-    
-    def __init__(self, iteration):
-        lines = [i for i in iteration.split('\n')[2:] if i != '']
-        self.IOtable =  IOPolyTable()
-        for line in lines:
-            self.IOtable.add_sample(line)
-
-
-class FastaFormat(StatMethods):
+class FastaFormat(PopStats):
     """
     Example usage:
     
@@ -386,10 +78,17 @@ class FastaFormat(StatMethods):
         self.ids = seq_names
         
         self.sequences = SeqTable(seq_table)
-        
+        self.IOlen = 0
         self.IOtable = IOPolyTable()
         for site in self.sequences.seqsBySite():
-            if 'N' not in site and len(set(site)) == 2:
+            if site.hasMissingData():
+                pass
+            elif site.numberOfAlleles() > 2:
+                pass
+            elif site.numberOfAlleles() == 1:
+                self.IOlen += 1
+            else:
+                self.IOlen += 1
                 siteIO = binarizeDNA(site)
                 self.IOtable.append(siteIO)
 
@@ -407,7 +106,7 @@ class FastaFormat(StatMethods):
         Creates a list of sequence ids equal to the number 
         of sequences as shown in the examples below:
            ['seq1', 'seq2', 'seq3']
-           ['seq01', 'seq02', ...'seq32']
+           ['seq01', 'seq02', ...'seq24']
         """
         ids = []
         for i in range(nseqs):
@@ -420,4 +119,31 @@ class FastaFormat(StatMethods):
         return ids
     
     def length(self):
-        return self.IOtable.length
+        return self.IOlen
+    
+    def nsamples(self):
+        return len(self.sequences)
+
+### ###
+
+class msFormat(PopStats):
+    
+    def __init__(self, text):
+        self.text = text
+        lines = [i for i in text.split('\n')[2:] if i != '']
+        
+        self.IOtable = IOPolyTable()
+        for line in lines:
+            self.IOtable.add_sample(line)
+            
+    def __str__(self):
+        return self.text
+    
+    def nsamples(self):
+        
+        try:
+            nsamples = len(self.IOtable[0])
+        except IndexError:
+            nsamples = None
+            
+        return nsamples
