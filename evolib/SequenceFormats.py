@@ -19,15 +19,20 @@ class FastaFormat(PopStats):
        >>> F = FastaFormat(fileObject)
        
        Example 2:
+       >>> import sys
+       >>> stdinObject = sys.stdin
+       >>> F = FastaFormat(stdinObject)
+       
+       Example 3:
        >>> seq = 'ATCTGATGCTGAC'
        >>> F = FastaFormat(seq)
        
-       Example 3:
+       Example 4:
        >>> id = 'seq1'
        >>> seq = 'ATCGATGTCGTGAC'
        >>> F = FastaFormat(seq, id)
        
-       Example 4:
+       Example 5:
        >>> ids = ['seq1', 'seq2', 'seq3']
        >>> seqs = ['ATCGATGTCGTGAC', 'ATCGATGTCGTGAC', 'ATCGATGTCGTGAC']
        >>> F = FastaFormat(seqs, ids)
