@@ -1,6 +1,7 @@
 # Classes
 from lib.Stats import PopStats
 from lib.DNAmethods import IOPolyTable, SeqTable
+from lib.DNAobjects import FastaSequence
 
 # Methods
 from lib.DNAmethods import minorMajorAllele, binarizeDNA
@@ -57,15 +58,22 @@ class FastaFormat(PopStats):
             else:
                 raise TypeError, 'Wrong arg type. File object or list of sequences.'
             
-    def __str__(self):
-        n = 70
-        the_string = ''
-        for s in range(len(self.sequences)):
-            seq = self.sequences[s]
-            the_string += '>' + self.ids[s] + '\n'
-            the_string += '\n'.join([seq[i: i + n] for i in range(0, len(seq), n)]) + '\n'
+    def __iter__(self):
+        
+        nseq = len(self.sequences)
+        for i in range(nseq):
+            sequence = FastaSequence(self.sequences[i], seqID = self.ids[i])
+            yield sequence
             
-        return the_string.rstrip()
+    def __str__(self):
+        
+        stringList = []
+        for s in range(len(self.sequences)):
+            seq = FastaSequence(self.sequences[s], seqID = self.ids[s])
+            stringList.append(seq)
+        theString = '\n'.join(map(str, stringList))
+            
+        return theString
 
     def _fromFile(self, fileObject):
         """
