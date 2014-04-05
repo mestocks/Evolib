@@ -13,7 +13,7 @@ class DNAsequence():
         self.sequence = seq
         
     def __str__(self):
-        return self.name, self.sequence
+        return self.sequence
     
     def complement(self):
         

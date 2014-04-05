@@ -1,5 +1,7 @@
 from GeneralMethods import loopByColumn
 
+###### ######
+
 def minorMajorAllele(seq):
         
         useq = list(set(seq))
@@ -26,6 +28,7 @@ def binarizeDNA(DNA):
     
     return robotDNA
 
+###### ######
 
 class IOPolyTable(list):
     
@@ -36,6 +39,8 @@ class IOPolyTable(list):
                 self[i] += item[i]
             except IndexError:
                 self.append(item[i])
+
+###### ######
 
 class Site(str):
     
@@ -51,6 +56,8 @@ class Site(str):
     def numberOfAlleles(self):
         alleles = set(self)
         return len(alleles)
+
+###### ######
 
 class SeqTable(list):
     

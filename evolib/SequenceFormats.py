@@ -10,6 +10,20 @@ from lib.DNAmethods import minorMajorAllele, binarizeDNA
 
 class FastaFormat(PopStats):
     """
+    *FastaFormat* - class representation of DNA sequence data in fasta format.
+        evolib.SequenceFormats::FastaFormat
+    
+    On the creation of a FastaFormat instance, two attributes are created from 
+    the fasta file and assigned to the object:
+    
+        FastaFormat.Sequences - is an object of type `lib.DNAmethods::SeqTable' 
+            and 
+        
+        FastaFormat.IOtable - is an object of type `lib.DNAmethods::IOPolyTable' 
+            and 
+    
+    
+    
     Example usage:
     
        >>> from evolib.SequenceFormats import FastaFormat
@@ -62,6 +76,10 @@ class FastaFormat(PopStats):
                 self._fromSequence(arg2, arg1)
             else:
                 raise TypeError, 'Wrong arg type. File object or list of sequences.'
+            
+    def __getitem__(self, item):
+        return FastaSequence(self.sequences[item], seqID = self.ids[item])
+
             
     def __iter__(self):
         
