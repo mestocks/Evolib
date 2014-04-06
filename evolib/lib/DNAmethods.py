@@ -1,7 +1,4 @@
 
-
-###### ######
-
 def minorMajorAllele(seq):
         
         useq = list(set(seq))
@@ -11,6 +8,7 @@ def minorMajorAllele(seq):
         major = counts[1][1]
         
         return minor, major
+
 
 def binarizeDNA(DNA):
     

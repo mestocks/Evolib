@@ -1,7 +1,7 @@
 # Classes
-from lib.DataObjects import BinaryTable, SeqTable
 from lib.DNAobjects import FastaSequence
 from lib.DataObjects import SequenceData
+from lib.DataObjects import BinaryTable, SeqTable
 
 ###### ######
 
@@ -94,7 +94,7 @@ class msFormat(SequenceData):
     def __init__(self, text):
         self.text = text
         lines = [i for i in text.split('\n')[2:] if i != '']
-        self._getBinaryTable(lines)
+        self.IO = self._getBinaryTable(lines)
         
             
     def __str__(self):
@@ -103,9 +103,11 @@ class msFormat(SequenceData):
     
     def _getBinaryTable(self, seqs):
         
-        self.IO = BinaryTable()
+        IO = BinaryTable()
         for line in seqs:
-            self.IO.add_sample(line)
+            IO.add_sample(line)
+            
+        return IO
             
     
     def nsamples(self):
