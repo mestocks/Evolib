@@ -1,5 +1,5 @@
 # Classes
-from lib.DataObjects import BinaryTable
+from lib.DataObjects import BinaryTable, SeqTable
 from lib.DNAobjects import FastaSequence
 from lib.DataObjects import SequenceData
 
@@ -75,8 +75,8 @@ class FastaFormat(SequenceData):
         self.sequences = seq_table
         self.ids = seq_names
         
-        self._getSeqTable(seq_table)
-        self._getBinaryTable(self.Seqs)
+        self.Seqs = SeqTable(seq_table)
+        self.IO = self._getBinaryTable(self.Seqs)
         
         
     def length(self):

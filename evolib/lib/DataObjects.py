@@ -47,7 +47,7 @@ class BinaryTable(list):
             
         return n
                 
-    def segregating_sites(self):
+    def seg_sites(self):
         
         if self == []:
             s = 0
@@ -56,13 +56,13 @@ class BinaryTable(list):
             
         return s
     
-    def thetaw(self):
+    def thetaW(self):
         n = self.nsamples()
-        s = self.segregating_sites()
+        s = self.seg_sites()
         
         return PopGenStats.WattersonsTheta(n, s)
         
-    def thetapi(self):
+    def thetaPi(self):
         pi = 0.0
         
         if self.nsamples() is not None:
@@ -71,11 +71,11 @@ class BinaryTable(list):
         
         return pi
     
-    def tajimasd(self):
+    def tajD(self):
         n = self.nsamples()
-        s = self.segregating_sites()
-        tw = self.thetaw()
-        pi = self.thetapi()
+        s = self.seg_sites()
+        tw = self.thetaW()
+        pi = self.thetaPi()
         
         return PopGenStats.TajimasD(n, s, tw, pi)
 
@@ -134,14 +134,14 @@ class SequenceData():
         self.seqs = seqs
         self.ids = ids
         
-        self._getSeqTable(seqs)
-        self._getBinaryTable(self.Seqs)
+        self.Seqs = SeqTable(seqs)
+        self.IO = self._getBinaryTable(self.Seqs)
     
     
     def _getBinaryTable(self, seqs):
         
         self.validSites = 0
-        self.IO = BinaryTable()
+        IO = BinaryTable()
         for site in seqs.seqsBySite():
             
             if site.hasMissingData():
@@ -153,13 +153,37 @@ class SequenceData():
             else:
                 self.validSites += 1
                 siteIO = binarizeDNA(site)
-                self.IO.append(siteIO)
+                IO.append(siteIO)
                 
+        return IO
     
-    def _getSeqTable(self, seqs):
+    
+    def define_pops(self, pop_nsam):
+        self.pop_nsam = pop_nsam
         
-        self.Seqs = SeqTable(seqs)
+    
+    def populations(self):
+        pops = self.pop_nsam
         
-
-    def define_pops(self, npops):
+        start = 0
+        for i in pops:
+            finish = start + i
+            newTable = SeqTable(self.Seqs[start: finish])
+            newBinary = self._getBinaryTable(newTable)
+            
+            start = finish
+            
+            yield newBinary
+            
         
+    def seg_sites(self):
+        return self.IO.seg_sites()
+    
+    def thetaW(self):
+        return self.IO.thetaW()
+    
+    def thetaPi(self):
+        return self.IO.thetaPi()
+    
+    def tajD(self):
+        return self.IO.tajD()
