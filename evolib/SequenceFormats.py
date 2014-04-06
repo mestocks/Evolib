@@ -8,6 +8,33 @@ from lib.DNAmethods import minorMajorAllele, binarizeDNA
 
 ###### ######
 
+# SequenceData
+# - Fasta
+# - VCF
+# - ms
+
+"""
+from PopGenMethods import wattersonsTheta
+
+class IOdata():
+    def __init__(self, data):
+        pass
+    def thetaw(self):
+        return wattersonsTheta(s, n)
+
+class SequenceData():
+    def __init__(self):
+        pass
+    def thetaw(self):
+        return self.IO.thetaw()
+
+class FastaFormat(SequenceData):
+    pass
+
+class msFormat(SequenceData):
+    pass
+"""
+
 class FastaFormat(PopStats):
     """
     *FastaFormat* - class representation of DNA sequence data in fasta format.
