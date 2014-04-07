@@ -10,19 +10,30 @@ class Site():
     
     def __init__(self, alleles):
         self.alleles = alleles
+        
+    
+    def alleles(self):
+        return self.alleles
+    
     
     def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
         
-        if set(self) <= set(dna):
+        if set(self.alleles()) <= set(dna):
             answer = False
         else:
             answer = True
             
         return answer
     
+    
     def numberOfAlleles(self):
-        alleles = set(self.alleles)
+        alleles = set(self.alleles())
         return len(alleles)
+    
+    
+    def site_class(self):
+        return 'Exon'
+
 
 ###### ######
 
