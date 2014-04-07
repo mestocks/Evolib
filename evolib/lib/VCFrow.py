@@ -1,4 +1,6 @@
-class ROW_BASECLASS(list):
+from DataObjects import Site
+
+class ROW_BASECLASS(list, Site):
     
     def __init__(self, values, classes, header):
         
@@ -67,8 +69,9 @@ class ROW_BASECLASS(list):
     def alleles(self):
         genotypes = self.genotypes()
         gametes = ''.join([gamete[0] + gamete[1] for gamete in genotypes])
+        site = Site(gametes)
         
-        return gametes
+        return site
 
     
     def heterozygosity(self, minGQ = 0, minDP = 0):

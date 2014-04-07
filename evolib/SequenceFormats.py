@@ -45,10 +45,11 @@ class FastaFormat(SequenceData):
 
             
     def __iter__(self):
-        
         nseq = len(self.sequences)
+        
         for i in range(nseq):
             sequence = FastaSequence(self.sequences[i], seqID = self.ids[i])
+            
             yield sequence
             
             

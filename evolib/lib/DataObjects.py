@@ -6,7 +6,10 @@ from DNAmethods import minorMajorAllele, binarizeDNA
 
 ###### ######
 
-class Site(str):
+class Site():
+    
+    def __init__(self, alleles):
+        self.alleles = alleles
     
     def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
         
@@ -18,7 +21,7 @@ class Site(str):
         return answer
     
     def numberOfAlleles(self):
-        alleles = set(self)
+        alleles = set(self.alleles)
         return len(alleles)
 
 ###### ######
@@ -156,6 +159,12 @@ class SequenceData():
                 IO.append(siteIO)
                 
         return IO
+    
+    
+    def bySite(self):
+        
+        for site in self.Seqs.seqsBySite():
+            yield site
     
     
     def define_pops(self, pop_nsam):

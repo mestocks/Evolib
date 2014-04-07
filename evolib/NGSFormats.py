@@ -32,11 +32,11 @@ class VariantCallFormat():
         
         
     def __iter__(self):
-        for row in self.row_iter():
+        for row in self.bySite():
             yield row
             
     
-    def row_iter(self):
+    def bySite(self):
         
         file = open(self.file_name, 'r')
         
