@@ -10,7 +10,7 @@ def loopByColumn(array):
         
         yield column
 
-def backToTheFutureIter(itr, size = 3):
+def block_iter(itr, size = 3, start = 1):
     """
     Iterator that is aware of all items within non-overlapping 
     blocks of length 'size'. Returns the current item value in 
@@ -35,15 +35,30 @@ def backToTheFutureIter(itr, size = 3):
             T ATG
             G ATG
             C CAT
-            .
-            .
+            A CAT
+            T CAT
+            G GCA
+            C GCA
+            A GCA
             T TGC
             G TGC
             C TGC
     """
     assert size > 1
+    assert start > 0
+    assert start <= size
     
-    i = 1
+    i = start
+    if i != 1:
+        p = []
+        for k in range(start, size + 1):
+            nxt = itr.next()
+            p.append(nxt)
+    
+        while i <= size:
+            yield (p[(i - (1 + start - 1)) % size], p)
+            i += 1
+        
     while True:
         
         if i % size == 1:
@@ -54,6 +69,9 @@ def backToTheFutureIter(itr, size = 3):
                     p.append(nxt)
                 except StopIteration:
                     pass
-                
-        yield (p[(i - 1) % size], p)
+       
+        try:
+            yield (p[(i - 1) % size], p)
+        except IndexError:
+            raise StopIteration
         i += 1
