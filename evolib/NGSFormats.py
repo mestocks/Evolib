@@ -1,8 +1,10 @@
+from lib.DataObjects import SequenceData
+
 from lib.VCFrow import ROW_BASECLASS, ROW_BASECLASS_OLD
 from lib.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
 
 
-class VariantCallFormat():
+class VariantCallFormat(SequenceData):
     """
     
     Usage:

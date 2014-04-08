@@ -1,19 +1,19 @@
 import PopGenStats
 
 # Methods
-from GeneralMethods import loopByColumn
-from DNAmethods import minorMajorAllele, binarizeDNA
+from GeneralMethods import loopByColumn, block_iter
+from DNAmethods import minorMajorAllele, binarizeDNA, sites2codons
 
 ###### ######
 
 class Site():
     
     def __init__(self, alleles):
-        self.alleles = alleles
+        self._alleles = alleles
         
     
     def alleles(self):
-        return self.alleles
+        return self._alleles
     
     
     def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
@@ -29,6 +29,10 @@ class Site():
     def numberOfAlleles(self):
         alleles = set(self.alleles())
         return len(alleles)
+    
+    
+    def nonsyn_site(self):
+        return
     
     
     def site_class(self):
@@ -166,11 +170,77 @@ class SequenceData():
                 self.validSites += 1
             else:
                 self.validSites += 1
-                siteIO = binarizeDNA(site)
+                siteIO = binarizeDNA(site.alleles())
                 IO.append(siteIO)
                 
         return IO
     
+    
+    def codingBySite(self):
+        
+        amino_acids = {'TTT':'F', 'TTC':'F', 'TTA':'L', 'TTG':'L', 'CTT':'L', 
+                       'CTC':'L', 'CTA':'L', 'CTG':'L', 'ATT':'I', 'ATC':'I', 
+                       'ATA':'I', 'ATG':'M', 'GTT':'V', 'GTC':'V', 'GTA':'V', 
+                       'GTG':'V', 'TCT':'S', 'TCC':'S', 'TCA':'S', 'TCG':'S', 
+                       'CCT':'P', 'CCC':'P', 'CCA':'P', 'CCG':'P', 'ACT':'T', 
+                       'ACC':'T', 'ACA':'T', 'ACG':'T', 'GCT':'A', 'GCC':'A', 
+                       'GCA':'A', 'GCG':'A', 'TAT':'Y', 'TAC':'Y', 'TAA':'*', 
+                       'TAG':'*', 'CAT':'H', 'CAC':'H', 'CAA':'Q', 'CAG':'Q', 
+                       'AAT':'N', 'AAC':'N', 'AAA':'K', 'AAG':'K', 'GAT':'D', 
+                       'GAC':'D', 'GAA':'E', 'GAG':'E', 'TGT':'C', 'TGC':'C', 
+                       'TGA':'*', 'TGG':'W', 'CGT':'R', 'CGC':'R', 'CGA':'R', 
+                       'CGG':'R', 'AGT':'S', 'AGC':'S', 'AGA':'R', 'AGG':'R', 
+                       'GGT':'G', 'GGC':'G', 'GGA':'G', 'GGG':'G'}
+        
+        for i in block_iter(self.bySite()):
+            SiteObject = i[0]
+            SiteObject.siteClassBroad = 'Coding'
+            Pos1 = i[1][0]
+            Pos2 = i[1][1]
+            Pos3 = i[1][2]
+            codon_sites = [Pos1, Pos2, Pos3]
+            codons = sites2codons(Pos1.alleles(), Pos2.alleles(), Pos3.alleles())
+            ucodons = set(codons)
+            
+            if len(ucodons) == 1:
+                
+                SiteObject.siteClassNarrow = None
+                yield SiteObject
+                
+            elif len(ucodons) > 2:
+                
+                SiteObject.siteClassNarrow = None
+                yield SiteObject
+                
+            else:
+                
+                if SiteObject.numberOfAlleles() > 1:
+                    
+                    aminos = [amino_acids[j] for j in ucodons]
+                    uaminos = set(aminos)
+                    
+                    if '*' in uaminos:
+                        
+                        SiteObject.siteClassNarrow = 'STOP'
+                        yield SiteObject
+                        
+                    elif len(uaminos) == 1:
+                        
+                        SiteObject.siteClassNarrow = 'SYN'
+                        yield SiteObject
+                    
+                    elif len(uaminos) == 2:
+                        
+                        SiteObject.siteClassNarrow = 'NONSYN'
+                        yield SiteObject
+                        
+                    else:
+                        raise IndexError, 'This should not happen (1).'
+                        
+                else:
+                    SiteObject.siteClassNarrow = None
+                    yield SiteObject
+
     
     def bySite(self):
         
