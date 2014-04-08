@@ -47,7 +47,7 @@ class BinaryTable(list):
         s = len(item)
         
         if self.nsamples() is not None:
-            assert s == self.segregating_sites(), "Cannot add a different number of segregating sites."
+            assert s == self.seg_sites(), "Cannot add a different number of segregating sites."
         
         for i in range(s):
             try:
