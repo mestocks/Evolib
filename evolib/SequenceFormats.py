@@ -1,3 +1,5 @@
+import random
+
 # Classes
 from lib.DNAobjects import FastaSequence
 from lib.DataObjects import SequenceData
@@ -119,3 +121,13 @@ class msFormat(SequenceData):
             n = None
             
         return n
+    
+    def sample_sites(self, p):
+        
+        newIO = BinaryTable()
+        for i in self.IO:
+            pick = random.random()
+            if pick < p:
+                newIO.append(i)
+                
+        self.IO = newIO
