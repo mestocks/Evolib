@@ -2,7 +2,7 @@ import PopGenStats
 
 # Methods
 from GeneralMethods import loopByColumn, block_iter
-from DNAmethods import minorMajorAllele, binarizeDNA, sites2codons
+from DNAmethods import minorMajorAllele, binarizeDNA, sites2codons, synNonsynProbs
 
 ###### ######
 
@@ -195,51 +195,61 @@ class SequenceData():
         for i in block_iter(self.bySite()):
             SiteObject = i[0]
             SiteObject.siteClassBroad = 'Coding'
-            Pos1 = i[1][0]
-            Pos2 = i[1][1]
-            Pos3 = i[1][2]
-            codon_sites = [Pos1, Pos2, Pos3]
-            codons = sites2codons(Pos1.alleles(), Pos2.alleles(), Pos3.alleles())
-            ucodons = set(codons)
             
-            if len(ucodons) == 1:
+            if len(i[1]) == 3:
+                Pos1 = i[1][0]
+                Pos2 = i[1][1]
+                Pos3 = i[1][2]
+                codon_sites = [Pos1, Pos2, Pos3]
+                codons = sites2codons(Pos1.alleles(), Pos2.alleles(), Pos3.alleles())
+                ucodons = set(codons)
+                SiteObject.ucodons = ucodons
                 
-                SiteObject.siteClassNarrow = None
-                yield SiteObject
-                
-            elif len(ucodons) > 2:
-                
-                SiteObject.siteClassNarrow = None
-                yield SiteObject
-                
-            else:
-                
-                if SiteObject.numberOfAlleles() > 1:
+                if sum([b.hasMissingData() for b in codon_sites]) == 0:
                     
-                    aminos = [amino_acids[j] for j in ucodons]
-                    uaminos = set(aminos)
-                    
-                    if '*' in uaminos:
+                    if len(ucodons) == 1:
                         
-                        SiteObject.siteClassNarrow = 'STOP'
+                        SiteObject.siteClassNarrow = 'MONO'
                         yield SiteObject
                         
-                    elif len(uaminos) == 1:
+                    elif len(ucodons) > 2:
                         
-                        SiteObject.siteClassNarrow = 'SYN'
-                        yield SiteObject
-                    
-                    elif len(uaminos) == 2:
-                        
-                        SiteObject.siteClassNarrow = 'NONSYN'
+                        SiteObject.siteClassNarrow = 'MULTI'
                         yield SiteObject
                         
                     else:
-                        raise IndexError, 'This should not happen (1).'
                         
+                        if SiteObject.numberOfAlleles() > 1:
+                            
+                            aminos = [amino_acids[j] for j in ucodons]
+                            uaminos = set(aminos)
+                            
+                            if '*' in uaminos:
+                                
+                                SiteObject.siteClassNarrow = 'STOP'
+                                yield SiteObject
+                                
+                            elif len(uaminos) == 1:
+                                
+                                SiteObject.siteClassNarrow = 'SYN'
+                                yield SiteObject
+                                
+                            elif len(uaminos) == 2:
+                                
+                                SiteObject.siteClassNarrow = 'NONSYN'
+                                yield SiteObject
+                                
+                            else:
+                                raise IndexError, 'This should not happen (1).'
+                            
+                        else:
+                            SiteObject.siteClassNarrow = 'MONO'
+                            yield SiteObject
+                            
                 else:
                     SiteObject.siteClassNarrow = None
-                    yield SiteObject
+            else:
+                SiteObject.siteClassNarrow = None
 
     
     def bySite(self):
@@ -250,6 +260,33 @@ class SequenceData():
     
     def define_pops(self, pop_nsam):
         self.pop_nsam = pop_nsam
+        
+        
+    def justSynonymous(self):
+        
+        isCoding = True
+        coding = self.codingBySite()
+        IO = BinaryTable()
+        self.valid_syn = 0
+        
+        while True:
+            if isCoding is True:
+                
+                try:
+                    Bp = coding.next()
+                    if Bp.siteClassNarrow == 'SYN':
+                        siteIO = binarizeDNA(Bp.alleles())
+                        IO.append(siteIO)
+                    
+                    if Bp.siteClassNarrow is not None:
+                        probs = [synNonsynProbs(codon)[0] for codon in Bp.ucodons]
+                        prob = sum(probs) / len(probs)
+                        self.valid_syn += prob
+                        
+                except StopIteration:
+                    break
+                
+        self.IO = IO
         
     
     def populations(self):
