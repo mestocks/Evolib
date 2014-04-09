@@ -1,14 +1,4 @@
-def loopByColumn(array):
-    m = len(array)
-    n = len(array[0])
-    
-    for j in range(n):
-        column = ''
-        for i in range(m):
-            item = array[i][j]
-            column += item
-        
-        yield column
+import numpy
 
 def block_iter(itr, size = 3, start = 1):
     """
@@ -75,3 +65,38 @@ def block_iter(itr, size = 3, start = 1):
         except IndexError:
             raise StopIteration
         i += 1
+
+
+def loopByColumn(array):
+    
+    m = len(array)
+    n = len(array[0])
+    
+    for j in range(n):
+        column = ''
+        for i in range(m):
+            item = array[i][j]
+            column += item
+        
+        yield column
+
+
+def member_iter(ranges, start = 1, end = 1000000):
+    
+    rng = numpy.array(ranges)
+    
+    for i in range(start, end + 1):
+        equal = i == rng
+        
+        if sum(equal) == 1:
+            yield True
+            
+        else:
+            state = i >= rng
+            
+            if sum(state) % 2 == 0:
+                yield False
+            else:
+                yield True
+                
+    

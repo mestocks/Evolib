@@ -1,7 +1,7 @@
 import PopGenStats
 
 # Methods
-from GeneralMethods import loopByColumn, block_iter
+from GeneralMethods import loopByColumn, block_iter, member_iter
 from DNAmethods import minorMajorAllele, binarizeDNA, sites2codons, synNonsynProbs
 
 ###### ######
@@ -176,6 +176,10 @@ class SequenceData():
         return IO
     
     
+    def annotate(self, exons):
+        self.exons = exons
+    
+    
     def codingBySite(self):
         
         amino_acids = {'TTT':'F', 'TTC':'F', 'TTA':'L', 'TTG':'L', 'CTT':'L', 
@@ -264,27 +268,33 @@ class SequenceData():
         
     def justSynonymous(self):
         
-        isCoding = True
+        member = member_iter(self.exons, end = 10000)
         coding = self.codingBySite()
+        
         IO = BinaryTable()
-        self.valid_syn = 0
+        self.validSites = 0
         
         while True:
-            if isCoding is True:
-                
-                try:
-                    Bp = coding.next()
-                    if Bp.siteClassNarrow == 'SYN':
-                        siteIO = binarizeDNA(Bp.alleles())
-                        IO.append(siteIO)
+            try:
+                isCoding = member.next()
+                if isCoding is True:
                     
-                    if Bp.siteClassNarrow is not None:
-                        probs = [synNonsynProbs(codon)[0] for codon in Bp.ucodons]
-                        prob = sum(probs) / len(probs)
-                        self.valid_syn += prob
-                        
-                except StopIteration:
-                    break
+                    try:
+                        Bp = coding.next()
+                        if Bp.siteClassNarrow == 'SYN':
+                            siteIO = binarizeDNA(Bp.alleles())
+                            IO.append(siteIO)
+                            
+                        if Bp.siteClassNarrow is not None:
+                            probs = [synNonsynProbs(codon)[0] for codon in Bp.ucodons]
+                            prob = sum(probs) / len(probs)
+                            self.validSites += prob
+                                
+                    except StopIteration:
+                        break
+                    
+            except StopIteration:
+                break
                 
         self.IO = IO
         

@@ -11,11 +11,10 @@ from evolib.lib.DNAmethods import synNonsynProbs
 openFile = open("test/Pa_can008.fsa", 'r')
 myData = FastaFormat(openFile)
 
-print 'All', myData.validSites, myData.seg_sites(), myData.thetaW() / myData.validSites, myData.thetaPi() / myData.validSites, myData.tajD()
-
+myData.annotate([1, 1106])
 myData.justSynonymous()
 
-print 'Syn', myData.valid_syn, myData.seg_sites(), myData.thetaW() / myData.valid_syn, myData.thetaPi() / myData.valid_syn, myData.tajD()
+print 'Syn', myData.validSites, myData.seg_sites(), myData.thetaW() / myData.validSites, myData.thetaPi() / myData.validSites, myData.tajD()
 
 #coding_iter = myData.codingBySite()
 
