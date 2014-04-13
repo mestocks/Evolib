@@ -96,6 +96,9 @@ class BinaryTable(list):
         pi = self.thetaPi()
         
         return PopGenStats.TajimasD(n, s, tw, pi)
+    
+    def wh97(self, pop_nsam):
+        return PopGenStats.WakeleyHey(self, pop_nsam)
 
 ###### ######
 
@@ -127,6 +130,7 @@ class SequenceData():
                 raise TypeError, 'List expected.'
             
         self._from_sequence(self, seqs, ids)
+        self.pop_nsam = None
 
 
     def _create_ids(self, nseqs):
@@ -324,3 +328,8 @@ class SequenceData():
     
     def tajD(self):
         return self.IO.tajD()
+        
+    def wh97(self):
+        assert self.pop_nsam is not None
+        return self.IO.wh97(self.pop_nsam)
+        
