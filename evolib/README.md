@@ -2,6 +2,10 @@
 
 
 ### Sequence data
+```python
+class SequenceData():
+        ...
+```
 
 It is often of interest to compare summary statistics calculated from observed data to the same statistics calculated from simulated datasets. The class ```SequenceData``` was therefore designed to be inherited by classes representing both real and simulated sequence data.
 ```
