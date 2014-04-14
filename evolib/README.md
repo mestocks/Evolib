@@ -9,7 +9,7 @@ It is often of interest to compare summary statistics calculated from observed d
         /          \
    FastaFormat    msFormat
 ```
-This means that any statistical methods defined in ```SequenceData``` are available to both ```FastaFormat``` and ```msFormat```, reducing code redundancy and ensuring that any calculations are indentical between observed and simulated datasets. For example, in the following code the same ```.tajD()``` method is inherited and called by both the ```FastaFormat``` and ```msFormat``` classes:
+This means that any statistical methods defined in ```SequenceData``` are available to both ```FastaFormat``` and ```msFormat```, reducing code redundancy and ensuring that any calculations are identical between observed and simulated datasets. For example, in the following code the same ```.tajD()``` method is inherited and called by both the ```FastaFormat``` and ```msFormat``` classes:
 ```python
 import sys
 from evolib.SequenceFormats import FastaFormat
