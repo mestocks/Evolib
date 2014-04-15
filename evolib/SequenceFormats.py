@@ -12,17 +12,6 @@ class FastaFormat(SequenceData):
     *FastaFormat* - class representation of DNA sequence data in fasta format.
         evolib.SequenceFormats::FastaFormat
     
-    On the creation of a FastaFormat instance, two attributes are created from 
-    the fasta file and assigned to the object:
-    
-        FastaFormat.Sequences - is an object of type `lib.DNAmethods::SeqTable' 
-            and 
-        
-        FastaFormat.IOtable - is an object of type `lib.DNAmethods::IOPolyTable' 
-            and 
-    
-    
-    
     Example usage:
     
        >>> from evolib.SequenceFormats import FastaFormat
