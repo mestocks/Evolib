@@ -1,35 +1,9 @@
 import PopGenStats
 
 # Methods
+from IteratorObjects import Site
 from GeneralMethods import loopByColumn, block_iter, member_iter
 from DNAmethods import minorMajorAllele, binarizeDNA, sites2codons, synNonsynProbs
-
-###### ######
-
-class Site():
-    
-    def __init__(self, alleles):
-        self._alleles = alleles
-        
-    
-    def alleles(self):
-        return self._alleles
-    
-    
-    def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
-        
-        if set(self.alleles()) <= set(dna):
-            answer = False
-        else:
-            answer = True
-            
-        return answer
-    
-    
-    def numberOfAlleles(self):
-        alleles = set(self.alleles())
-        return len(alleles)
-
 
 ###### ######
 
