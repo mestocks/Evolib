@@ -1,3 +1,5 @@
+from lib.FileIterators import fastq_iter
+
 from lib.DataObjects import SequenceData
 
 from lib.VCFrow import ROW_BASECLASS, ROW_BASECLASS_OLD
@@ -103,3 +105,16 @@ class VariantCallFormat(SequenceData):
         file.close()
         
         return header
+
+class FastqFormat():
+    
+    def __init__(self, FileObject):
+        self.FileObject = FileObject
+        
+    def __iter__(self):
+        for row in self.bySite():
+            yield row
+            
+    def bySite(self):
+        for row in fastq_iter(self.FileObject):
+            yield row
