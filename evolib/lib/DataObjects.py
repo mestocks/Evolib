@@ -6,6 +6,15 @@ from DNAmethods import minorMajorAllele, binarizeDNA, sites2codons, synNonsynPro
 
 ###### ######
 
+class FastqRead():
+    def __init__(self, seq, seqid, quality):
+        self.seq = seq
+        self.seqid = seqid
+        self.quality = quality
+        
+    def __str__(self):
+        return '\n'.join([self.seqid, self.seq, '+', self.quality])
+
 class Site():
     
     def __init__(self, alleles):
