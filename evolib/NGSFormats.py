@@ -1,10 +1,7 @@
-from lib.FileIterators import fastq_iter
-
 from lib.DataObjects import SequenceData
+from lib.FileIterators import fastq_iter, vcf_iter
 
-from lib.VCFrow import ROW_BASECLASS, ROW_BASECLASS_OLD
-from lib.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
-
+###### ######
 
 class VariantCallFormat(SequenceData):
     """
@@ -24,15 +21,11 @@ class VariantCallFormat(SequenceData):
         >>>     print bp['CHROM'], bp['POS'], bp['REF'], bp.genotypes(), bp.heterozygosity()
     """
     
-    def __init__(self, file_name):
+    def __init__(self, FileObject):
         
-        self.file_name = file_name
-        self.header = self.get_header(file_name)
+        self.FileObject = FileObject
         
-        nsamples = len(self.header) - 9
-        self.col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT] + [SAMPLE] * nsamples
-        
-        self.chromosome_info = dict(self.chr_info())
+        #self.chromosome_info = dict(self.chr_info())
         
         
     def __iter__(self):
@@ -42,20 +35,14 @@ class VariantCallFormat(SequenceData):
     
     def bySite(self):
         
-        file = open(self.file_name, 'r')
-        
-        for line in file:
-            
-            if line.startswith('#') is False:
-                
-                value_list = line.rstrip().split('\t')
-                v_col_row = ROW_BASECLASS(value_list, self.col_classes, self.header)
-                
-                yield v_col_row
-                
+        for row in vcf_iter(self.FileObject):
+            yield row
                 
     def chr_info(self):
-        
+        ### This no longer works (as it is dependent on 
+        ### a file name rather than a file object. This 
+        ### has downstream consequences for interating 
+        ### through multiple vcf files.
         chromosomes = []
         past_chrom = None
         reverse = None
@@ -88,23 +75,8 @@ class VariantCallFormat(SequenceData):
                         chromosomes.append(add_info)
                     
         return chromosomes
-    
-    
-    def get_header(self, file_name):
-        
-        file = open(file_name, 'r')
-        
-        for line in file:
-            if line.startswith('#') is False:
-                break
-            elif line.startswith('##') is True:
-                pass
-            else:
-                header = line[1:].rstrip().split('\t')
-                
-        file.close()
-        
-        return header
+
+###### ######
 
 class FastqFormat():
     
@@ -112,9 +84,5 @@ class FastqFormat():
         self.FileObject = FileObject
         
     def __iter__(self):
-        for row in self.bySite():
-            yield row
-            
-    def bySite(self):
         for row in fastq_iter(self.FileObject):
             yield row
