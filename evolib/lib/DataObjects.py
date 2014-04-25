@@ -29,14 +29,6 @@ class Site():
     def numberOfAlleles(self):
         alleles = set(self.alleles())
         return len(alleles)
-    
-    
-    def nonsyn_site(self):
-        return
-    
-    
-    def site_class(self):
-        return 'Exon'
 
 
 ###### ######
@@ -55,6 +47,7 @@ class BinaryTable(list):
                 
             except IndexError:
                 self.append(item[i])
+                
     
     def nsamples(self):
         
@@ -64,6 +57,7 @@ class BinaryTable(list):
             n = len(self[0])
             
         return n
+    
                 
     def seg_sites(self):
         
@@ -114,8 +108,10 @@ class SeqTable(list):
 ###### ######
 
 class SequenceData():
-    
-    
+    """
+    Class representation of DNA sequences from multiple 
+    samples. 
+    """
     def __init__(self, seqs, ids = None):
         
         if isinstance(seqs, list) is False:
