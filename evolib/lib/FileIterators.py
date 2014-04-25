@@ -1,4 +1,4 @@
-from DataObjects import FastqRead
+from IteratorObjects import FastqRead
 
 def fastq_iter(FileObject):
     
