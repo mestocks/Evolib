@@ -84,9 +84,5 @@ class FastqFormat():
         self.FileObject = FileObject
         
     def __iter__(self):
-        for row in self.bySite():
-            yield row
-            
-    def bySite(self):
         for row in fastq_iter(self.FileObject):
             yield row
