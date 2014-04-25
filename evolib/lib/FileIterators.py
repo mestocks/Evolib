@@ -1,3 +1,5 @@
+from DataObjects import FastqRead
+
 def fastq_iter(FileObject):
     
     linenum = 0
@@ -15,7 +17,8 @@ def fastq_iter(FileObject):
             assert cline.startswith('+')
         elif remainder == 3:
             quality = cline
-            yield [linenum, remainder, seqid, seq, quality]
+            FsqR = FastqRead(seq, seqid, quality)
+            yield FsqR
         else:
             raise IndexError, "Problem with counter. remainder should not be > 3."
         
