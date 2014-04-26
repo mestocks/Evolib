@@ -10,9 +10,10 @@ VCF files can be efficiently iterated:
 ```python
 from evolib.NGSFormats import VariantCallFormat
 
-VCF = VariantCallFormat("myData.vcf")
+openFile = open("myData.vcf", 'r')
+myVCF = VariantCallFormat(openFile)
 
-for bp in VCF:
+for bp in myVCF:
   print bp['CHROM'], bp['POS'], bp.genotypes(), bp.heterozygosity()
 ```
 
