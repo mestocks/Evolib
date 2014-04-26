@@ -16,7 +16,8 @@ class VariantCallFormat(SequenceData):
     Example:
     
         >>> from SequenceFormats import VariantCallFormat
-        >>> myVCF = VariantCallFormat("data.vcf")
+        >>> openFile = open("myData.vcf", 'r')
+        >>> myVCF = VariantCallFormat(openFile)
         >>> for bp in myVCF:
         >>>     print bp['CHROM'], bp['POS'], bp['REF'], bp.genotypes(), bp.heterozygosity()
     """
