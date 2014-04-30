@@ -1,5 +1,5 @@
 import math
-#from scipy import misc
+from scipy import misc
 
 def WattersonsTheta(n, s):
     
@@ -11,7 +11,7 @@ def WattersonsTheta(n, s):
     
     return tw
     
-"""def TajimasTheta(n, io):
+def TajimasTheta(n, io):
     
     sumPi = 0.0
     denom = misc.comb(n, 2)
@@ -22,7 +22,7 @@ def WattersonsTheta(n, s):
     pi = sumPi / denom
     
     return pi
-"""    
+    
 def TajimasD(n, s, tw, pi):
     
     if s == 0:

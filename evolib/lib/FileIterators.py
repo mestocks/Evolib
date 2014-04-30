@@ -1,4 +1,4 @@
-from IteratorObjects import FastqRead
+from IteratorObjects import FastqRead, GFFRecord
 from VCFrow import ROW_BASECLASS
 from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
 
@@ -25,6 +25,28 @@ def fastq_iter(FileObject):
             raise IndexError, "Problem with counter. remainder should not be > 3."
         
         linenum += 1
+
+def gff_iter(FileObject):
+    
+    name = 'start'
+    for line in FileObject:
+        if line.startswith('#') is False:
+            items = line.rstrip().split('\t')
+            if name == 'start':
+                name = items[0]
+                Gff = GFFRecord()
+                Gff.add(items)
+                
+            elif items[0] != name:
+                yield Gff
+                name = items[0]
+                Gff = GFFRecord()
+                Gff.add(items)
+                
+            else:
+                Gff.add(items)
+            
+    yield Gff
 
 def vcf_iter(FileObject):
     

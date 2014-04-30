@@ -9,6 +9,12 @@ class FastqRead():
 
 ###### ######
 
+class GFFRecord():
+    def add(self, items):
+        pass
+
+###### ######
+
 class Site():
     
     def __init__(self, alleles):
