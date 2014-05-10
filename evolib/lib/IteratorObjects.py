@@ -10,8 +10,24 @@ class FastqRead():
 ###### ######
 
 class GFFRecord():
+    def __init__(self):
+        self.exons = []
+        self.name = None
+        
     def add(self, items):
-        pass
+        if items[2] == "exon":
+            self._exon(items)
+        
+        if self.name is None:
+            self.name = items[0]
+            
+        try:
+            self.records.append(items)
+        except AttributeError:
+            self.records = [items]
+            
+    def _exon(self, record):
+        self.exons.extend([int(record[3]), int(record[4])])
 
 ###### ######
 
