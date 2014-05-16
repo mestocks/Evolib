@@ -1,11 +1,15 @@
 class FastqRead():
-    def __init__(self, seq, seqid, quality):
+    def __init__(self, seq, seqid, qual):
         self.seq = seq
         self.seqid = seqid
-        self.quality = quality
+        self.qual = qual
         
     def __str__(self):
         return '\n'.join([self.seqid, self.seq, '+', self.quality])
+    
+    def quality(self):
+        qualities = map(ord, self.qual)
+        return qualities
 
 ###### ######
 
