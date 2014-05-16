@@ -87,3 +87,6 @@ class FastqFormat():
     def __iter__(self):
         for row in fastq_iter(self.FileObject):
             yield row
+            
+    def __len__(self):
+        return sum(1 for row in fastq_iter(self.FileObject))
