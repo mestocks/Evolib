@@ -41,6 +41,9 @@ class Site():
         self._alleles = alleles
         
     
+    def __str__(self):
+        return self.alleles()
+
     def alleles(self):
         return self._alleles
     

@@ -34,7 +34,9 @@ class FastaFormat(SequenceData):
     def __getitem__(self, item):
         return FastaSequence(self.sequences[item], seqID = self.ids[item])
 
-            
+    def __len__(self):
+        return len(self.sequences)
+
     def __iter__(self):
         nseq = len(self.sequences)
         
@@ -86,6 +88,7 @@ class msFormat(SequenceData):
     def __init__(self, text):
         self.text = text
         lines = [i for i in text.split('\n')[2:] if i != '']
+        self.Seqs = lines
         self.IO = self._getBinaryTable(lines)
         
             

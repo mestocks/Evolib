@@ -28,16 +28,27 @@ for i in myGFF:
     if i.name in refdb.keys():
         gffdb.update({i.name: i.exons})
 
+annFile = open("/home/mist/Documents/Projects/spruce/papo/manuscripts/20140107papo/data/nxtgen/abies_ann.txt", 'r')
 
-openFile = open("test/Pa_can008.fsa", 'r')
-myData = FastaFormat(openFile)
+for line in annFile:
+    line_split = line.rstrip().split()
+    if len(line_split) == 1:
+        locus, exons = line_split[0], []
+    else:
+        locus, exons = line_split[0], map(int, line_split[1:])
+    openFile = open("/home/mist/Documents/Projects/spruce/papo/manuscripts/20140107papo/data/nxtgen/Pa_" + locus + ".fsa", 'r')
+    myData = FastaFormat(openFile)
+    myData.annotate(exons)
+    myData.justSynonymous()
+    print myData
+    #print locus, myData.validSites, myData.seg_sites()
 
-myData.annotate([1, 1106])
-#myData.justSynonymous()
+
+
 
 #print 'Syn', myData.validSites, myData.seg_sites(), myData.thetaW() / myData.validSites, myData.thetaPi() / myData.validSites, myData.tajD()
 
-coding_iter = myData.codingBySite()
+#coding_iter = myData.codingBySite()
 
 #while True:
 #    try:

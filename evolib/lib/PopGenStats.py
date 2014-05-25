@@ -62,6 +62,7 @@ def WakeleyHey(io, pop_nsam):
         site = io[index]
         site1 = site[: n1]
         site2 = site[n1: n1 + n2]
+        
         zero1 = '0' in site1
         zero2 = '0' in site2
         one1 = '1' in site1

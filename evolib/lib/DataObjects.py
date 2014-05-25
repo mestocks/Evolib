@@ -12,8 +12,8 @@ class BinaryTable(list):
     def add_sample(self, item):
         s = len(item)
         
-        if self.nsamples() is not None:
-            assert s == self.seg_sites(), "Cannot add a different number of segregating sites."
+        #if self.nsamples() is not None:
+        #    assert s == self.seg_sites(), "Cannot add a different number of segregating sites."
         
         for i in range(s):
             try:
@@ -35,10 +35,12 @@ class BinaryTable(list):
                 
     def seg_sites(self):
         
-        if self == []:
-            s = 0
-        else:
-            s = len(self)
+        s = 0
+        if self != []:
+            for i in self:
+                nIO = len(set(i))
+                if nIO > 1:
+                    s += 1
             
         return s
     
@@ -134,8 +136,9 @@ class SequenceData():
         
         self.validSites = 0
         IO = BinaryTable()
+        self.sites = []
         for site in seqs.seqsBySite():
-            
+            self.sites.append(site)
             if site.hasMissingData():
                 pass
             elif site.numberOfAlleles() > 2:
@@ -154,7 +157,7 @@ class SequenceData():
         self.exons = exons
     
     
-    def codingBySite(self):
+    def codingBySite(self, start = 1):
         
         amino_acids = {'TTT':'F', 'TTC':'F', 'TTA':'L', 'TTG':'L', 'CTT':'L', 
                        'CTC':'L', 'CTA':'L', 'CTG':'L', 'ATT':'I', 'ATC':'I', 
@@ -170,7 +173,7 @@ class SequenceData():
                        'CGG':'R', 'AGT':'S', 'AGC':'S', 'AGA':'R', 'AGG':'R', 
                        'GGT':'G', 'GGC':'G', 'GGA':'G', 'GGG':'G'}
         
-        for i in block_iter(self.bySite()):
+        for i in block_iter(self.bySite(), start = start):
             SiteObject = i[0]
             SiteObject.siteClassBroad = 'Coding'
             
@@ -182,9 +185,12 @@ class SequenceData():
                 codons = sites2codons(Pos1.alleles(), Pos2.alleles(), Pos3.alleles())
                 ucodons = set(codons)
                 SiteObject.ucodons = ucodons
+                SiteObject.uaminos = None
                 
                 if sum([b.hasMissingData() for b in codon_sites]) == 0:
-                    
+                    aminos = [amino_acids[j] for j in ucodons]
+                    uaminos = set(aminos)
+                    SiteObject.uaminos = uaminos
                     if len(ucodons) == 1:
                         
                         SiteObject.siteClassNarrow = 'MONO'
@@ -226,8 +232,10 @@ class SequenceData():
                             
                 else:
                     SiteObject.siteClassNarrow = None
+                    yield SiteObject
             else:
                 SiteObject.siteClassNarrow = None
+                #yield SiteObject
 
     
     def bySite(self):
@@ -238,6 +246,10 @@ class SequenceData():
     
     def define_pops(self, pop_nsam):
         self.pop_nsam = pop_nsam
+        
+    
+    def getSite(self, index):
+        return self.sites[index]
         
         
     def justSynonymous(self):
@@ -279,12 +291,12 @@ class SequenceData():
         start = 0
         for i in pops:
             finish = start + i
-            newTable = SeqTable(self.Seqs[start: finish])
-            newBinary = self._getBinaryTable(newTable)
-            
+            IO = BinaryTable()
+            for io in self.IO:
+                IO.append(io[start: finish])
             start = finish
             
-            yield newBinary
+            yield IO
             
         
     def seg_sites(self):

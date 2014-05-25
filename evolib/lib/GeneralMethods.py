@@ -86,6 +86,9 @@ def member_iter(ranges, start = 1, end = 1000000):
     rng = numpy.array(ranges)
     
     for i in range(start, end + 1):
+        #if ranges == []:
+        #    yield False
+        #else:
         equal = i == rng
         
         if sum(equal) == 1:

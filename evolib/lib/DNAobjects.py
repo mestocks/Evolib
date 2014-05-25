@@ -12,6 +12,12 @@ class DNAsequence():
         self.name = seqID
         self.sequence = seq
         
+    def __getitem__(self, index):
+        return self.sequence[index]
+        
+    def __len__(self):
+        return len(self.sequence)
+        
     def __str__(self):
         return self.sequence
     
