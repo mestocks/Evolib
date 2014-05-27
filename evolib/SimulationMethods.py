@@ -10,9 +10,9 @@ def ms_iter(fileObject):
     for line in fileObject:
         
         if header is False:
-            if line.rstrip() == '//':
+            if line.startswith('//'):
                 
-                msClass = msFormat(iteration)
+                msClass = msFormat(iteration.rstrip())
                 yield msClass
                 iteration = ''
                 
@@ -20,8 +20,8 @@ def ms_iter(fileObject):
                 iteration += line
                 
         elif header is True:
-            if line.rstrip() == '//':
+            if line.startswith('//'):
                 header = False
                 
-    msClass = msFormat(iteration)
+    msClass = msFormat(iteration.rstrip())
     yield msClass
