@@ -32,6 +32,6 @@ Populations can be easily defined and statistics calculated:
 F = FastaFormat(f)
 F.define_pops([12, 12])
 
-for pop in F:
+for pop in F.populations():
   print pop.seg_sites(), pop.tajD()
 ```
