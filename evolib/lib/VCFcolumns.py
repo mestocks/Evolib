@@ -85,8 +85,8 @@ class INFO(COL_BASECLASS):
         if isinstance(self.value, str):
             self.value = self._parse(self.chr_value)
 
-        INFO_parse = {'DP': self._DP, 
-                      'MQ': self._MQ}
+        INFO_parse = {'DP': self._DP}#, 
+                     # 'MQ': self._MQ}
 
         if index in INFO_parse.keys():
             self.value = INFO_parse[index](self.value)
@@ -137,6 +137,8 @@ class FORMAT(COL_BASECLASS):
         
         return value
 
+###### ######
+
 class SAMPLE(COL_BASECLASS):
     __slots__ = ['col_name', 'chr_value', 'value']
     
@@ -144,12 +146,32 @@ class SAMPLE(COL_BASECLASS):
         self.chr_value = value
         self.value = value
         self.format_value = format_value
+        
     
     def __getitem__(self, key):
-
+        
+        if isinstance(key, str) is False:
+            raise TypeError, 'Only str indexing is supported.'
+        
+        return self._get_formatted_item(key)
+    
+    
+    def _get_formatted_item(self, key):
+        """
+        Formats certain items that need to be converted. 
+        For example, 'DP' is converted to an integer. 
+        However, it only does this if it has not been done
+        before. This minimises repetition and results in 
+        considerable increases in speed as only those 
+        items that are explicitly called are parsed.
+        """
+        # Check if the column has been parsed.
         if isinstance(self.value, str):
             self.value = self._parse(self.chr_value, self.format_value)
             
+        # Some values need to be converted. If it's 
+        # not been done already then re-format by 
+        # calling the relevant function.
         SAMPLE_parse = {'DP': self._DP, 
                         'GT': self._GT, 
                         'GQ': self._GQ, 
@@ -157,29 +179,65 @@ class SAMPLE(COL_BASECLASS):
         
         if key in SAMPLE_parse.keys():
             item = self.value[key]
-            if isinstance(item, str):
-                self.value[key] = SAMPLE_parse[key](item)
-
+            if item is not None:
+                if isinstance(item, str):
+                    self.value[key] = SAMPLE_parse[key](item)
+            elif item is None:
+                # Missing DP values should be 0 rather than None.
+                if key == 'DP':
+                    self.value[key] = 0
+                
         return self.value[key]
+    
         
-    def _parse(self, chr_value, format):
+    def _parse(self, chr_value, format_col):
+        """
+        Splits and parses the string by ':' to give a 
+        dictionary. For example, '0/1:23:0,45,0', returns 
+        {'GT': '0/1', 'DP': '23', 'PL': '0,45,0'}. Some vcf files do not 
+        contain all format fields (when there are no 
+        reads mapping to the position for a certain 
+        individual). In such scenarios, None is entered 
+        into the relevant position in the list. For example, 
+        './.' would parse to {'GT': './.', 'DP': None, 'PL': None}. 
+        """
+        value = []
+        list_value = chr_value.split(":")
         
-        list_value = chr_value.split(':')
-        value = dict(zip(format, list_value))
+        for i in range(len(format_col)):
+            f = format_col[i]
+            
+            try:
+                v = list_value[i]
+            except IndexError:
+                v = None
+            
+            value.append((f, v))
         
-        return value
+        return dict(value)
+    
     
     def _DP(self, item):
         return int(item)
     
+    
     def _GT(self, item):
+        """
         
+        """
         sep = '/'
         if '|' in item:
             sep = '|'
-        item = map(int, item.split(sep))
+            
+        new_item = []
+        item_split = item.split(sep)
+        for i in item_split:
+            if i == ".":
+                new_item.append(None)
+            else:
+                new_item.append(i)
         
-        return item
+        return new_item
     
     def _GQ(self, item):        
         return int(item)
@@ -194,7 +252,11 @@ class SAMPLE(COL_BASECLASS):
     
         return item
     
-    
+    def binary_call(self):
+        # This will throw an error if self['GT'] 
+        # is None (i.e. non-iterable). Do I need to 
+        # take this into account?
+        return tuple(self['GT'])
     
     def genotype_call(self, ref, alt):
         
@@ -209,7 +271,10 @@ class SAMPLE(COL_BASECLASS):
         #gCall = genotypeCombinations[findZero]
         #print self.value
         GT = self['GT']
-        gCall = (possibleAlleles[GT[0]], possibleAlleles[GT[1]])
+        if GT == [None, None]:
+            gCall = (None, None)
+        else:
+            gCall = (possibleAlleles[int(GT[0])], possibleAlleles[int(GT[1])])
         
         return gCall
 
