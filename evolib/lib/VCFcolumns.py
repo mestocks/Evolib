@@ -232,10 +232,7 @@ class SAMPLE(COL_BASECLASS):
         new_item = []
         item_split = item.split(sep)
         for i in item_split:
-            if i == ".":
-                new_item.append(None)
-            else:
-                new_item.append(i)
+            new_item.append(i)
         
         return new_item
     
@@ -271,10 +268,7 @@ class SAMPLE(COL_BASECLASS):
         #gCall = genotypeCombinations[findZero]
         #print self.value
         GT = self['GT']
-        if GT == [None, None]:
-            gCall = (None, None)
-        else:
-            gCall = (possibleAlleles[int(GT[0])], possibleAlleles[int(GT[1])])
+        gCall = (possibleAlleles[int(GT[0])], possibleAlleles[int(GT[1])])
         
         return gCall
 

@@ -52,10 +52,10 @@ class ROW_BASECLASS(list, Site):
         return btypes
     
     def get_genotypes(self):
-        ref, alt = self["REF"], self["ALT"]
+        possible_alleles = self.possible_alleles()
         benotypes = self.benotypes()
         
-        return Genotypes(benotypes, ref, alt)
+        return Genotypes(benotypes, possible_alleles)
 
     def genotypes(self):
         
@@ -74,6 +74,11 @@ class ROW_BASECLASS(list, Site):
             genotypes.append(genotype)
         
         return genotypes
+    
+    def iter_samples(self):
+        for Sample in self.__getitem__(slice(9, None)):
+            yield Sample
+            
     
     def number_of_alleles(self, include = None):
         
@@ -103,6 +108,14 @@ class ROW_BASECLASS(list, Site):
             index += 1
         
         return len(set(gens))
+    
+    def possible_alleles(self):
+        
+        ref, alt = self['REF'].value, self['ALT'].value
+        print ref, alt
+        alleles = [ref] + alt.split(',')
+        
+        return alleles
     
     def variationIsSegregating(self):
         

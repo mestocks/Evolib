@@ -53,10 +53,17 @@ class FastaSequence(DNAsequence):
 class Genotypes():
     
     
-    def __init__(self, benotypes, ref, alt):
+    def __init__(self, benotypes, possible_alleles):
         self.benotypes = benotypes
-        self.ref, self.alt = ref, alt
+        self.possible_alleles = possible_alleles
     
+    
+    def __iter__(self):
+        for g in self.iter_genotypes():
+            yield g
+            
+    def __str__(self):
+        return ' '.join([g[0] + "," + g[1] for g in self.iter_genotypes()])
         
     def allele_numbers(self, ualleles):
         
@@ -65,6 +72,23 @@ class Genotypes():
         
         return nalleles
     
+    def iter_benotypes(self):
+        
+        for b in self.benotypes:
+            yield (b[0], b[1])
+    
+    def iter_genotypes(self):
+        
+        for b in self.iter_benotypes():
+            
+            if b == ('.', '.'):
+                yield ('N', 'N')
+                
+            else:
+                one = self.possible_alleles[int(b[0])]
+                two = self.possible_alleles[int(b[1])]
+                
+                yield (one, two)
     
     def number_of_alleles(self):
         return len(set(''.join([b[0] + b[1] for b in self.benotypes])))
@@ -84,3 +108,5 @@ class Genotypes():
         ualleles.sort()
         
         return ualleles
+
+
