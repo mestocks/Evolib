@@ -53,8 +53,8 @@ class FastaSequence(DNAsequence):
 class Genotypes():
     
     
-    def __init__(self, benotypes, possible_alleles):
-        self.benotypes = benotypes
+    def __init__(self, iter_benotypes, possible_alleles):
+        self.benotypes = [b for b in iter_benotypes]
         self.possible_alleles = possible_alleles
     
     
@@ -71,6 +71,36 @@ class Genotypes():
         nalleles = [alleles.count(a) for a in ualleles]
         
         return nalleles
+        
+    def is_heterozygote(self):
+        ishet = []
+        for b in self.iter_benotypes():
+            if b != ('.', '.'):
+                if b[0] != b[1]:
+                    ishet.append(True)
+                else:
+                    ishet.append(False)
+        
+        return ishet
+        
+        
+    def genotype_numbers(self, binary_genotypes, ualleles):
+        """
+        Assumes mono and bi-allelic sites only.
+        
+        binary_genotypes = ['00', '01', ...'10']
+        ualleles = ['0', '1']
+        
+        returns [num_AA, num_Aa, num_aa]
+        """
+        derived = ualleles[1]
+        ngens = [0 for i in range(3)]
+        for g in binary_genotypes:
+            c = g.count(derived)
+            ngens[c] += 1
+            
+        return ngens
+
     
     def iter_benotypes(self):
         
@@ -96,8 +126,8 @@ class Genotypes():
     
     def number_of_genotypes(self):
         return len(set([b[0] + b[1] for b in self.benotypes]))
-    
-    
+        
+        
     def subset(self, indices):
         self.benotypes = [self.benotypes[b] for b in indices]
         
