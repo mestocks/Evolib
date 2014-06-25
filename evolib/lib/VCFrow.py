@@ -42,7 +42,13 @@ class ROW_BASECLASS(list, Site):
             value = self.classes[index](self.values[index])
             
         return value
-    
+        
+        
+    def iter_samples(self):
+        for Sample in self.__getitem__(slice(9, None)):
+            yield Sample
+            
+"""
     def benotypes(self):
         
         btypes = []
@@ -149,8 +155,10 @@ class ROW_BASECLASS(list, Site):
     
     def heterozygosity(self, minGQ = 0, minDP = 0):
         """
+"""
         Calculate the hetorozygosity for this site. Counts the number of individuals that are
         heterozygotes and then divides this by the number of individuals. 
+"""
         """
         REF = self['REF']
         ALT = self['ALT']
@@ -213,6 +221,7 @@ class ROW_BASECLASS(list, Site):
         chi = stats.chisquare(obs, exp, 1)
         p_value = chi[1]
         """
+"""
         chis = []
         for i in range(len(obs)):
             x2 = chisquared(obs[i], exp[i])
@@ -224,9 +233,10 @@ class ROW_BASECLASS(list, Site):
         p_value = None
         
         return chi
+"""
         """
         return p_value
-
+"""
 ####################
 
 class ROW_BASECLASS_OLD(list):

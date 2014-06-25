@@ -51,6 +51,23 @@ class FastaSequence(DNAsequence):
 ###### ######
 
 class Genotypes():
+    """
+    Class for dealing with the genotype values given in each row of 
+    a VCF file. evolib.lib.VCFrow::ROW_BASECLASS provides a wrapper 
+    for this.
+    """
+    def __init__(self, raw_genotypes, possible_alleles):
+        self.raw_genotypes = raw_genotypes
+        self.possible_alleles = possible_alleles
+        
+    def iter_benotypes(self):
+        
+        for Sample in raw_genotypes:
+            b = Sample.binary_call()
+            
+            yield b[0] + b[1]
+
+class Genotypes_old():
     
     
     def __init__(self, benotypes, possible_alleles):
