@@ -9,6 +9,7 @@ class ROW_BASECLASS(list, Site):
     
     def __init__(self, values, classes, header):
          
+        self.NA = '.'
         self.classes = classes
         self.header = header
         self.values = values
@@ -50,12 +51,8 @@ class ROW_BASECLASS(list, Site):
             
 """
     def benotypes(self):
-        
-        btypes = []
-        for sample in self.__getitem__(slice(9, None)):
-            btypes.append(sample.binary_call())
-        
-        return btypes
+        for sample in self.iter_samples():
+            yield sample.binary_call()
     
     def get_genotypes(self):
         possible_alleles = self.possible_alleles()
@@ -93,7 +90,7 @@ class ROW_BASECLASS(list, Site):
         index = 0
         for gen in btypes:
             if include is None or index in include:
-                if gen[0] != None and gen[1] != None:
+                if gen[0] != self.NA and gen[1] != self.NA:
                     bps = gen[0] + gen[1]
                     if bps != 'NN':
                         alls.append(bps)
@@ -101,7 +98,7 @@ class ROW_BASECLASS(list, Site):
         allstr = ''.join(alls)
         
         return len(set(allstr))
-    
+
     def number_of_genotypes(self, include = None):
         
         btypes = self.benotypes()
@@ -109,7 +106,7 @@ class ROW_BASECLASS(list, Site):
         index = 0
         for b in btypes:
             if include is None or index in include:
-                if b[0] != None and b[1] != None:
+                if b[0] != self.NA and b[1] != self.NA:
                     gens.append(b[0] + b[1])
             index += 1
         
@@ -118,7 +115,6 @@ class ROW_BASECLASS(list, Site):
     def possible_alleles(self):
         
         ref, alt = self['REF'].value, self['ALT'].value
-        print ref, alt
         alleles = [ref] + alt.split(',')
         
         return alleles
