@@ -63,3 +63,47 @@ class Site():
     def numberOfAlleles(self):
         alleles = set(self.alleles())
         return len(alleles)
+
+from evolib.lib.DataObjects import SequenceData
+
+class msFormat(SequenceData):
+    
+    
+    def __init__(self, text):
+        self.text = text
+        lines = [i for i in text.split('\n')[2:] if i != '']
+        self.Seqs = lines
+        self.IO = self._getBinaryTable(lines)
+        
+            
+    def __str__(self):
+        return self.text
+    
+    
+    def _getBinaryTable(self, seqs):
+        
+        IO = BinaryTable()
+        for line in seqs:
+            IO.add_sample(line)
+            
+        return IO
+            
+    
+    def nsamples(self):
+        
+        try:
+            n = len(self.IO[0])
+        except IndexError:
+            n = None
+            
+        return n
+    
+    def sample_sites(self, p):
+        
+        newIO = BinaryTable()
+        for i in self.IO:
+            pick = random.random()
+            if pick < p:
+                newIO.append(i)
+                
+        self.IO = newIO

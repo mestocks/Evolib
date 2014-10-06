@@ -1,4 +1,4 @@
-from IteratorObjects import FastqRead, GFFRecord
+from IteratorObjects import FastqRead, GFFRecord, msFormat
 from VCFrow import ROW_BASECLASS
 from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
 
@@ -65,3 +65,28 @@ def vcf_iter(FileObject):
             Row = ROW_BASECLASS(value_list, col_classes, header)
             
             yield Row
+
+
+def ms_iter(fileObject):
+    
+    header = True
+    iteration = ''
+    
+    for line in fileObject:
+        
+        if header is False:
+            if line.startswith('//'):
+                
+                msClass = msFormat(iteration.rstrip())
+                yield msClass
+                iteration = ''
+                
+            else:
+                iteration += line
+                
+        elif header is True:
+            if line.startswith('//'):
+                header = False
+                
+    msClass = msFormat(iteration.rstrip())
+    yield msClass
