@@ -41,7 +41,7 @@ class VariantCallFormat(SequenceData):
 
 class FastqFormat():
     
-    def __init__(self, path):
+    def __init__(self, FileObject):
         self.FileObject = FileObject
         
     def __iter__(self):
