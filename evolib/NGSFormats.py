@@ -1,5 +1,5 @@
 from lib.DataObjects import SequenceData
-from lib.FileIterators import fastq_iter, vcf_iter
+from iterators.Iterators import fastq_iter, vcf_iter
 
 ###### ######
 
