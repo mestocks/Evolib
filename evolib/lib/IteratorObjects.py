@@ -11,6 +11,9 @@ class FastqRead():
         qualities = map(ord, self.qual)
         return qualities
 
+    def __len__(self):
+        return len(self.seq)
+
 ###### ######
 
 class GFFRecord():
