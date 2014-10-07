@@ -1,3 +1,31 @@
+class Site():
+    
+    def __init__(self, alleles):
+        self._alleles = alleles
+        
+    
+    def __str__(self):
+        return self.alleles()
+
+    def alleles(self):
+        return self._alleles
+    
+    
+    def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
+        
+        if set(self.alleles()) <= set(dna):
+            answer = False
+        else:
+            answer = True
+            
+        return answer
+    
+    def numberOfAlleles(self):
+        alleles = set(self.alleles())
+        return len(alleles)
+
+###### ######
+
 class FastqRead():
     def __init__(self, seq, seqid, qual):
         self.seq = seq
@@ -19,7 +47,7 @@ class FastqRead():
 import numpy
 from scipy import stats
 
-from evolib.lib.DataObjects import Site
+#from evolib.lib.DataObjects import Site
 from evolib.lib.DNAobjects import Genotypes
 from evolib.lib.StatMethods import chisquared
 
@@ -92,34 +120,6 @@ class GFFRecord():
 
 ###### ######
 
-class Site():
-    
-    def __init__(self, alleles):
-        self._alleles = alleles
-        
-    
-    def __str__(self):
-        return self.alleles()
-
-    def alleles(self):
-        return self._alleles
-    
-    
-    def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
-        
-        if set(self.alleles()) <= set(dna):
-            answer = False
-        else:
-            answer = True
-            
-        return answer
-    
-    def numberOfAlleles(self):
-        alleles = set(self.alleles())
-        return len(alleles)
-
-###### ######
-
 from evolib.lib.DataObjects import SequenceData
 
 class msFormat(SequenceData):
@@ -163,3 +163,86 @@ class msFormat(SequenceData):
                 newIO.append(i)
                 
         self.IO = newIO
+import random
+
+# Classes
+from evolib.lib.DNAobjects import FastaSequence
+from evolib.data.AlignmentObjects import DnaPopulationData
+#from lib.DataObjects import SequenceData
+from evolib.lib.DataObjects import BinaryTable, SeqTable
+
+###### ######
+
+class FastaAlignment(DnaPopulationData):
+    """
+    *FastaFormat* - class representation of DNA sequence data in fasta format.
+        evolib.SequenceFormats::FastaFormat
+    
+    Example usage:
+    
+       >>> from evolib.SequenceFormats import FastaFormat
+       
+       Example 1:
+       >>> fileObject = open('example.fsa', 'r')
+       >>> F = FastaFormat(fileObject)
+       
+       Example 2:
+       >>> import sys
+       >>> stdinObject = sys.stdin
+       >>> F = FastaFormat(stdinObject)
+       
+    """
+
+    def __init__(self, fileObject):
+        self._fromFile(fileObject)
+        
+            
+    def __getitem__(self, item):
+        return FastaSequence(self.sequences[item], seqID = self.ids[item])
+
+    def __len__(self):
+        return len(self.sequences)
+
+    def __iter__(self):
+        nseq = len(self.sequences)
+        
+        for i in range(nseq):
+            sequence = FastaSequence(self.sequences[i], seqID = self.ids[i])
+            
+            yield sequence
+            
+            
+    def __str__(self):
+        
+        stringList = []
+        for s in range(len(self.sequences)):
+            seq = FastaSequence(self.sequences[s], seqID = self.ids[s])
+            stringList.append(seq)
+        theString = '\n'.join(map(str, stringList))
+            
+        return theString
+    
+
+    def _fromFile(self, fileObject):
+        """
+        Returns a matrix where M[i][j] refers to the jth site of the ith individual.
+        """        
+        step1 = ''.join(map(lambda line: line, fileObject))
+        step2 = step1.split('\n>')
+        seq_table = [part.partition('\n')[2].replace('\n','') for part in step2]
+        seq_names = [part.partition('\n')[0].replace('>', '') for part in step2]
+        
+        self.sequences = seq_table
+        self.ids = seq_names
+        
+        self.DNAdata = SeqTable(seq_table)
+        self.IOdata = self._get_IOdata(self.DNAdata)
+        
+        
+    def length(self):
+        return self.validSites
+    
+    
+    def nsamples(self):
+        return len(self.sequences)
+

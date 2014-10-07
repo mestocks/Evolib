@@ -1,9 +1,9 @@
-import PopGenStats
+import evolib.lib.PopGenStats as PopGenStats
 
 # Methods
-from IteratorObjects import Site
-from GeneralMethods import loopByColumn, block_iter, member_iter
-from DNAmethods import minorMajorAllele, binarizeDNA, sites2codons, synNonsynProbs
+from evolib.format.IteratorObjects import Site
+from evolib.lib.GeneralMethods import loopByColumn, block_iter, member_iter
+from evolib.lib.DNAmethods import minorMajorAllele, binarizeDNA, sites2codons, synNonsynProbs
 
 ###### ######
 
