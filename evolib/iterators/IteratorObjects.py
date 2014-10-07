@@ -16,6 +16,60 @@ class FastqRead():
 
 ###### ######
 
+import numpy
+from scipy import stats
+
+from evolib.lib.DataObjects import Site
+from evolib.lib.DNAobjects import Genotypes
+from evolib.lib.StatMethods import chisquared
+
+class VCFrow(list, Site):
+    
+    def __init__(self, values, classes, header):
+         
+        self.NA = '.'
+        self.classes = classes
+        self.header = header
+        self.values = values
+        self.FormatClass = None
+        self.lookupindex = dict([(key, index) for index, key in enumerate(self.header)])
+        
+        return list.__init__(self, values)
+    
+    def __getitem__(self, index):
+        
+        if isinstance(index, str):
+            index = self.lookupindex[index]
+            
+        if isinstance(index, slice):
+            value = []
+            for i in range(len(self.header)).__getitem__(index):
+                v = self._get_colvalue(i)
+                value.append(v)
+        else:
+            value = self._get_colvalue(index)
+        
+        return value
+    
+    def _get_colvalue(self, index):
+        
+        if index > 8:
+            if self.FormatClass is None:
+                self.FormatClass = self.classes[8](self.values[8])
+            value = self.classes[index](self.values[index], self.FormatClass.value)
+        else:
+            value = self.classes[index](self.values[index])
+            
+        return value
+        
+        
+    def iter_samples(self):
+        for Sample in self.__getitem__(slice(9, None)):
+            yield Sample
+
+
+###### ######
+
 class GFFRecord():
     def __init__(self):
         self.exons = []
@@ -63,6 +117,8 @@ class Site():
     def numberOfAlleles(self):
         alleles = set(self.alleles())
         return len(alleles)
+
+###### ######
 
 from evolib.lib.DataObjects import SequenceData
 

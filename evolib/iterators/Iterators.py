@@ -1,5 +1,4 @@
-from IteratorObjects import FastqRead, GFFRecord, msFormat
-from VCFrow import ROW_BASECLASS
+from IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow
 from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
 
 def fastq_iter(FileObject):
@@ -62,7 +61,7 @@ def vcf_iter(FileObject):
             value_list = line.rstrip().split('\t')
             nsamples = len(header) - 9
             col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT] + [SAMPLE] * nsamples
-            Row = ROW_BASECLASS(value_list, col_classes, header)
+            Row = VCFrow(value_list, col_classes, header)
             
             yield Row
 
