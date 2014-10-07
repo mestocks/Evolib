@@ -163,15 +163,14 @@ class msFormat(SequenceData):
                 newIO.append(i)
                 
         self.IO = newIO
-import random
 
-# Classes
-from evolib.lib.DNAobjects import FastaSequence
-from evolib.data.AlignmentObjects import DnaPopulationData
-#from lib.DataObjects import SequenceData
-from evolib.lib.DataObjects import BinaryTable, SeqTable
+
 
 ###### ######
+
+from evolib.lib.DNAobjects import FastaSequence
+from evolib.data.AlignmentObjects import DnaPopulationData
+from evolib.lib.DataObjects import BinaryTable, SeqTable
 
 class FastaAlignment(DnaPopulationData):
     """
