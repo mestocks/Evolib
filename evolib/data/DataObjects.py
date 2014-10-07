@@ -1,10 +1,3 @@
-import evolib.lib.PopGenStats as PopGenStats
-
-# Methods
-from evolib.format.IteratorObjects import Site
-from evolib.lib.GeneralMethods import loopByColumn, block_iter, member_iter
-from evolib.lib.DNAmethods import minorMajorAllele, binarizeDNA, sites2codons, synNonsynProbs
-
 ###### ######
 
 class BinaryTable(list):
@@ -21,73 +14,32 @@ class BinaryTable(list):
                 
             except IndexError:
                 self.append(item[i])
-                
-    
-    def nsamples(self):
-        
-        if self == []:
-            n = None
-        else:
-            n = len(self[0])
-            
-        return n
-    
-                
-    def seg_sites(self):
-        
-        s = 0
-        if self != []:
-            for i in self:
-                nIO = len(set(i))
-                if nIO > 1:
-                    s += 1
-            
-        return s
-    
-    def thetaW(self):
-        n = self.nsamples()
-        s = self.seg_sites()
-        
-        return PopGenStats.WattersonsTheta(n, s)
-        
-    def thetaPi(self):
-        pi = 0.0
-        
-        if self.nsamples() is not None:
-            n = self.nsamples()
-            pi = PopGenStats.TajimasTheta(n, self)
-        
-        return pi
-    
-    def tajD(self):
-        n = self.nsamples()
-        s = self.seg_sites()
-        tw = self.thetaW()
-        pi = self.thetaPi()
-        
-        return PopGenStats.TajimasD(n, s, tw, pi)
-    
-    def wh97(self, pop_nsam):
-        return PopGenStats.WakeleyHey(self, pop_nsam)
+
 
 ###### ######
 
+from evolib.formats.IteratorObjects import Site
+from evolib.tools.GeneralMethods import loopByColumn
+
 class SeqTable(list):
     
-
     def seqsBySite(self):
         
         for site in loopByColumn(self):
             SiteClass = Site(site)
             yield SiteClass
 
+            
 ###### ######
+#, block_iter, member_iter
+#from evolib.tools.DNAmethods import minorMajorAllele, binarizeDNA, sites2codons, synNonsynProbs
 
+"""
 class SequenceData():
-    """
+
     Class representation of DNA sequences from multiple 
     samples. 
-    """
+
     def __init__(self, seqs, ids = None):
         
         if isinstance(seqs, list) is False:
@@ -106,12 +58,12 @@ class SequenceData():
 
 
     def _create_ids(self, nseqs):
-        """
+
         Creates a list of sequence ids equal to the number 
         of sequences as shown in the examples below:
            ['seq1', 'seq2', 'seq3']
            ['seq01', 'seq02', ...'seq24']
-        """
+
         ids = []
         for i in range(nseqs):
             seqnum = i + 1
@@ -315,3 +267,4 @@ class SequenceData():
         assert self.pop_nsam is not None
         return self.IO.wh97(self.pop_nsam)
         
+"""

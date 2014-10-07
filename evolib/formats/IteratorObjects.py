@@ -48,8 +48,8 @@ import numpy
 from scipy import stats
 
 #from evolib.lib.DataObjects import Site
-from evolib.lib.DNAobjects import Genotypes
-from evolib.lib.StatMethods import chisquared
+from evolib.tools.DNAobjects import Genotypes
+#from evolib.stats.StatMethods import chisquared
 
 class VCFrow(list, Site):
     
@@ -120,35 +120,25 @@ class GFFRecord():
 
 ###### ######
 
-from evolib.lib.DataObjects import SequenceData
+from evolib.data.AlignmentObjects import IOPopulationData
 
-class msFormat(SequenceData):
+class msFormat(IOPopulationData):
     
     
     def __init__(self, text):
         self.text = text
         lines = [i for i in text.split('\n')[2:] if i != '']
         self.Seqs = lines
-        self.IO = self._getBinaryTable(lines)
+        self.IOdata = self._get_IOdata(lines)
         
             
     def __str__(self):
         return self.text
     
-    
-    def _getBinaryTable(self, seqs):
-        
-        IO = BinaryTable()
-        for line in seqs:
-            IO.add_sample(line)
-            
-        return IO
-            
-    
     def nsamples(self):
         
         try:
-            n = len(self.IO[0])
+            n = len(self.IOdata[0])
         except IndexError:
             n = None
             
@@ -157,20 +147,20 @@ class msFormat(SequenceData):
     def sample_sites(self, p):
         
         newIO = BinaryTable()
-        for i in self.IO:
+        for i in self.IOdata:
             pick = random.random()
             if pick < p:
                 newIO.append(i)
                 
-        self.IO = newIO
+        self.IOdata = newIO
 
 
 
 ###### ######
 
-from evolib.lib.DNAobjects import FastaSequence
+from evolib.tools.DNAobjects import FastaSequence
 from evolib.data.AlignmentObjects import DnaPopulationData
-from evolib.lib.DataObjects import BinaryTable, SeqTable
+from evolib.data.DataObjects import BinaryTable, SeqTable
 
 class FastaAlignment(DnaPopulationData):
     """

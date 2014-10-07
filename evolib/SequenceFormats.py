@@ -1,13 +1,4 @@
-#import random
-
-# Classes
-#from lib.DNAobjects import FastaSequence
-#from lib.DataObjects import SequenceData
-#from lib.DataObjects import BinaryTable, SeqTable
-
-###### ######
-
-from evolib.format.IteratorObjects import FastaAlignment
+from evolib.formats.IteratorObjects import FastaAlignment
 
 class FastaFormat(FastaAlignment):
     """

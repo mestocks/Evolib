@@ -1,7 +1,7 @@
 from evolib.stats.StatObjects import IOstats
 
-from evolib.lib.DataObjects import BinaryTable, SeqTable
-from evolib.lib.DNAmethods import binarizeDNA
+from evolib.data.DataObjects import BinaryTable, SeqTable
+from evolib.tools.DNAmethods import binarizeDNA
 
 class DnaPopulationData(IOstats):
     """
@@ -72,3 +72,18 @@ class DnaPopulationData(IOstats):
                 
         return IO
 
+###### ######
+
+class IOPopulationData(IOstats):
+
+    def __init__(self, seqs):
+
+        self.IOdata = self._get_IOdata(self, seqs)
+        
+    def _get_IOdata(self, seqs):
+        
+        IO = BinaryTable()
+        for line in seqs:
+            IO.add_sample(line)
+            
+        return IO
