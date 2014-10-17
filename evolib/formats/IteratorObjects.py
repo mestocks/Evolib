@@ -1,29 +1,3 @@
-class Site():
-    
-    def __init__(self, alleles):
-        self._alleles = alleles
-        
-    
-    def __str__(self):
-        return self.alleles()
-
-    def alleles(self):
-        return self._alleles
-    
-    
-    def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
-        
-        if set(self.alleles()) <= set(dna):
-            answer = False
-        else:
-            answer = True
-            
-        return answer
-    
-    def numberOfAlleles(self):
-        alleles = set(self.alleles())
-        return len(alleles)
-
 ###### ######
 
 class FastqRead():
@@ -47,11 +21,11 @@ class FastqRead():
 import numpy
 from scipy import stats
 
-#from evolib.lib.DataObjects import Site
+from evolib.generic.Alignment import VCFSite
 from evolib.tools.DNAobjects import Genotypes
 #from evolib.stats.StatMethods import chisquared
 
-class VCFrow(list, Site):
+class VCFrow(list, VCFSite):
     
     def __init__(self, values, classes, header):
          
@@ -158,7 +132,8 @@ class msFormat(IOPopulationData):
 
 ###### ######
 
-from evolib.tools.DNAobjects import FastaSequence
+from evolib.generic.AlignmentSite import FastaSite
+from evolib.generic.GeneticSequence import FastaSequence
 from evolib.data.AlignmentObjects import DnaPopulationData
 from evolib.data.DataObjects import BinaryTable, SeqTable
 

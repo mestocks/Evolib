@@ -18,7 +18,7 @@ class BinaryTable(list):
 
 ###### ######
 
-from evolib.formats.IteratorObjects import Site
+from evolib.generic.AlignmentSite import Site
 from evolib.tools.GeneralMethods import loopByColumn
 
 class SeqTable(list):
