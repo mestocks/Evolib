@@ -21,7 +21,7 @@ class FastqRead():
 import numpy
 from scipy import stats
 
-from evolib.generic.Alignment import VCFSite
+from evolib.generic.AlignmentSite import VCFSite
 from evolib.tools.DNAobjects import Genotypes
 #from evolib.stats.StatMethods import chisquared
 
