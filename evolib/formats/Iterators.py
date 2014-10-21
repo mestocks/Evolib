@@ -89,3 +89,33 @@ def ms_iter(fileObject):
                 
     msClass = msFormat(iteration.rstrip())
     yield msClass
+
+
+def fwdpp_iter(fileObject):
+
+    header = True
+    iteration = ''
+    ns = 0
+    
+    for line in fileObject:
+        
+        if header is False:
+            if line.startswith('//'):
+                if ns % 2 == 0:
+                    selClass = msFormat(iteration.rstrip())
+                    yield neuClass, selClass
+                else:
+                    neuClass = msFormat(iteration.rstrip())
+                iteration = ''
+                ns += 1
+            else:
+                iteration += line
+                
+        elif header is True:
+            if line.startswith('//'):
+                ns += 1
+                header = False
+
+    if ns % 2 == 0:
+        selClass = msFormat(iteration.rstrip())
+        yield neuClass, selClass
