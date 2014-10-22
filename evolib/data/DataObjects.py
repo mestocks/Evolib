@@ -1,12 +1,31 @@
 import numpy
 
 class IOtable(numpy.ndarray):
-    
+    """
+    Boolean representation of segregating sites in a population.
+    IOtable[i][j] represents the ith segregating sites in the 
+    jth individual.
+    """
     def __new__(cls, input_array):
         return numpy.asarray(input_array).view(cls)
 
     def __array_finalize__(self, obj):
         if obj is None: return
+
+    def minor_allele_frequencies(self):
+        return numpy.sum(self, axis = 1)
+
+    def site_frequency_spectrum(self):
+
+        maf = self.minor_allele_frequencies()
+        n = len(self[0])
+        
+        if n % 2 == 0:
+            minlen = (n / 2) + 1
+        else:
+            minlen = (n + 1) / 2
+        
+        return numpy.bincount(maf, minlength = minlen)
 
 ###### ######
 

@@ -39,8 +39,6 @@ def TajimasD(n, s, tw, pi):
     
     if s == 0:
         D = None
-    elif tw == pi:
-        D = 0.0
     else:
         rawD = pi - tw
     
@@ -56,8 +54,9 @@ def TajimasD(n, s, tw, pi):
         e1 = c1 / a1
         e2 = c2 / (a1 * a1 + a2)
         V = e1 * s + e2 * s * (s - 1.)
+
         D = rawD / math.sqrt(V)
-        
+    
     return D
 
 def WakeleyHey(io, pop_nsam):
