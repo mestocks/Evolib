@@ -10,7 +10,19 @@ def WattersonsTheta(n, s):
         tw = s / a1
     
     return tw
+
+def TajimasThetaIO(n, io):
     
+    sumPi = 0.0
+    denom = misc.comb(n, 2)
+    for site in io:
+        nminor = sum(site)
+        nmajor = n - nminor
+        sumPi += nminor * nmajor
+    pi = sumPi / denom
+    
+    return pi
+
 def TajimasTheta(n, io):
     
     sumPi = 0.0
@@ -27,6 +39,8 @@ def TajimasD(n, s, tw, pi):
     
     if s == 0:
         D = None
+    elif tw == pi:
+        D = 0.0
     else:
         rawD = pi - tw
     

@@ -1,3 +1,13 @@
+import numpy
+
+class IOtable(numpy.ndarray):
+    
+    def __new__(cls, input_array):
+        return numpy.asarray(input_array).view(cls)
+
+    def __array_finalize__(self, obj):
+        if obj is None: return
+
 ###### ######
 
 class BinaryTable(list):

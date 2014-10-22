@@ -27,6 +27,38 @@ def binarizeDNA(DNA):
     
 	return robotDNA
 
+def booleanDNA(DNA):
+    
+	bases = set(['A', 'T', 'C', 'G'])
+	uDNA = set(DNA)
+    
+	assert uDNA <= bases
+    
+	if len(uDNA) == 1:
+		robotDNA = DNA.replace(DNA[0], '0')
+                robotDNA = [False for i in range(len(DNA))]
+	else:
+		minor, major = minorMajorAllele(DNA)
+                robotDNA = []
+                for i in DNA:
+                        if i == minor:
+                                robotDNA.append(True)
+                        elif i == major:
+                                robotDNA.append(False)
+		#robotDNA = DNA.replace(minor, '1')
+		#robotDNA = robotDNA.replace(major, '0')
+    
+	return robotDNA
+
+def booleanIO(IO):
+        bio = []
+        for io in IO:
+                if io == '1':
+                        bio.append(True)
+                elif io == '0':
+                        bio.append(False)
+
+        return bio
 
 def sites2codons(site1, site2, site3):
 	
