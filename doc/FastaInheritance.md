@@ -7,8 +7,8 @@
                             ^     :  :     ^            : : : : : :
                             |    IOtable   |            :         :
                             |              |        FastaSite    FastaSequence
-                            |     DNAPopulationData     ^             ^
-                            |     ^                     |             |
+              IOPopulationData   DNAPopulationData     ^             ^
+                            ^     ^                     |             |
                             |     |                    Site      DNAsequence
                             |     |                             
                             IOstats                            
