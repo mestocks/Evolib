@@ -1,5 +1,15 @@
-from IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow
+from IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment
 from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
+
+def fasta_alignment_iter(file_paths):
+
+    for f in file_paths:
+        
+        FileObject = open(f, 'r')
+        FsaFormat = FastaAlignment(FileObject)
+        
+        yield FsaFormat
+        
 
 def fastq_iter(FileObject):
     

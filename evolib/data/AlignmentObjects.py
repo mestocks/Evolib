@@ -114,12 +114,13 @@ class IOPopulationData(IOstats):
 
     def _alt_get_IOdata(self, seqs):
         
-        io = [] 
-        for s in range(len(seqs[0])):
-            site = ''.join([f[s] for f in seqs[:]])
-            bio = booleanIO(site)
-            io.append(bio)
-
+        io = []
+        if seqs != []:
+            for s in range(len(seqs[0])):
+                site = ''.join([f[s] for f in seqs[:]])
+                bio = booleanIO(site)
+                io.append(bio)
+                
         IO = IOtable(io)
-            
+        
         return IO

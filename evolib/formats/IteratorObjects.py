@@ -103,20 +103,21 @@ class msFormat(IOPopulationData):
         self.text = text
         lines = [i for i in text.split('\n')[2:] if i != '']
         self.Seqs = lines
+        #self.IOdata = self._alt_get_IOdata(lines)
         self.IOdata = self._get_IOdata(lines)
         
             
     def __str__(self):
         return self.text
     
-    def nsamples(self):
-        
-        try:
-            n = len(self.IOdata[0])
-        except IndexError:
-            n = None
-            
-        return n
+    #def nsamples(self):
+    #    
+    #    try:
+    #        n = len(self.IOdata[0])
+    #    except IndexError:
+    #        n = None
+    #        
+    #    return n
     
     def sample_sites(self, p):
         
@@ -200,13 +201,13 @@ class FastaAlignment(DnaPopulationData):
         self.ids = seq_names
         
         self.DNAdata = SeqTable(seq_table)
-        self.IOdata = self._get_IOdata(self.DNAdata)
+        self.IOdata = self._alt_get_IOdata(self.DNAdata)
         
         
     def length(self):
         return self.validSites
     
     
-    def nsamples(self):
-        return len(self.sequences)
+    #def nsamples(self):
+    #    return len(self.sequences)
 
