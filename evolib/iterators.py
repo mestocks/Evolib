@@ -1,5 +1,5 @@
-from IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment
-from VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
+from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment
+from evolib.formats.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
 
 def fasta_iter(file_paths):
 
