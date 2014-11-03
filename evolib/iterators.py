@@ -1,15 +1,33 @@
 from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment
+
 from evolib.formats.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
+
+import os
+import collections
+
+
+###### ######
+
 
 def fasta_iter(file_paths):
 
-    for f in file_paths:
+    if isinstance(file_paths, str):
+        file_paths = [file_paths]
+
+    assert isinstance(file_paths, collections.Iterable), "file_paths is not iterable: %r" % file_paths
+    
+    for fpath in file_paths:
+
+        assert os.path.isfile(fpath), "fpath does not exist: %r" % fpath
         
-        FileObject = open(f, 'r')
+        FileObject = open(fpath, 'r')
         FsaFormat = FastaAlignment(FileObject)
         
         yield FsaFormat
         
+
+###### ######
+
 
 def fastq_iter(FileObject):
     
@@ -35,6 +53,10 @@ def fastq_iter(FileObject):
         
         linenum += 1
 
+
+###### ######
+
+
 def gff_iter(FileObject):
     
     name = 'start'
@@ -57,6 +79,10 @@ def gff_iter(FileObject):
             
     yield Gff
 
+
+###### ######
+
+
 def vcf_iter(FileObject):
     
     for line in FileObject:
@@ -74,6 +100,9 @@ def vcf_iter(FileObject):
             Row = VCFrow(value_list, col_classes, header)
             
             yield Row
+
+
+###### ######
 
 
 def ms_iter(fileObject):
@@ -99,6 +128,9 @@ def ms_iter(fileObject):
                 
     msClass = msFormat(iteration.rstrip())
     yield msClass
+
+
+###### ######
 
 
 def fwdpp_iter(fileObject):

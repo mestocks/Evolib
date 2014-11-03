@@ -25,8 +25,17 @@ class Site(object):
         return len(alleles)
 
 
+###### ######
+
+
 class FastaSite(Site):
     pass
 
+
+###### ######
+
+
 class VCFSite(Site):
-    pass
+
+    def alleles(self):
+        raise IndexError, "self.alleles() not implemented yet"

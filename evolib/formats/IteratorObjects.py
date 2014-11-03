@@ -16,16 +16,12 @@ class FastqRead():
     def __len__(self):
         return len(self.seq)
 
+
 ###### ######
 
-import numpy
-from scipy import stats
-
 from evolib.generic.AlignmentSite import VCFSite
-from evolib.tools.DNAobjects import Genotypes
-#from evolib.stats.StatMethods import chisquared
 
-class VCFrow(list, VCFSite):
+class VCFrow(VCFSite):
     
     def __init__(self, values, classes, header):
          
@@ -33,10 +29,9 @@ class VCFrow(list, VCFSite):
         self.classes = classes
         self.header = header
         self.values = values
+        
         self.FormatClass = None
         self.lookupindex = dict([(key, index) for index, key in enumerate(self.header)])
-        
-        return list.__init__(self, values)
     
     def __getitem__(self, index):
         
@@ -52,6 +47,9 @@ class VCFrow(list, VCFSite):
             value = self._get_colvalue(index)
         
         return value
+
+    def __str__(self):
+        return '\t'.join(self.values)
     
     def _get_colvalue(self, index):
         
