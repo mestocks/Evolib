@@ -23,17 +23,22 @@ from evolib.generic.AlignmentSite import VCFSite
 
 class VCFrow(VCFSite):
     
-    def __init__(self, values, classes, header):
-         
+    def __init__(self, values, classes, header, nsamples):
+        
         self.NA = '.'
         self.classes = classes
         self.header = header
         self.values = values
+        self.nsamples = nsamples
         
         self.FormatClass = None
-        self.lookupindex = dict([(key, index) for index, key in enumerate(self.header)])
+        self.lookupindex = None
+        
     
     def __getitem__(self, index):
+
+        if self.lookupindex is None:
+            self.lookupindex = dict([(key, index) for index, key in enumerate(self.header)])
         
         if isinstance(index, str):
             index = self.lookupindex[index]
@@ -64,8 +69,14 @@ class VCFrow(VCFSite):
         
         
     def iter_samples(self):
-        for Sample in self.__getitem__(slice(9, None)):
-            yield Sample
+        
+        self.FormatClass = self.classes[8](self.values[8])
+        maxRange = self.nsamples + 9
+        
+        FormatValue = self.FormatClass.value
+        SampleClass = self.classes[9]
+        
+        return (SampleClass(self.values[i], FormatValue) for i in xrange(9, maxRange))
 
 
 ###### ######
@@ -167,23 +178,25 @@ class FastaAlignment(DnaPopulationData):
         return len(self.sequences)
 
     def __iter__(self):
+        
+        for i in self.iter_seqs():
+            yield i
+
+    def __str__(self):
+
+        stringlist = (str(fseq) for fseq in self.iter_seqs())
+
+        return '\n'.join(stringlist)
+
+
+    def iter_seqs(self):
+        
         nseq = len(self.sequences)
         
         for i in range(nseq):
             sequence = FastaSequence(self.sequences[i], seqID = self.ids[i])
             
-            yield sequence
-            
-            
-    def __str__(self):
-        
-        stringList = []
-        for s in range(len(self.sequences)):
-            seq = FastaSequence(self.sequences[s], seqID = self.ids[s])
-            stringList.append(seq)
-        theString = '\n'.join(map(str, stringList))
-            
-        return theString
+            yield sequence 
     
 
     def _fromFile(self, fileObject):

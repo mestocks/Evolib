@@ -152,8 +152,14 @@ class SAMPLE(COL_BASECLASS):
         
         if isinstance(key, str) is False:
             raise TypeError, 'Only str indexing is supported.'
+
+        #self.value = self._parse(self.chr_value, self.format_value)
+        #return self._GT(self.value[key])
         
         return self._get_formatted_item(key)
+
+    def __str__(self):
+        return self.chr_value
     
     
     def _get_formatted_item(self, key):

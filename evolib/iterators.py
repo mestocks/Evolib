@@ -92,12 +92,12 @@ def vcf_iter(FileObject):
         
         elif line.startswith('#'):
             header = line[1:].rstrip().split('\t')
+            nsamples = len(header) - 9
+            col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT] + [SAMPLE] * nsamples
             
         else:
             value_list = line.rstrip().split('\t')
-            nsamples = len(header) - 9
-            col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT] + [SAMPLE] * nsamples
-            Row = VCFrow(value_list, col_classes, header)
+            Row = VCFrow(value_list, col_classes, header, nsamples)
             
             yield Row
 
