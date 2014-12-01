@@ -21,7 +21,11 @@ class FastqRead():
 
 from evolib.generic.AlignmentSite import VCFSite
 
+# 
+
 class VCFrow(VCFSite):
+
+    #__slots__ = ['NA', 'classes', 'header', 'values', 'nsamples', 'FormatClass', 'lookupindex']
     
     def __init__(self, values, classes, header, nsamples):
         
@@ -56,7 +60,7 @@ class VCFrow(VCFSite):
     def __str__(self):
         return '\t'.join(self.values)
     
-    def _get_colvalue(self, index):
+    def _old_get_colvalue(self, index):
         
         if index > 8:
             if self.FormatClass is None:
@@ -66,9 +70,35 @@ class VCFrow(VCFSite):
             value = self.classes[index](self.values[index])
             
         return value
-        
-        
+
+    def _get_colvalue(self, index):
+
+        if index == 8:
+            Format = self.classes[index]
+            Format.value = self.value[index]
+        elif index > 8:
+            value = self.classes[index](self.values[index], self.FormatClass.value)
+        else:
+            value = self.classes[index](self.values[index])
+            
+        return value
+
     def iter_samples(self):
+
+        Format = self.classes[8]
+        Format.value = self.values[8]
+        
+        maxRange = self.nsamples + 9
+        
+        #FormatValue = self.FormatClass.value
+        SampleClass = self.classes[9]
+
+        for i in xrange(9, maxRange):
+            yield SampleClass(self.values[i], Format)
+        
+        #return (SampleClass(self.values[i], Format) for i in xrange(9, maxRange))      
+        
+    def old_iter_samples(self):
         
         self.FormatClass = self.classes[8](self.values[8])
         maxRange = self.nsamples + 9

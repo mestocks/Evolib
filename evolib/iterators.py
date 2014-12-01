@@ -1,6 +1,6 @@
 from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment
 
-from evolib.formats.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE
+from evolib.formats.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, FORMAT2, SAMPLE, SAMPLE2
 
 import os
 import collections
@@ -94,6 +94,28 @@ def vcf_iter(FileObject):
             header = line[1:].rstrip().split('\t')
             nsamples = len(header) - 9
             col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT] + [SAMPLE] * nsamples
+            
+        else:
+            value_list = line.rstrip().split('\t')
+            Row = VCFrow(value_list, col_classes, header, nsamples)
+            
+            yield Row
+
+###### ######
+
+
+def vcf_iter2(FileObject):
+    
+    for line in FileObject:
+        
+        if line.startswith('##'):
+            pass
+        
+        elif line.startswith('#'):
+            header = line[1:].rstrip().split('\t')
+            nsamples = len(header) - 9
+            Format = FORMAT2()
+            col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, Format] + [SAMPLE2] * nsamples
             
         else:
             value_list = line.rstrip().split('\t')

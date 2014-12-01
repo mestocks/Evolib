@@ -137,10 +137,118 @@ class FORMAT(COL_BASECLASS):
         
         return value
 
+class FORMAT2(COL_BASECLASS):
+
+    def __init__(self):
+        self.format_dict = {}
+
+    def __getitem__(self, value):
+        
+        if value not in self.format_dict:
+            new_value = dict([(j, i) for (i, j) in enumerate(value.split(":"))])
+            self.format_dict.update({value: new_value})
+
+        return self.format_dict[value]
+
+
+
+###### ######
+
+class SAMPLE2(COL_BASECLASS):
+
+    __slots__ = ['chr_value', 'value', 'split_value', 'Format', 'SAMPLE_parse']
+        
+    def __init__(self, value, Format):
+        
+        self.chr_value = value
+        self.value = value
+        self.split_value = None
+        self.Format = Format
+        self.SAMPLE_parse = {'DP': self._DP,
+                             'GT': self._GT, 
+                             'GQ': self._GQ, 
+                             'PL': self._PL}
+    
+    def __getitem__(self, key):
+
+        if self.split_value is None:
+            self.split_value = self.chr_value.split(":")
+            
+        if self.chr_value == "./.":
+            item = None
+        else:
+            #split_value = self.chr_value.split(":")
+            item = self.split_value[self.Format[self.Format.value][key]]
+            
+        if key in self.SAMPLE_parse:
+            item = self.SAMPLE_parse[key](item)
+            
+        return item
+    
+
+    def __str__(self):
+        return self.chr_value
+
+    
+    def _DP(self, item):
+        
+        new_item = 0
+        if item is not None:
+            new_item = int(item)
+            
+        return new_item
+    
+    
+    def _GT(self, item):
+
+        new_item = './.'
+        if item is not None:
+            sep = '/'
+            if '|' in item:
+                sep = '|'
+                
+            new_item = item.split(sep)
+        
+        return new_item
+    
+    def _GQ(self, item):
+
+        new_item = './.'
+        if item is not None:
+            new_item = int(item)
+            
+        return new_item
+    
+
+    def _PL(self, item):
+        
+        if item is not None:
+            try:
+                item = int(item)
+            except ValueError:
+                item = map(int, item.split(','))
+    
+        return item
+        
+
+
+
 ###### ######
 
 class SAMPLE(COL_BASECLASS):
     __slots__ = ['col_name', 'chr_value', 'value']
+    
+    """
+    SAMPLE["GQ"]
+    :: self._get_formatted_item() [1]
+    :: :: parse [1]
+    :: :: add key to dictionary (few if statements)
+    
+    value['GT']
+    {'DL:DP': {'DL': 0, 'DP': 1}}
+    
+    
+    """
     
     def __init__(self, value, format_value):
         self.chr_value = value
@@ -235,10 +343,11 @@ class SAMPLE(COL_BASECLASS):
         if '|' in item:
             sep = '|'
             
-        new_item = []
-        item_split = item.split(sep)
-        for i in item_split:
-            new_item.append(i)
+        #new_item = []
+        #item_split = item.split(sep)
+        #for i in item_split:
+        #    new_item.append(i)
+        new_item = item.split(sep)
         
         return new_item
     
