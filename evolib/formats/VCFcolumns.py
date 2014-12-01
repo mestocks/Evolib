@@ -230,7 +230,24 @@ class SAMPLE2(COL_BASECLASS):
     
         return item
         
+    def is_het(self):
+        
+        ishet = None
 
+        if self.split_value is None:
+            self.split_value = self.chr_value.split(":")
+            
+        if self.chr_value == "./.":
+            item = None
+        else:
+            item = self.split_value[self.Format[self.Format.value]['GT']]
+
+        if item == '0/0' or item == '1/1':
+            ishet = False
+        elif item == '0/1' or item == '1/0':
+            ishet = True
+
+        return ishet
 
 
 ###### ######

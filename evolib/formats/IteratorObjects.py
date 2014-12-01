@@ -39,21 +39,21 @@ class VCFrow(VCFSite):
         self.lookupindex = None
         
     
-    def __getitem__(self, index):
+    def __getitem__(self, item):
 
         if self.lookupindex is None:
             self.lookupindex = dict([(key, index) for index, key in enumerate(self.header)])
-        
-        if isinstance(index, str):
-            index = self.lookupindex[index]
             
-        if isinstance(index, slice):
+        if isinstance(item, str):
+            item = self.lookupindex[item]
+            
+        if isinstance(item, slice):
             value = []
-            for i in range(len(self.header)).__getitem__(index):
+            for i in range(len(self.header)).__getitem__(item):
                 v = self._get_colvalue(i)
                 value.append(v)
         else:
-            value = self._get_colvalue(index)
+            value = self._get_colvalue(item)
         
         return value
 
@@ -73,11 +73,11 @@ class VCFrow(VCFSite):
 
     def _get_colvalue(self, index):
 
-        if index == 8:
-            Format = self.classes[index]
-            Format.value = self.value[index]
-        elif index > 8:
-            value = self.classes[index](self.values[index], self.FormatClass.value)
+        Format = self.classes[8]
+        Format.value = self.values[8]
+
+        if index > 8:
+            value = self.classes[index](self.values[index], Format)
         else:
             value = self.classes[index](self.values[index])
             
