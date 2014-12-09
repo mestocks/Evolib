@@ -23,6 +23,55 @@ from evolib.generic.AlignmentSite import VCFSite
 
 # 
 
+
+class VCFrow3(object):
+    # row["CHROM"]
+    # row[:2] -> refers only to samples
+
+    # header.names = ['CHROM']
+    # header.str_item = {'CHROM': (CHROM, 0), ...}
+    # header.int_item = {0: (CHROM, 0), ...}
+
+    def __init__(self, values, header, Format):
+        self.values = values
+        self.header = header
+        self.Format = Format
+        self.Format.value = self.values[8]
+        self.nsamples = header.nsamples
+
+    def __str__(self):
+        return '\t'.join(self.values)
+
+    def __getitem__(self, item):
+
+        #if isinstance(item, slice):
+        #    value = self.values[slice]
+        #else:
+        if isinstance(item, str):
+            itemClass, index = self.header.str_item[item]
+        elif isinstance(item, int):
+            itemClass, index = self.header.int_item[item]
+            
+        if index > 8:
+            value = itemClass(self.values[index], self.Format)
+        else:
+            value = itemClass(self.values[index])
+
+        return value
+
+    def smap(self, mode, key):
+        # currently ~ 8,500 rows/second (inc. CHROM and POS)
+        return map(mode, (col.str_fetch(key) for col in self.iter_samples()))
+
+    def iter_samples(self):
+        
+        maxRange = self.nsamples + 9
+        SampleClass, index = self.header.int_item[9]
+
+        for i in xrange(9, maxRange):
+            yield SampleClass(self.values[i], self.Format)
+
+
 class VCFrow(VCFSite):
 
     #__slots__ = ['NA', 'classes', 'header', 'values', 'nsamples', 'FormatClass', 'lookupindex']
@@ -46,7 +95,10 @@ class VCFrow(VCFSite):
             
         if isinstance(item, str):
             item = self.lookupindex[item]
-            
+
+        if isinstance(item, slice):
+            value = [v for v in self.classes[item]]
+
         if isinstance(item, slice):
             value = []
             for i in range(len(self.header)).__getitem__(item):
@@ -54,6 +106,7 @@ class VCFrow(VCFSite):
                 value.append(v)
         else:
             value = self._get_colvalue(item)
+
         
         return value
 

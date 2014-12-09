@@ -156,7 +156,7 @@ class FORMAT2(COL_BASECLASS):
 
 class SAMPLE2(COL_BASECLASS):
 
-    __slots__ = ['chr_value', 'value', 'split_value', 'Format', 'SAMPLE_parse']
+    __slots__ = ['chr_value', 'value', 'split_value', 'Format']#, 'SAMPLE_parse']
         
     def __init__(self, value, Format):
         
@@ -164,12 +164,28 @@ class SAMPLE2(COL_BASECLASS):
         self.value = value
         self.split_value = None
         self.Format = Format
-        self.SAMPLE_parse = {'DP': self._DP,
-                             'GT': self._GT, 
-                             'GQ': self._GQ, 
-                             'PL': self._PL}
+        #self.SAMPLE_parse = {'DP': self._DP,
+        #                     'GT': self._GT, 
+        #                     'GQ': self._GQ, 
+        #                     'PL': self._PL}
     
+
     def __getitem__(self, key):
+        
+        #self.SAMPLE_parse = {'DP': self._DP,
+        #                     'GT': self._GT, 
+        #                     'GQ': self._GQ, 
+        #                     'PL': self._PL}
+    
+        if self.chr_value == "./.":
+            item = None
+        else:
+            self.split_value = self.chr_value.split(":")
+            item = self.split_value[self.Format[self.Format.value][key]]
+
+        return item
+
+    def getitem__(self, key):
 
         if self.split_value is None:
             self.split_value = self.chr_value.split(":")
@@ -189,14 +205,30 @@ class SAMPLE2(COL_BASECLASS):
     def __str__(self):
         return self.chr_value
 
+    def str_fetch(self, key):        
+
+        if self.chr_value == "./.":
+            item = '0'
+        else:
+            #if self.split_value is None:
+            self.split_value = self.chr_value.split(":")
+                
+            item = self.split_value[self.Format[self.Format.value][key]]
+
+        return item
     
     def _DP(self, item):
+
+        if item is None:
+            item = 0
+
+        return int(item)
         
-        new_item = 0
-        if item is not None:
-            new_item = int(item)
+        #new_item = 0
+        #if item is not None:
+        #    new_item = int(item)
             
-        return new_item
+        #return new_item
     
     
     def _GT(self, item):

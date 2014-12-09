@@ -1,4 +1,4 @@
-from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment
+from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment, VCFrow3
 
 from evolib.formats.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, FORMAT2, SAMPLE, SAMPLE2
 
@@ -103,6 +103,34 @@ def vcf_iter(FileObject):
 
 ###### ######
 
+class Header(object):
+    
+    def __init__(self, header):
+        self.names = header
+        self.nsamples = len(header) - 9
+        self.classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
+        self.str_item = dict([(key, (self.classes[index], index)) for index, key in enumerate(header)])
+        self.int_item = dict([(index, (self.classes[index], index)) for index, key in enumerate(header)])
+
+def vcf_iter3(FileObject):
+    
+    for line in FileObject:
+        
+        if line.startswith('##'):
+            pass
+        
+        elif line.startswith('#'):
+            header = line[1:].rstrip().split('\t')
+            headerClass = Header(header)
+            Format = FORMAT2()
+            
+        else:
+            # currently ~ 8,500 rows/second
+            values = line.rstrip().split('\t')
+            Row = VCFrow3(values, headerClass, Format)
+            
+            yield Row
+        
 
 def vcf_iter2(FileObject):
     

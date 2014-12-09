@@ -3,7 +3,7 @@ from evolib.formats.Iterators import fastq_iter, vcf_iter
 
 ###### ######
 
-class VariantCallFormat(SequenceData):
+class VariantCallFormat(object):
     """
     
     Usage:
