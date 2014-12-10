@@ -13,7 +13,14 @@ class DNAsequence():
         self.sequence = seq
         
     def __getitem__(self, index):
-        return self.sequence[index]
+        
+        if isinstance(index, int):
+            item = self.sequence[index]
+        elif isinstance(index, slice):
+            seq = self.sequence[index]
+            item = DNAsequence(seq, seqID = self.name)
+
+        return item
         
     def __len__(self):
         return len(self.sequence)

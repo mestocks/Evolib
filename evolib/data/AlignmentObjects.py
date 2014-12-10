@@ -2,7 +2,7 @@ from evolib.tools.GeneralMethods import create_ids
 
 from evolib.stats.StatObjects import IOstats, altIOstats
 
-from evolib.data.DataObjects import BinaryTable, SeqTable, SeqTable2, IOtable
+from evolib.data.DataObjects import BinaryTable, SeqTable, IOtable
 from evolib.tools.DNAmethods import binarizeDNA, booleanDNA, booleanIO
 
 class DnaPopulationData(altIOstats):
@@ -29,14 +29,13 @@ class DnaPopulationData(altIOstats):
 
     def _attach_data(self, sequences, ids):
         
-        self.DNAdata = SeqTable(sequences)
-        self.DNAdata2 = SeqTable2(sequences, ids)
+        self.DNAdata = SeqTable(sequences, ids)
         self.IOdata = self._alt_get_IOdata(self.DNAdata)
 
     ######
         
     def __len__(self):
-        return len(self.DNAdata2)
+        return len(self.DNAdata)
         
     ######
     

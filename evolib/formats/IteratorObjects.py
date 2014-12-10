@@ -229,7 +229,7 @@ from evolib.formats.ParseMethods import parse_fasta_alignment
 from evolib.generic.AlignmentSite import FastaSite
 from evolib.generic.GeneticSequence import FastaSequence
 from evolib.data.AlignmentObjects import DnaPopulationData
-from evolib.data.DataObjects import BinaryTable, SeqTable, SeqTable2
+from evolib.data.DataObjects import BinaryTable, SeqTable
 
 class FastaAlignment(DnaPopulationData):
     """
@@ -262,9 +262,9 @@ class FastaAlignment(DnaPopulationData):
     def __getitem__(self, item):
 
         if isinstance(item, str):
-            Fseq = FastaSequence(self.DNAdata2[item], item)
+            Fseq = FastaSequence(self.DNAdata[item], item)
         elif isinstance(item, int):
-            Fseq = FastaSequence(self.DNAdata2[item], self.DNAdata2.ids[item])
+            Fseq = FastaSequence(self.DNAdata[item], self.DNAdata.ids[item])
         else:
             raise TypeError, "String or integer required"
         
@@ -290,14 +290,14 @@ class FastaAlignment(DnaPopulationData):
         nseq = self.nsamples()
         
         for i in xrange(nseq):
-            sequence = FastaSequence(self.DNAdata2[i], seqID = self.DNAdata2.ids[i])
+            sequence = FastaSequence(self.DNAdata[i], seqID = self.DNAdata.ids[i])
             
             yield sequence
 
     ######
             
     def ids(self):
-        return self.DNAdata2.ids
+        return self.DNAdata.ids
 
 
     def nsamples(self):
@@ -305,9 +305,9 @@ class FastaAlignment(DnaPopulationData):
 
 
     def sequences(self):
-        return self.DNAdata2.sequences
+        return self.DNAdata.sequences
 
     
-    #def length(self):
-    #    return self.validSites
+    def length(self):
+        return self.validSites
     
