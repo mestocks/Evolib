@@ -67,6 +67,18 @@ def block_iter(itr, size = 3, start = 1):
         i += 1
 
 
+def create_ids(nids, prefix):
+    ids = []
+    for i in range(nseqs):
+        seqnum = i + 1
+        num_zeros = len(str(nseqs)) - len(str(seqnum))
+        zeros = '0' * num_zeros
+        id1 = prefix + zeros + str(seqnum)
+        ids.append(id1)
+            
+    return ids
+
+
 def loopByColumn(array):
     
     m = len(array)

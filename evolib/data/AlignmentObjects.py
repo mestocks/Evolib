@@ -1,3 +1,5 @@
+from evolib.tools.GeneralMethods import create_ids
+
 from evolib.stats.StatObjects import IOstats, altIOstats
 
 from evolib.data.DataObjects import BinaryTable, SeqTable, SeqTable2, IOtable
@@ -17,47 +19,26 @@ class DnaPopulationData(altIOstats):
         
         if isinstance(ids, list) is False:
             if ids is None:
-                ids = self._create_ids(n)
+                ids = create_ids(n, "seq")
             else:
                 raise TypeError, 'List expected.'
 
-        self._from_sequence(seqs, ids)
+        self._attach_data(seqs, ids)
         self.pop_nsam = None
 
-    def __len__(self):
-        return len(self.DNAdata2)
-        
 
     def _attach_data(self, sequences, ids):
+        
         self.DNAdata = SeqTable(sequences)
         self.DNAdata2 = SeqTable2(sequences, ids)
         self.IOdata = self._alt_get_IOdata(self.DNAdata)
 
-
-    def _create_ids(self, nseqs):
-        """
-        Creates a list of sequence ids equal to the number 
-        of sequences as shown in the examples below:
-           ['seq1', 'seq2', 'seq3']
-           ['seq01', 'seq02', ...'seq24']
-        """
-        ids = []
-        for i in range(nseqs):
-            seqnum = i + 1
-            num_zeros = len(str(nseqs)) - len(str(seqnum))
-            zeros = '0' * num_zeros
-            id1 = 'seq' + zeros + str(seqnum)
-            ids.append(id1)
-            
-        return ids
-    
-    
-    def _from_sequence(self, seqs, ids):
+    ######
         
-        self.seqs = seqs
-        self.ids = ids
-        self._attach_data(seqs, ids)
-    
+    def __len__(self):
+        return len(self.DNAdata2)
+        
+    ######
     
     def _get_IOdata(self, seqs):
         

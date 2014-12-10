@@ -252,14 +252,10 @@ class FastaAlignment(DnaPopulationData):
     """
     
     def __init__(self, fileObject):
-        
-        self._from_file(fileObject)
-
-
-    def _from_file(self, fileObject):
-        
+    
         seqs, ids = parse_fasta_alignment(fileObject)
         self._attach_data(seqs, ids)
+
 
     ######
         
