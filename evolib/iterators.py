@@ -125,7 +125,6 @@ def vcf_iter3(FileObject):
             Format = FORMAT2()
             
         else:
-            # currently ~ 8,500 rows/second
             values = line.rstrip().split('\t')
             Row = VCFrow3(values, headerClass, Format)
             

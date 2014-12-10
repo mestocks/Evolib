@@ -225,10 +225,11 @@ class msFormat(IOPopulationData):
 
 ###### ######
 
+from evolib.formats.ParseMethods import parse_fasta_alignment
 from evolib.generic.AlignmentSite import FastaSite
 from evolib.generic.GeneticSequence import FastaSequence
 from evolib.data.AlignmentObjects import DnaPopulationData
-from evolib.data.DataObjects import BinaryTable, SeqTable
+from evolib.data.DataObjects import BinaryTable, SeqTable, SeqTable2
 
 class FastaAlignment(DnaPopulationData):
     """
@@ -249,21 +250,36 @@ class FastaAlignment(DnaPopulationData):
        >>> F = FastaFormat(stdinObject)
        
     """
-
+    
     def __init__(self, fileObject):
-        self._fromFile(fileObject)
         
-            
-    def __getitem__(self, item):
-        return FastaSequence(self.sequences[item], seqID = self.ids[item])
+        self._from_file(fileObject)
 
-    def __len__(self):
-        return len(self.sequences)
+
+    def _from_file(self, fileObject):
+        
+        seqs, ids = parse_fasta_alignment(fileObject)
+        self._attach_data(seqs, ids)
+
+    ######
+        
+    def __getitem__(self, item):
+
+        if isinstance(item, str):
+            Fseq = FastaSequence(self.DNAdata2[item], item)
+        elif isinstance(item, int):
+            Fseq = FastaSequence(self.DNAdata2[item], self.DNAdata2.ids[item])
+        else:
+            raise TypeError, "String or integer required"
+        
+        return Fseq
+    
 
     def __iter__(self):
         
         for i in self.iter_seqs():
             yield i
+                
 
     def __str__(self):
 
@@ -271,37 +287,31 @@ class FastaAlignment(DnaPopulationData):
 
         return '\n'.join(stringlist)
 
+    ######
 
     def iter_seqs(self):
         
-        nseq = len(self.sequences)
+        nseq = self.nsamples()
         
-        for i in range(nseq):
-            sequence = FastaSequence(self.sequences[i], seqID = self.ids[i])
+        for i in xrange(nseq):
+            sequence = FastaSequence(self.DNAdata2[i], seqID = self.DNAdata2.ids[i])
             
-            yield sequence 
-    
+            yield sequence
 
-    def _fromFile(self, fileObject):
-        """
-        Returns a matrix where M[i][j] refers to the jth site of the ith individual.
-        """        
-        step1 = ''.join(map(lambda line: line, fileObject))
-        step2 = step1.split('\n>')
-        seq_table = [part.partition('\n')[2].replace('\n','') for part in step2]
-        seq_names = [part.partition('\n')[0].replace('>', '') for part in step2]
-        
-        self.sequences = seq_table
-        self.ids = seq_names
-        
-        self.DNAdata = SeqTable(seq_table)
-        self.IOdata = self._alt_get_IOdata(self.DNAdata)
-        
-        
-    def length(self):
-        return self.validSites
-    
-    
-    #def nsamples(self):
-    #    return len(self.sequences)
+    ######
+            
+    def ids(self):
+        return self.DNAdata2.ids
 
+
+    def nsamples(self):
+        return self.__len__()
+
+
+    def sequences(self):
+        return self.DNAdata2.sequences
+
+    
+    #def length(self):
+    #    return self.validSites
+    

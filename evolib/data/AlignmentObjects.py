@@ -1,6 +1,6 @@
 from evolib.stats.StatObjects import IOstats, altIOstats
 
-from evolib.data.DataObjects import BinaryTable, SeqTable, IOtable
+from evolib.data.DataObjects import BinaryTable, SeqTable, SeqTable2, IOtable
 from evolib.tools.DNAmethods import binarizeDNA, booleanDNA, booleanIO
 
 class DnaPopulationData(altIOstats):
@@ -23,6 +23,15 @@ class DnaPopulationData(altIOstats):
 
         self._from_sequence(seqs, ids)
         self.pop_nsam = None
+
+    def __len__(self):
+        return len(self.DNAdata2)
+        
+
+    def _attach_data(self, sequences, ids):
+        self.DNAdata = SeqTable(sequences)
+        self.DNAdata2 = SeqTable2(sequences, ids)
+        self.IOdata = self._alt_get_IOdata(self.DNAdata)
 
 
     def _create_ids(self, nseqs):
@@ -47,10 +56,7 @@ class DnaPopulationData(altIOstats):
         
         self.seqs = seqs
         self.ids = ids
-        
-        self.DNAdata = SeqTable(seqs)
-        #self.IOdata = self._get_IOdata(self.DNAdata)
-        self.IOdata = self._alt_get_IOdata(self.DNAdata)
+        self._attach_data(seqs, ids)
     
     
     def _get_IOdata(self, seqs):
@@ -94,6 +100,9 @@ class DnaPopulationData(altIOstats):
         IO = IOtable(io)
                 
         return IO
+
+
+    
 
 ###### ######
 
