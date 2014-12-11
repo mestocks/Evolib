@@ -251,9 +251,19 @@ class FastaAlignment(DnaPopulationData):
        
     """
     
-    def __init__(self, fileObject):
-    
-        seqs, ids = parse_fasta_alignment(fileObject)
+    def __init__(self, *args):
+        
+        nargs = len(args)
+        if nargs == 1:
+            if isinstance(args[0], list):
+                seqs, ids = self._from_sequence(args[0])
+            else:
+                seqs, ids = parse_fasta_alignment(args[0])
+        elif nargs == 2:
+                seqs, ids = self._from_sequence(args[0], args[1])
+        else:
+            raise TypeError, "Wrong number of arguments"
+        
         self._attach_data(seqs, ids)
 
 
@@ -285,6 +295,15 @@ class FastaAlignment(DnaPopulationData):
 
     ######
 
+    def pop(self, index = None):
+        
+        seq, seqid = self.DNAdata.pop(index)
+        self.IOdata = self._get_IOdata(self.DNAdata)
+
+        return FastaSequence(seq, seqid)
+
+    ######
+
     def iter_seqs(self):
         
         nseq = self.nsamples()
@@ -294,20 +313,5 @@ class FastaAlignment(DnaPopulationData):
             
             yield sequence
 
-    ######
-            
-    def ids(self):
-        return self.DNAdata.ids
 
-
-    def nsamples(self):
-        return self.__len__()
-
-
-    def sequences(self):
-        return self.DNAdata.sequences
-
-    
-    def length(self):
-        return self.validSites
     

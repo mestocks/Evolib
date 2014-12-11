@@ -47,7 +47,6 @@ class BinaryTable(list):
 
 ###### ######
 
-from evolib.generic.AlignmentSite import Site
 from evolib.tools.GeneralMethods import loopByColumn
 
 class SeqTable(object):
@@ -55,6 +54,8 @@ class SeqTable(object):
     def __init__(self, sequences, ids):
         self.sequences, self.ids = sequences, ids
         self.seqlookup = dict([(ids[i], sequences[i]) for i in xrange(len(ids))])
+
+    ######
 
     def __getitem__(self, index):
 
@@ -67,14 +68,33 @@ class SeqTable(object):
 
         return item
 
+    
     def __len__(self):
         return len(self.sequences)
 
-    def seqsBySite(self):
+    ######
+
+    def iter_sites(self):
         
         for site in loopByColumn(self.sequences):
-            SiteClass = Site(site)
-            yield SiteClass
+            yield site
+
+    ######
+            
+    def index(self, key):
+        return self.ids.index(key)
+
+    
+    def pop(self, index = None):
+
+        if index is None:
+            index = -1
+
+        seq = self.sequences.pop(index)
+        seqid = self.ids.pop(index)
+        self.seqlookup = dict([(self.ids[i], self.sequences[i]) for i in xrange(len(self.ids))])
+        
+        return seq, seqid
 
             
 ###### ######

@@ -5,7 +5,7 @@ class IOstats(object):
     def __init__(self, IOdata):
         self.IOdata = self.IOdata
 
-    def nsamples(self):
+    def _IOnsam(self):
         
         try:
             n = len(self.IOdata[0])
@@ -20,7 +20,7 @@ class IOstats(object):
 
     def thetaW(self):
 
-        n = self.nsamples()
+        n = self._IOnsam()
         s = self.seg_sites()
         
         return PopGenStats.WattersonsTheta(n, s)
@@ -28,7 +28,7 @@ class IOstats(object):
     def thetaPi(self):
         
         pi = 0.0
-        n = self.nsamples()
+        n = self._IOnsam()
         if n is not None:
             pi = PopGenStats.TajimasThetaIO(n, self.IOdata)
 
@@ -36,7 +36,7 @@ class IOstats(object):
 
     def tajD(self):
         
-        n = self.nsamples()
+        n = self._IOnsam()
         s = self.seg_sites()
         tw = self.thetaW()
         pi = self.thetaPi()
