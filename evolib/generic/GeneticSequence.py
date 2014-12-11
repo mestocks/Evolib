@@ -1,9 +1,12 @@
 import random
 
+from evolib.tools.GeneralMethods import block_iter, non_overlapping_iter
+from evolib.tools.DNAmethods import complement, reverse, dna_to_amino
+
 ###### ######
 
-class DNAsequence(object):
-    
+class GeneticSequence(object):
+
     def __init__(self, seq, seqID = None):
         
         if seqID is None:
@@ -27,20 +30,63 @@ class DNAsequence(object):
         
     def __str__(self):
         return self.sequence
+
+######
+
+class AminoAcidSequence(GeneticSequence):
+    pass
+
+######
+
+class FastaAminoAcidSequence(AminoAcidSequence):
+    
+    def __str__(self):
+        
+        n = 70
+        IDstring = '>' + self.name + '\n'
+        sequence = '\n'.join([self.sequence[i: i + n] for i in range(0, len(self.sequence), n)])
+        
+        return IDstring + sequence
+
+######
+
+class DNAsequence(GeneticSequence):
     
     def complement(self):
-        
-        compDict = {'A': 'T', 'a': 't',
-                    'T': 'A', 't': 'a',
-                    'G': 'C', 'g': 'c',
-                    'C': 'G', 'c': 'g',
-                    'N': 'N', 'n': 'n',
-                    '-': '-'}
-        
-        self.sequence = ''.join([compDict[bp] for bp in self.sequence])
+        cseq = complement(self.sequence)
+
+        return type(self)(cseq, self.name)
         
     def reverse(self):
-        self.sequence = self.sequence[::-1]
+        rsequence = reverse(self.sequence)
+
+        return type(self)(rsequence, self.name)
+
+    def reverse_complement(self):
+        cseq = complement(self.sequence)
+        rcseq = reverse(cseq)
+
+        return type(self)(rcseq, self.name)
+
+    def _translate(self, frame = 0):
+
+        codons = (codon for codon in non_overlapping_iter(self.sequence, size = 3, start = frame))
+        aas = ''
+        for codon in codons:
+            if '-' in codon or 'N' in codon:
+                aas += '-'
+            elif len(codon) != 3:
+                aas += '-'
+            else:
+                aas += dna_to_amino[codon]
+
+        return aas
+
+    def translate(self, frame = 0):
+        
+        aas = self._translate(frame)
+
+        return AminoAcidSequence(aas, self.name)
         
 
 ###### ######
@@ -54,6 +100,14 @@ class FastaSequence(DNAsequence):
         sequence = '\n'.join([self.sequence[i: i + n] for i in range(0, len(self.sequence), n)])
         
         return IDstring + sequence
+
+    def translate(self, frame = 0):
+        
+        aas = self._translate(frame)
+
+        return FastaAminoAcidSequence(aas, self.name)
+
+
 
 ###### ######
 

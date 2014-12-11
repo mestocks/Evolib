@@ -1,15 +1,5 @@
 import numpy
 
-def minorMajorAllele(seq):
-	
-        useq = list(set(seq))
-        counts = [(seq.count(i), i) for i in useq]
-        counts.sort()
-        minor = counts[0][1]
-        major = counts[1][1]
-        
-        return minor, major
-
 
 def binarizeDNA(DNA):
     
@@ -60,6 +50,34 @@ def booleanIO(IO):
 
         return bio
 
+
+dna_to_amino = {'TTT':'F', 'TTC':'F', 'TTA':'L', 'TTG':'L', 'CTT':'L', 
+                'CTC':'L', 'CTA':'L', 'CTG':'L', 'ATT':'I', 'ATC':'I', 
+                'ATA':'I', 'ATG':'M', 'GTT':'V', 'GTC':'V', 'GTA':'V', 
+                'GTG':'V', 'TCT':'S', 'TCC':'S', 'TCA':'S', 'TCG':'S', 
+                'CCT':'P', 'CCC':'P', 'CCA':'P', 'CCG':'P', 'ACT':'T', 
+                'ACC':'T', 'ACA':'T', 'ACG':'T', 'GCT':'A', 'GCC':'A', 
+                'GCA':'A', 'GCG':'A', 'TAT':'Y', 'TAC':'Y', 'TAA':'*', 
+                'TAG':'*', 'CAT':'H', 'CAC':'H', 'CAA':'Q', 'CAG':'Q', 
+                'AAT':'N', 'AAC':'N', 'AAA':'K', 'AAG':'K', 'GAT':'D', 
+                'GAC':'D', 'GAA':'E', 'GAG':'E', 'TGT':'C', 'TGC':'C', 
+                'TGA':'*', 'TGG':'W', 'CGT':'R', 'CGC':'R', 'CGA':'R', 
+                'CGG':'R', 'AGT':'S', 'AGC':'S', 'AGA':'R', 'AGG':'R', 
+                'GGT':'G', 'GGC':'G', 'GGA':'G', 'GGG':'G'}
+
+
+def minorMajorAllele(seq):
+	
+        useq = list(set(seq))
+        counts = [(seq.count(i), i) for i in useq]
+        counts.sort()
+        minor = counts[0][1]
+        major = counts[1][1]
+        
+        return minor, major
+
+
+
 def sites2codons(site1, site2, site3):
 	
 	nsamples = len(site1)
@@ -69,6 +87,23 @@ def sites2codons(site1, site2, site3):
 		codons.append(codon)
 		
 	return codons
+
+
+def complement(seq):
+
+        compDict = {'A': 'T', 'a': 't',
+                    'T': 'A', 't': 'a',
+                    'G': 'C', 'g': 'c',
+                    'C': 'G', 'c': 'g',
+                    'N': 'N', 'n': 'n',
+                    '-': '-'}
+        
+        cseq = ''.join([compDict[bp] for bp in seq])
+
+        return cseq
+
+def reverse(seq):
+        return seq[::-1]
 
 
 def synNonsynProbs(codon):

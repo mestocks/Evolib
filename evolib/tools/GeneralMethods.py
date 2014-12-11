@@ -114,4 +114,21 @@ def member_iter(ranges, start = 1, end = 1000000):
             else:
                 yield True
                 
-    
+
+def non_overlapping_iter(seq, size, start = 0):
+
+    lenseq = len(seq)
+
+    for i in xrange(start, lenseq):
+        rem = (i - start) % size
+        
+        if i == start:
+            winseq = seq[i]
+        elif rem == 0:
+            yield winseq
+            winseq = seq[i]
+        else:
+            winseq += seq[i]
+
+    yield winseq
+            
