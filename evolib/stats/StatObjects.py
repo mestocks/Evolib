@@ -1,6 +1,6 @@
 import evolib.stats.PopGenStats as PopGenStats
 
-class altIOstats(object):
+class IOstats(object):
 
     def __init__(self, IOdata):
         self.IOdata = self.IOdata
@@ -46,7 +46,7 @@ class altIOstats(object):
     def wh97(self, pop_nsam):
         return PopGenStats.WakeleyHey(self.IOdata, pop_nsam)
 
-class IOstats(object):
+class old_IOstats(object):
 
     def __init__(self, IOdata):
         self.IOdata = self.IOdata

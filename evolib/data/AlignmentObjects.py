@@ -1,11 +1,11 @@
 from evolib.tools.GeneralMethods import create_ids
 
-from evolib.stats.StatObjects import IOstats, altIOstats
+from evolib.stats.StatObjects import IOstats
 
-from evolib.data.DataObjects import BinaryTable, SeqTable, IOtable
-from evolib.tools.DNAmethods import binarizeDNA, booleanDNA, booleanIO
+from evolib.data.DataObjects import SeqTable, IOtable
+from evolib.tools.DNAmethods import booleanDNA, booleanIO
 
-class DnaPopulationData(altIOstats):
+class DnaPopulationData(IOstats):
     """
     Class representation of DNA sequences from multiple 
     samples. 
@@ -30,7 +30,7 @@ class DnaPopulationData(altIOstats):
     def _attach_data(self, sequences, ids):
         
         self.DNAdata = SeqTable(sequences, ids)
-        self.IOdata = self._alt_get_IOdata(self.DNAdata)
+        self.IOdata = self._get_IOdata(self.DNAdata)
 
     ######
         
@@ -40,32 +40,12 @@ class DnaPopulationData(altIOstats):
     ######
     
     def _get_IOdata(self, seqs):
-        
-        self.validSites = 0
-        IO = BinaryTable()
-        self.sites = []
-        for site in seqs.seqsBySite():
-            self.sites.append(site)
-            if site.hasMissingData():
-                pass
-            elif site.numberOfAlleles() > 2:
-                pass
-            elif site.numberOfAlleles() == 1:
-                self.validSites += 1
-            else:
-                self.validSites += 1
-                siteIO = binarizeDNA(site.alleles())
-                IO.append(siteIO)
-                
-        return IO
-
-    def _alt_get_IOdata(self, seqs):
 
         self.validSites = 0
         io = []
-        self.sites = []
+        
         for site in seqs.seqsBySite():
-            self.sites.append(site)
+            
             if site.hasMissingData():
                 pass
             elif site.numberOfAlleles() > 2:
@@ -91,17 +71,9 @@ class IOPopulationData(IOstats):
     def __init__(self, seqs):
 
         self.IOdata = self._get_IOdata(seqs)
-        #self.IOdata = self._alt_get_IOdata(seqs)
-        
-    def _get_IOdata(self, seqs):
-        
-        IO = BinaryTable()
-        for line in seqs:
-            IO.add_sample(line)
-            
-        return IO
 
-    def _alt_get_IOdata(self, seqs):
+
+    def _get_IOdata(self, seqs):
         
         io = []
         if seqs != []:

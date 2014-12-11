@@ -229,7 +229,7 @@ from evolib.formats.ParseMethods import parse_fasta_alignment
 from evolib.generic.AlignmentSite import FastaSite
 from evolib.generic.GeneticSequence import FastaSequence
 from evolib.data.AlignmentObjects import DnaPopulationData
-from evolib.data.DataObjects import BinaryTable, SeqTable
+from evolib.data.DataObjects import SeqTable
 
 class FastaAlignment(DnaPopulationData):
     """

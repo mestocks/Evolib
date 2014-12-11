@@ -2,7 +2,7 @@ import random
 
 ###### ######
 
-class DNAsequence():
+class DNAsequence(object):
     
     def __init__(self, seq, seqID = None):
         
@@ -18,7 +18,7 @@ class DNAsequence():
             item = self.sequence[index]
         elif isinstance(index, slice):
             seq = self.sequence[index]
-            item = DNAsequence(seq, seqID = self.name)
+            item = type(self)(seq, seqID = self.name)
 
         return item
         
