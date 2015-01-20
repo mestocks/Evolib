@@ -79,16 +79,37 @@ def create_ids(nids, prefix):
     return ids
 
 
-def loopByColumn(array):
+def loopByColumn(array, start = 0, size = 1):
+    """
+    m x n
+      ['abcdef',
+       'abcdef',
+       'abcdef']
     
+    n x m
+      ['aaa', 'bbb', 'ccc',
+       'ddd', 'eee', 'fff']
+
+    [['abc', 'abc', 'abc'],
+     ['def', 'def', 'def']]
+    """
     m = len(array)
     n = len(array[0])
     
-    for j in range(n):
-        column = ''
-        for i in range(m):
-            item = array[i][j]
-            column += item
+    for j in xrange(start, n, size):
+        
+        if size == 1:
+            column = ''
+        else:
+            column = []
+            
+        for i in xrange(m):
+            item = array[i][j: j + size]
+            
+            if size == 1:
+                column += item
+            else:
+                column.append(item)
         
         yield column
 
@@ -132,3 +153,4 @@ def non_overlapping_iter(seq, size, start = 0):
 
     yield winseq
             
+

@@ -7,6 +7,10 @@ from evolib.data.DataObjects import SeqTable, IOtable
 from evolib.tools.DNAmethods import booleanDNA, booleanIO
 from evolib.generic.GeneticSequence import DNAsequence
 
+from evolib.tools.GeneralMethods import loopByColumn
+
+from evolib.tools.DNAmethods import dna_to_amino
+
 class DnaPopulationData(IOstats):
     """
     Class representation of DNA sequences from multiple 
@@ -76,7 +80,13 @@ class DnaPopulationData(IOstats):
                 
         return IO
 
-        ######
+    ######
+    
+    def iter_sites(self):
+        for site in self.DNAdata.iter_sites():
+            yield site
+    
+    ######
             
     def ids(self):
         return self.DNAdata.ids
@@ -120,6 +130,33 @@ class DnaPopulationData(IOstats):
             
         return type(self)(cds_seqs, self.DNAdata.ids)
 
+    def synnonsyn(self, frame):
+
+        syn, nonsyn = 0, 0
+        for codons in loopByColumn(self.DNAdata.sequences, start = frame, size = 3):
+            nmiss = sum([len(set(i) - set('ATGCatgc')) for i in codons])
+            if nmiss > 0:
+                # contains non-ATGC data
+                pass
+            else:
+                ucodons = list(set(codons))
+                nucodons = len(ucodons)
+                if nucodons > 2:
+                    # > 1 segregating site in codon
+                    pass
+                elif nucodons == 1:
+                    # monomorphic site
+                    pass
+                else:
+                    aa1, aa2 = dna_to_amino[ucodons[0]], dna_to_amino[ucodons[1]]
+                    if aa1 == aa2:
+                        syn += 1
+                    else:
+                        nonsyn += 1
+                        
+                    print len(set(codons)), aa1, aa2, codons
+
+        return syn, nonsyn
     
 
 ###### ######
