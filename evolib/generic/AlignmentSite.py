@@ -11,7 +11,7 @@ class Site(object):
         return self._alleles
     
     
-    def hasMissingData(self, dna = ['A', 'T', 'C', 'G']):
+    def has_missing_data(self, dna = ['A', 'T', 'C', 'G']):
         
         if set(self.alleles()) <= set(dna):
             answer = False
@@ -20,7 +20,7 @@ class Site(object):
             
         return answer
     
-    def numberOfAlleles(self):
+    def number_of_alleles(self):
         alleles = set(self.alleles())
         return len(alleles)
 
@@ -38,4 +38,9 @@ class FastaSite(Site):
 class VCFSite(Site):
 
     def alleles(self):
-        raise IndexError, "self.alleles() not implemented yet"
+        if str(self['ALT']) == ".":
+            alleles = ''.join([str(self['REF']) + str(self['REF']) for i in self.iter_samples()])
+        else:
+            alleles = ''.join([s.genotype_str(str(self['REF']), str(self['ALT'])) for s in self.iter_samples()])
+
+        return alleles

@@ -61,11 +61,11 @@ class DnaPopulationData(IOstats):
 
             SiteClass = Site(site)
             
-            if SiteClass.hasMissingData():
+            if SiteClass.has_missing_data():
                 pass
-            elif SiteClass.numberOfAlleles() > 2:
+            elif SiteClass.number_of_alleles() > 2:
                 pass
-            elif SiteClass.numberOfAlleles() == 1:
+            elif SiteClass.number_of_alleles() == 1:
                 self.validSites += 1
             else:
                 self.validSites += 1

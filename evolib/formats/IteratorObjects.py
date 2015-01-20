@@ -24,7 +24,7 @@ from evolib.generic.AlignmentSite import VCFSite
 # 
 
 
-class VCFrow3(object):
+class VCFrow3(VCFSite):
     # row["CHROM"]
     # row[:2] -> refers only to samples
 
@@ -70,6 +70,7 @@ class VCFrow3(object):
 
         for i in xrange(9, maxRange):
             yield SampleClass(self.values[i], self.Format)
+        
 
 
 class VCFrow(VCFSite):

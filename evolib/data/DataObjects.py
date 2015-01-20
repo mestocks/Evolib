@@ -1,5 +1,21 @@
 import numpy
 
+class IOtable_old(numpy.ma.MaskedArray):
+    """
+    Boolean representation of segregating sites in a population.
+    IOtable[i][j] represents the ith segregating sites in the 
+    jth individual.
+    """
+    def __new__(cls, input_array):
+        return numpy.asarray(input_array).view(cls)
+
+    def __array_finalize__(self, obj):
+        if obj is None: return
+        super(IOtable_old, self).__array_finalize__(obj)
+
+    def minor_allele_frequencies(self):
+        return self.sum(axis = 1)
+
 class IOtable(numpy.ndarray):
     """
     Boolean representation of segregating sites in a population.

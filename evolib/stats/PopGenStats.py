@@ -1,6 +1,18 @@
 import math
 from scipy import misc
 
+def Dxy(xa, xb, ya, yb):
+    
+    d = (xa * yb) + (xb * ya)
+    n12 = (xa + xb) * (ya + yb)
+
+    if d == 0:
+        dxy = 0.0
+    else:
+        dxy = d / float(n12)
+
+    return dxy
+
 def WattersonsTheta(n, s):
     
     if s == 0:

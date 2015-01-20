@@ -172,16 +172,19 @@ class SAMPLE2(COL_BASECLASS):
 
     def __getitem__(self, key):
         
-        #self.SAMPLE_parse = {'DP': self._DP,
-        #                     'GT': self._GT, 
-        #                     'GQ': self._GQ, 
-        #                     'PL': self._PL}
+        self.SAMPLE_parse = {'DP': self._DP,
+                             'GT': self._GT, 
+                             'GQ': self._GQ, 
+                             'PL': self._PL}
     
         if self.chr_value == "./.":
             item = None
         else:
             self.split_value = self.chr_value.split(":")
             item = self.split_value[self.Format[self.Format.value][key]]
+
+        if key in self.SAMPLE_parse:
+            item = self.SAMPLE_parse[key](item)
 
         return item
 
@@ -233,7 +236,7 @@ class SAMPLE2(COL_BASECLASS):
     
     def _GT(self, item):
 
-        new_item = './.'
+        new_item = ['N', 'N']
         if item is not None:
             sep = '/'
             if '|' in item:
@@ -281,6 +284,20 @@ class SAMPLE2(COL_BASECLASS):
 
         return ishet
 
+    def genotype_str(self, ref, alt):
+        possibleAlleles = [ref] + alt.split(',')
+        GT = self['GT']
+        one, two = possibleAlleles[int(GT[0])], possibleAlleles[int(GT[1])]
+
+        return one + two
+
+    def genotype_call(self, ref, alt):
+        
+        possibleAlleles = [ref] + alt.split(',')
+        GT = self['GT']
+        gCall = (possibleAlleles[int(GT[0])], possibleAlleles[int(GT[1])])
+        
+        return gCall
 
 ###### ######
 

@@ -17,28 +17,49 @@ def binarizeDNA(DNA):
     
 	return robotDNA
 
-def booleanDNA(DNA):
+def booleanDNA(mixed_case_seq):
+        
+        DNA = set(['A', 'T', 'C', 'G'])
+
+        length = len(mixed_case_seq)
+        seq = mixed_case_seq.upper()
+        seq_set = set(seq)
+        
+	dna_seq_intersect = list(DNA & seq_set)
+        nalleles = len(dna_seq_intersect)
+
+        assert nalleles < 3
+
+        if nalleles == 0:
+                dna10 = [None for j in xrange(length)]
+        elif nalleles == 1:
+                dna10 = []
+                for i in xrange(length):
+                        if seq[i] in DNA:
+                                dna10.append(False)
+                        else:
+                                dna10.append(None)
+        else:
+                one = (seq.count(dna_seq_intersect[0]), dna_seq_intersect[0])
+                two = (seq.count(dna_seq_intersect[1]), dna_seq_intersect[1])
+                both = [one, two]
+                both.sort()
+
+                minor, major = both[0][1], both[1][1]
+                
+                dna10 = []
+                for i in xrange(length):
+                        if seq[i] in DNA:
+                                if seq[i] == minor:
+                                        dna10.append(True)
+                                elif seq[i] == major:
+                                        dna10.append(False)
+                                else:
+                                        raise TypeError, "not minor or major"
+                        else:
+                                dna10.append(None)
     
-	bases = set(['A', 'T', 'C', 'G'])
-	uDNA = set(DNA)
-    
-	assert uDNA <= bases
-    
-	if len(uDNA) == 1:
-		robotDNA = DNA.replace(DNA[0], '0')
-                robotDNA = [False for i in range(len(DNA))]
-	else:
-		minor, major = minorMajorAllele(DNA)
-                robotDNA = []
-                for i in DNA:
-                        if i == minor:
-                                robotDNA.append(True)
-                        elif i == major:
-                                robotDNA.append(False)
-		#robotDNA = DNA.replace(minor, '1')
-		#robotDNA = robotDNA.replace(major, '0')
-    
-	return robotDNA
+	return dna10
 
 def booleanIO(IO):
         bio = []
