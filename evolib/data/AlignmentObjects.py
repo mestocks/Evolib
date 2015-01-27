@@ -9,7 +9,7 @@ from evolib.generic.GeneticSequence import DNAsequence
 
 from evolib.tools.GeneralMethods import loopByColumn
 
-from evolib.tools.DNAmethods import dna_to_amino
+from evolib.tools.DNAmethods import dna_to_amino, synNonsynProbs
 
 class DnaPopulationData(IOstats):
     """
@@ -130,34 +130,59 @@ class DnaPopulationData(IOstats):
             
         return type(self)(cds_seqs, self.DNAdata.ids)
 
-    def synnonsyn(self, frame):
+    ######
 
-        syn, nonsyn = 0, 0
+    def nonsyn(self, frame):
+
+        nsyn, nnon = 0, 0
+        nsam = len(self.DNAdata.sequences)
+        syn_seqs, nonsyn_seqs = ['' for n in range(nsam)], ['' for n in range(nsam)]
         for codons in loopByColumn(self.DNAdata.sequences, start = frame, size = 3):
+
             nmiss = sum([len(set(i) - set('ATGCatgc')) for i in codons])
             if nmiss > 0:
                 # contains non-ATGC data
                 pass
+            
             else:
+                
                 ucodons = list(set(codons))
                 nucodons = len(ucodons)
                 if nucodons > 2:
                     # > 1 segregating site in codon
                     pass
+                
                 elif nucodons == 1:
                     # monomorphic site
-                    pass
+                    nsp, nnp = synNonsynProbs(ucodons[0])
+                    nsyn += 3 * nsp
+                    nnon += 3 * nnp
+                    
                 else:
-                    aa1, aa2 = dna_to_amino[ucodons[0]], dna_to_amino[ucodons[1]]
-                    if aa1 == aa2:
-                        syn += 1
-                    else:
-                        nonsyn += 1
-                        
-                    print len(set(codons)), aa1, aa2, codons
+                    codon1, codon2 = ucodons[0], ucodons[1]
+                    codon_count = [(codons.count(codon1), codon1), (codons.count(codon2), codon2)]
+                    codon_count.sort(reverse = True)
+                    major = codon_count[0][1]
+                    nsp, nnp = synNonsynProbs(major)
+                    nsyn += 3 * nsp
+                    nnon += 3 * nnp
+                    
+                    sindex = [i for i in range(len(codon1)) if codon1[i] != codon2[i]][0]
+                    for s in range(len(codons)):
+                        aa1, aa2 = dna_to_amino[ucodons[0]], dna_to_amino[ucodons[1]]
+                        if aa1 == aa2:
+                            syn_seqs[s] += codons[s][sindex]
+                        else:
+                            nonsyn_seqs[s] += codons[s][sindex]
 
-        return syn, nonsyn
-    
+        SynClass = type(self)(syn_seqs, self.DNAdata.ids)
+        NonSynClass = type(self)(nonsyn_seqs, self.DNAdata.ids)
+
+        SynClass.validSites = nsyn
+        NonSynClass.validSites = nnon
+
+        return SynClass, NonSynClass
+            
 
 ###### ######
 
