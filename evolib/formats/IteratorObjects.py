@@ -193,10 +193,10 @@ class msFormat(IOPopulationData):
     
     
     def __init__(self, text):
+        
         self.text = text
         lines = [i for i in text.split('\n')[2:] if i != '']
         self.Seqs = lines
-        #self.IOdata = self._alt_get_IOdata(lines)
         self.IOdata = self._get_IOdata(lines)
         
             

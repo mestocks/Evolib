@@ -186,11 +186,16 @@ class DnaPopulationData(IOstats):
 
 ###### ######
 
+import random
+
 class IOPopulationData(IOstats):
 
     def __init__(self, seqs):
 
-        self.IOdata = self._get_IOdata(seqs)
+        if isinstance(seqs, IOtable):
+            self.IOdata = seqs
+        else:
+            self.IOdata = self._get_IOdata(seqs)
 
 
     def _get_IOdata(self, seqs):
@@ -205,3 +210,25 @@ class IOPopulationData(IOstats):
         IO = IOtable(io)
         
         return IO
+
+    def nonsyn_sample_sites(self, p):
+
+        n = len(self.IOdata)
+        one, two = [], []
+        
+        for i in xrange(n):
+            rint = random.random()
+
+            if rint < p:
+                one.append(list(self.IOdata[i]))
+            else:
+                two.append(list(self.IOdata[i]))
+
+        table1 = IOtable(one)
+        table2 = IOtable(two)
+
+        OneClass, TwoClass = IOPopulationData(table1), IOPopulationData(table2)
+
+        return OneClass, TwoClass
+
+        
