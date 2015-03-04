@@ -129,7 +129,8 @@ class FORMAT(COL_BASECLASS):
     
     def __init__(self, value):
         self.chr_value = value
-        self.value = self._parse(value)
+        self.value = value
+        #self.value = self._parse(value)
     
     def _parse(self, chr_value):
         

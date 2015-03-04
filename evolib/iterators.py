@@ -84,7 +84,7 @@ def gff_iter(FileObject):
 
 
 def vcf_iter(FileObject):
-    
+
     for line in FileObject:
         
         if line.startswith('##'):
@@ -94,7 +94,6 @@ def vcf_iter(FileObject):
             header = line[1:].rstrip().split('\t')
             nsamples = len(header) - 9
             col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT] + [SAMPLE] * nsamples
-            
         else:
             value_list = line.rstrip().split('\t')
             Row = VCFrow(value_list, col_classes, header, nsamples)
@@ -111,18 +110,25 @@ class Header(object):
         self.classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
         self.str_item = dict([(key, (self.classes[index], index)) for index, key in enumerate(header)])
         self.int_item = dict([(index, (self.classes[index], index)) for index, key in enumerate(header)])
+        self.preamble = ''
+
+    def __str__(self):
+        return self.preamble
 
 def vcf_iter3(FileObject):
     
+    preamble = ''
     for line in FileObject:
         
         if line.startswith('##'):
-            pass
+            preamble += line
         
         elif line.startswith('#'):
+            preamble += line.rstrip()
             header = line[1:].rstrip().split('\t')
             headerClass = Header(header)
             Format = FORMAT2()
+            headerClass.preamble = preamble
             
         else:
             values = line.rstrip().split('\t')
