@@ -43,17 +43,14 @@ class VCFrow3(VCFSite):
         return '\t'.join(self.values)
 
     def __getitem__(self, item):
-
-        #if isinstance(item, slice):
-        #    value = self.values[slice]
-        #else:
         
         # 1 item costs 0.7s per 1 million rows (str lookup)
-        #if isinstance(item, str):
-        itemClass, index = self.header.str_item[item]
-        #elif isinstance(item, int):
-        #    itemClass, index = self.header.int_item[item]
-        #index = 0    
+        # if statement along costs 0.5s per 1 million row (str lookup)
+        if isinstance(item, str):
+            itemClass, index = self.header.str_item[item]
+        elif isinstance(item, int):
+            itemClass, index = self.header.int_item[item]
+            
         if index > 8:
             value = itemClass(self.values[index], self.Format)
         else:
