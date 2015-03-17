@@ -29,9 +29,12 @@ class COL_BASECLASS(object):
 
 #######################
 
-class CHROM(COL_BASE_STR):
+class CHROM_old(COL_BASE_STR):
     #__slots__ = ['col_name', 'chr_value', 'value']
     col_name = 'CHROM'
+
+class CHROM(str):
+    pass
 
 class POS(COL_BASE_INT):
     __slots__ = ['col_name', 'chr_value']
