@@ -156,7 +156,7 @@ def vcf_iter4(FileObject):
             headerClass = Header(header)
             Format = FORMAT2()
             headerClass.preamble = preamble
-            Row = VCFrow3([None] * 8, headerClass, Format)
+            Row = VCFrow3([None] * len(header), headerClass, Format)
             
 def vcf_iter2(FileObject):
     
