@@ -142,6 +142,7 @@ def vcf_iter4(FileObject):
     for line in FileObject:
         
         if line[0] != '#':
+            # rstrip costs 0.5s per 1 million rows
             values = line.rstrip().split('\t')
             Row.values = values
             
