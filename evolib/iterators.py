@@ -153,11 +153,11 @@ def vcf_iter4(FileObject):
             headerClass.preamble = preamble
             
         else:
-            values = line.rstrip().split('\t')
+            #values = line.rstrip().split('\t')
             if count == 0:
-                Row = VCFrow3(values, headerClass, Format)
+                Row = VCFrow3(line, headerClass, Format)
             else:
-                Row.values = values
+                Row.values = line
             count += 1
             
             yield Row
