@@ -144,10 +144,11 @@ def vcf_iter4(FileObject):
         
         if line[0] != '#':
             values = line.rstrip().split('\t')
-            if count == 0:
-                Row = VCFrow3(values, headerClass, Format)
-            else:
+            if count != 0:
                 Row.values = values
+            else:
+                Row = VCFrow3(values, headerClass, Format)
+            
             count += 1
             
             yield Row
