@@ -139,7 +139,6 @@ def vcf_iter3(FileObject):
 def vcf_iter4(FileObject):
     
     preamble = ''
-    Row = VCFrow3(None, headerClass, Format)
     for line in FileObject:
         
         if line[0] != '#':
@@ -157,6 +156,7 @@ def vcf_iter4(FileObject):
             headerClass = Header(header)
             Format = FORMAT2()
             headerClass.preamble = preamble
+            Row = VCFrow3(None, headerClass, Format)
             
 def vcf_iter2(FileObject):
     
