@@ -47,16 +47,19 @@ class VCFrow3(VCFSite):
         #if isinstance(item, slice):
         #    value = self.values[slice]
         #else:
-        #if isinstance(item, str):
-        #    itemClass, index = self.header.str_item[item]
-        #elif isinstance(item, int):
-        #    itemClass, index = self.header.int_item[item]
-        index = 0    
+        
+        # 1 item costs 0.7s per 1 million rows (str lookup)
+        if isinstance(item, str):
+            itemClass, index = self.header.str_item[item]
+        elif isinstance(item, int):
+            itemClass, index = self.header.int_item[item]
+        #index = 0    
         if index > 8:
             value = itemClass(self.values[index], self.Format)
         else:
-            #value = itemClass(self.values[index])
-            value = self.values[index]
+            # initialising an empty str class costs ~0.6s per 1 million rows (CHROM)
+            value = itemClass(self.values[index])
+            #value = self.values[index]
 
         return value
 
