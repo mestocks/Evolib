@@ -142,6 +142,8 @@ def vcf_iter4(FileObject):
     count = 0
     for line in FileObject:
         
+        #if line
+        
         if line.startswith('##'):
             preamble += line
         
