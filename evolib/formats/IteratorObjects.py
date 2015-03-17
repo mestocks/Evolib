@@ -50,13 +50,13 @@ class VCFrow3(VCFSite):
             itemClass, index = self.header.str_item[item]
         elif isinstance(item, int):
             itemClass, index = self.header.int_item[item]
-            
-        if index > 8:
-            value = itemClass(self.values[index], self.Format)
-        else:
+        
+        if index <= 8:
             # initialising an empty str class costs ~0.6s per 1 million rows (CHROM)
             value = itemClass(self.values[index])
             #value = self.values[index]
+        else:
+            value = itemClass(self.values[index], self.Format)
 
         return value
 
