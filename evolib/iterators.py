@@ -142,19 +142,7 @@ def vcf_iter4(FileObject):
     count = 0
     for line in FileObject:
         
-        #if line
-        
-        if line.startswith('##'):
-            preamble += line
-        
-        elif line.startswith('#'):
-            preamble += line.rstrip()
-            header = line[1:].rstrip().split('\t')
-            headerClass = Header(header)
-            Format = FORMAT2()
-            headerClass.preamble = preamble
-            
-        else:
+        if line[0] != '#':
             values = line.rstrip().split('\t')
             if count == 0:
                 Row = VCFrow3(values, headerClass, Format)
@@ -163,7 +151,17 @@ def vcf_iter4(FileObject):
             count += 1
             
             yield Row
-
+            
+        elif line[:2] == '##':
+            preamble += line
+        
+        else:
+            preamble += line.rstrip()
+            header = line[1:].rstrip().split('\t')
+            headerClass = Header(header)
+            Format = FORMAT2()
+            headerClass.preamble = preamble
+            
 def vcf_iter2(FileObject):
     
     for line in FileObject:
