@@ -55,7 +55,8 @@ class VCFrow3(VCFSite):
         if index > 8:
             value = itemClass(self.values[index], self.Format)
         else:
-            value = itemClass(self.values[index])
+            #value = itemClass(self.values[index])
+            value = self.values[index]
 
         return value
 
