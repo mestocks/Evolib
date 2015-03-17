@@ -47,11 +47,11 @@ class VCFrow3(VCFSite):
         #if isinstance(item, slice):
         #    value = self.values[slice]
         #else:
-        if isinstance(item, str):
-            itemClass, index = self.header.str_item[item]
-        elif isinstance(item, int):
-            itemClass, index = self.header.int_item[item]
-            
+        #if isinstance(item, str):
+        #    itemClass, index = self.header.str_item[item]
+        #elif isinstance(item, int):
+        #    itemClass, index = self.header.int_item[item]
+        index = 0    
         if index > 8:
             value = itemClass(self.values[index], self.Format)
         else:
