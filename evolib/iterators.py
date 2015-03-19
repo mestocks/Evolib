@@ -107,7 +107,8 @@ class Header(object):
     def __init__(self, header):
         self.names = header
         self.nsamples = len(header) - 9
-        self.classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
+        #self.classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
+        self.classes = [str, int, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
         self.str_item = dict([(key, (self.classes[index], index)) for index, key in enumerate(header)])
         self.int_item = dict([(index, (self.classes[index], index)) for index, key in enumerate(header)])
         self.preamble = ''
