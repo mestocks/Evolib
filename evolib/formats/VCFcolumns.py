@@ -175,7 +175,7 @@ class SAMPLE2(COL_BASECLASS):
     
 
     def __getitem__(self, key):
-        
+        print key, self.chr_value
         self.SAMPLE_parse = {'DP': self._DP,
                              'GT': self._GT, 
                              'GQ': self._GQ, 
