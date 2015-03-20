@@ -147,7 +147,7 @@ class FORMAT2(COL_BASECLASS):
         self.format_dict = {}
 
     def __getitem__(self, value):
-        
+        print value
         if value not in self.format_dict:
             new_value = dict([(j, i) for (i, j) in enumerate(value.split(":"))])
             self.format_dict.update({value: new_value})
@@ -175,7 +175,6 @@ class SAMPLE2(COL_BASECLASS):
     
 
     def __getitem__(self, key):
-        print key, self.chr_value
         self.SAMPLE_parse = {'DP': self._DP,
                              'GT': self._GT, 
                              'GQ': self._GQ, 
