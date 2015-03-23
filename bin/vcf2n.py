@@ -73,7 +73,7 @@ for row in vcfstream:
     gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp['GT'] != './.')
         
     alls = (int(gt[0]) + int(gt[1]) for gt in gts)
-    nsam = 2 * sum(1 for g in alls)
+    nsam = 2 * sum(1 for g in gts)
     nder = sum(alls)
     if nsam == 0:
         print chrom, pos, 'NA', 'NA'
