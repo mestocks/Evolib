@@ -76,7 +76,7 @@ for row in vcfstream:
     
     nsam = 2 * sum(1 for g in alls)
     nder = sum(alls)
-    print ' '.join(map(str, alls)), nsam, nder
+    
     if nsam == 0:
         print chrom, pos, 'NA', 'NA'
     else:
