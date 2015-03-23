@@ -73,6 +73,7 @@ for row in vcfstream:
     gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp['GT'] != './.')
     print ' '.join(map(str, gts))
     alls = (int(gt[0]) + int(gt[1]) for gt in gts)
+    print ' '.join(map(str, alls))
     nsam = 2 * sum(1 for g in gts)
     nder = sum(alls)
     if nsam == 0:
