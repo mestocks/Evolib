@@ -1,6 +1,6 @@
-from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment, VCFrow3
+from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment
 
-from evolib.formats.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE, SAMPLE2, SAMPLE3
+from evolib.formats.VCFcolumns import INFO, FORMAT, SAMPLE
 
 import os
 import collections
@@ -80,25 +80,6 @@ def gff_iter(FileObject):
     yield Gff
 
 
-###### ######
-
-
-def vcf_iter(FileObject):
-
-    for line in FileObject:
-        
-        if line.startswith('##'):
-            pass
-        
-        elif line.startswith('#'):
-            header = line[1:].rstrip().split('\t')
-            nsamples = len(header) - 9
-            col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT] + [SAMPLE] * nsamples
-        else:
-            value_list = line.rstrip().split('\t')
-            Row = VCFrow(value_list, col_classes, header, nsamples)
-            
-            yield Row
 
 ###### ######
 
@@ -107,8 +88,7 @@ class Header(object):
     def __init__(self, header):
         self.names = header
         self.nsamples = len(header) - 9
-        #self.classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
-        self.classes = [str, int, str, REF, ALT, float, str, INFO, None] + [SAMPLE3] * self.nsamples
+        self.classes = [str, int, str, str, str, float, str, INFO, None] + [SAMPLE] * self.nsamples
         self.str_item = dict([(key, (self.classes[index], index)) for index, key in enumerate(header)])
         self.int_item = dict([(index, (self.classes[index], index)) for index, key in enumerate(header)])
         self.preamble = ''
@@ -116,28 +96,9 @@ class Header(object):
     def __str__(self):
         return self.preamble
 
-def vcf_iter3(FileObject):
-    
-    preamble = ''
-    for line in FileObject:
-        
-        if line.startswith('##'):
-            preamble += line
-        
-        elif line.startswith('#'):
-            preamble += line.rstrip()
-            header = line[1:].rstrip().split('\t')
-            headerClass = Header(header)
-            Format = FORMAT2()
-            headerClass.preamble = preamble
-            
-        else:
-            values = line.rstrip().split('\t')
-            Row = VCFrow3(values, headerClass, Format)
-            
-            yield Row
-        
-def vcf_iter4(FileObject):
+###### ######
+
+def vcf_iter(FileObject):
     
     preamble = ''
     for line in FileObject:
@@ -146,6 +107,7 @@ def vcf_iter4(FileObject):
             # rstrip costs 0.5s per 1 million rows
             values = line.rstrip().split('\t')
             Row.values = values
+            Row.Format.value = values[8]
             
             yield Row
             
@@ -158,28 +120,8 @@ def vcf_iter4(FileObject):
             headerClass = Header(header)
             Format = FORMAT()
             headerClass.preamble = preamble
-            Row = VCFrow3([None] * len(header), headerClass, Format)
+            Row = VCFrow([None] * len(header), headerClass, Format)
             
-def vcf_iter2(FileObject):
-    
-    for line in FileObject:
-        
-        if line.startswith('##'):
-            pass
-        
-        elif line.startswith('#'):
-            header = line[1:].rstrip().split('\t')
-            nsamples = len(header) - 9
-            Format = FORMAT2()
-            col_classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, Format] + [SAMPLE2] * nsamples
-            
-        else:
-            value_list = line.rstrip().split('\t')
-            Row = VCFrow(value_list, col_classes, header, nsamples)
-            
-            yield Row
-
-
 ###### ######
 
 

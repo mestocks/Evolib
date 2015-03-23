@@ -21,10 +21,7 @@ class FastqRead():
 
 from evolib.generic.AlignmentSite import VCFSite
 
-# 
-
-
-class VCFrow3(VCFSite):
+class VCFrow(VCFSite):
     # row["CHROM"]
     # row[:2] -> refers only to samples
 
@@ -72,96 +69,6 @@ class VCFrow3(VCFSite):
         for i in xrange(9, maxRange):
             yield SampleClass(self.values[i], self.Format)
         
-
-
-class VCFrow(VCFSite):
-
-    #__slots__ = ['NA', 'classes', 'header', 'values', 'nsamples', 'FormatClass', 'lookupindex']
-    
-    def __init__(self, values, classes, header, nsamples):
-        
-        self.NA = '.'
-        self.classes = classes
-        self.header = header
-        self.values = values
-        self.nsamples = nsamples
-        
-        self.FormatClass = None
-        self.lookupindex = None
-        
-    
-    def __getitem__(self, item):
-
-        if self.lookupindex is None:
-            self.lookupindex = dict([(key, index) for index, key in enumerate(self.header)])
-            
-        if isinstance(item, str):
-            item = self.lookupindex[item]
-
-        if isinstance(item, slice):
-            value = [v for v in self.classes[item]]
-
-        if isinstance(item, slice):
-            value = []
-            for i in range(len(self.header)).__getitem__(item):
-                v = self._get_colvalue(i)
-                value.append(v)
-        else:
-            value = self._get_colvalue(item)
-
-        
-        return value
-
-    def __str__(self):
-        return '\t'.join(self.values)
-    
-    def _old_get_colvalue(self, index):
-        
-        if index > 8:
-            if self.FormatClass is None:
-                self.FormatClass = self.classes[8](self.values[8])
-            value = self.classes[index](self.values[index], self.FormatClass.value)
-        else:
-            value = self.classes[index](self.values[index])
-            
-        return value
-
-    def _get_colvalue(self, index):
-
-        Format = self.classes[8]
-        Format.value = self.values[8]
-
-        if index > 8:
-            value = self.classes[index](self.values[index], Format)
-        else:
-            value = self.classes[index](self.values[index])
-            
-        return value
-
-    def iter_samples(self):
-
-        Format = self.classes[8]
-        Format.value = self.values[8]
-        
-        maxRange = self.nsamples + 9
-        
-        #FormatValue = self.FormatClass.value
-        SampleClass = self.classes[9]
-
-        for i in xrange(9, maxRange):
-            yield SampleClass(self.values[i], Format)
-        
-        #return (SampleClass(self.values[i], Format) for i in xrange(9, maxRange))      
-        
-    def old_iter_samples(self):
-        
-        self.FormatClass = self.classes[8](self.values[8])
-        maxRange = self.nsamples + 9
-        
-        FormatValue = self.FormatClass.value
-        SampleClass = self.classes[9]
-        
-        return (SampleClass(self.values[i], FormatValue) for i in xrange(9, maxRange))
 
 
 ###### ######
