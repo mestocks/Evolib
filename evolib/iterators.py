@@ -1,6 +1,6 @@
 from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment, VCFrow3
 
-from evolib.formats.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, FORMAT2, SAMPLE, SAMPLE2
+from evolib.formats.VCFcolumns import CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, FORMAT, SAMPLE, SAMPLE2, SAMPLE3
 
 import os
 import collections
@@ -107,8 +107,8 @@ class Header(object):
     def __init__(self, header):
         self.names = header
         self.nsamples = len(header) - 9
-        self.classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
-        #self.classes = [str, int, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
+        #self.classes = [CHROM, POS, ID, REF, ALT, QUAL, FILTER, INFO, None] + [SAMPLE2] * self.nsamples
+        self.classes = [str, int, str, REF, ALT, float, str, INFO, None] + [SAMPLE3] * self.nsamples
         self.str_item = dict([(key, (self.classes[index], index)) for index, key in enumerate(header)])
         self.int_item = dict([(index, (self.classes[index], index)) for index, key in enumerate(header)])
         self.preamble = ''
@@ -156,7 +156,7 @@ def vcf_iter4(FileObject):
             preamble += line.rstrip()
             header = line[1:].rstrip().split('\t')
             headerClass = Header(header)
-            Format = FORMAT2()
+            Format = FORMAT()
             headerClass.preamble = preamble
             Row = VCFrow3([None] * len(header), headerClass, Format)
             

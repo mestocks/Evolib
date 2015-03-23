@@ -66,7 +66,38 @@ class FILTER(COL_BASECLASS):
     __slots__ = ['col_name', 'chr_value', 'value']
     col_name = 'FILTER'
 
+    
 class INFO(COL_BASECLASS):
+    __slots__ = ['chr_value', 'value']
+    
+    def __getitem__(self, index):
+        """
+        The actual parsing of the INFO line only occurs when 
+        __getitem__ is called. This is to save on unnecesary 
+        processing of the VCF file that occurs when not all 
+        columns are used. The same also applies to each item 
+        within INFO.
+        
+        Each INFO entry is delimited by ';'. Each entry consist of the descriptor and 
+        value separated by '='. E.g:
+        INFO
+        DP=1;AF=0;AC1=0;DP4=1,0,0,0;MQ=25;FQ=-24.3
+        """
+        if isinstance(self.value, str):
+            self.value = dict([tuple(i.split('=')) for i in chr_value.split(';') if '=' in i])
+        
+        INFO_parse = {'DP': int, 'MQ': int}
+        
+        value = self.value[index]
+        
+        if index in INFO_parse:
+            value = INFO_parse[index](value)
+        
+        return value
+        
+        
+    
+class INFO_old(COL_BASECLASS):
     __slots__ = ['col_name', 'chr_value', 'value']
     col_name = 'INFO'
     """
@@ -126,37 +157,74 @@ class INFO(COL_BASECLASS):
         
         return value
 
+###### ######
+    
 class FORMAT(COL_BASECLASS):
-    __slots__ = ['col_name', 'chr_value', 'value']
-    col_name = 'FORMAT'
-    
-    def __init__(self, value):
-        self.chr_value = value
-        self.value = value
-        #self.value = self._parse(value)
-    
-    def _parse(self, chr_value):
-        
-        value = chr_value.split(':')
-        
-        return value
-
-class FORMAT2(COL_BASECLASS):
 
     def __init__(self):
         self.format_dict = {}
 
     def __getitem__(self, value):
-        print value
+        
         if value not in self.format_dict:
             new_value = dict([(j, i) for (i, j) in enumerate(value.split(":"))])
             self.format_dict.update({value: new_value})
 
         return self.format_dict[value]
 
-
-
 ###### ######
+
+class SAMPLE3(COL_BASECLASS):
+    __slots__ = ['chr_value', 'value', 'Format']
+    
+    def __init__(self, value, Format):
+        self.chr_value = value
+        self.value - value
+        self.Format = Format
+        
+    def __getitem__(self, key):
+        
+        if self.chr_value == './.':
+            item = None
+        else:
+            if isinstance(self.value, str):
+                self.value = self.chr_value.split(':')
+                self.SAMPLE_parse = {'DP': int}
+                
+            item = self.value[self.Format[self.Format.value][key]]
+            
+            if key in self.SAMPLE_parse:
+                item = self.SAMPLE_parse[key](item)
+            
+        return item
+    
+    def is_het(self):
+        
+        gt = self['GT']
+        
+        if gt is None:
+            het = None
+        else:
+            if gt == '0/1' or gt == '1/0':
+                het = True
+            else: 
+                het = False
+            
+        return het
+    
+    def str_fetch(self, key):        
+
+        if self.chr_value == "./.":
+            item = 'NA'
+        else:
+            #if self.split_value is None:
+            self.split_value = self.chr_value.split(":")
+                
+            item = self.split_value[self.Format[self.Format.value][key]]
+
+        return item
+    
+######
 
 class SAMPLE2(COL_BASECLASS):
 
@@ -175,6 +243,7 @@ class SAMPLE2(COL_BASECLASS):
     
 
     def __getitem__(self, key):
+        print key, self.chr_value
         self.SAMPLE_parse = {'DP': self._DP,
                              'GT': self._GT, 
                              'GQ': self._GQ, 
