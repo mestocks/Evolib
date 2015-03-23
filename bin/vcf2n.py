@@ -70,9 +70,8 @@ for row in vcfstream:
     #pass
     chrom, pos = row['CHROM'], row['POS']
     print row
-    gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp.chr_value != './.')
-    for i in gts:
-        print i
+    gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp['GT'] != './.')
+        
     alls = (int(gt[0]) + int(gt[1]) for gt in gts)
     nsam = 2 * sum(1 for g in alls)
     nder = sum(alls)
