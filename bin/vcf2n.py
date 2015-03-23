@@ -69,7 +69,7 @@ vcfstream = vcf_iter(sys.stdin)
 for row in vcfstream:
     #pass
     chrom, pos = row['CHROM'], row['POS']
-    print row
+    
     gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp['GT'] != './.')
         
     alls = (int(gt[0]) + int(gt[1]) for gt in gts)
