@@ -66,21 +66,24 @@ vcfstream = vcf_iter(sys.stdin)
 #    else:
 #        pass
 
+inc_chr = sys.argv[1].split(',')
+
 for row in vcfstream:
     #pass
     chrom, pos = row['CHROM'], row['POS']
     
-    gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp['GT'] != './.')
-    #print ' '.join(map(str, gts))
-    alls = [int(gt[0]) + int(gt[1]) for gt in gts]
-    
-    nsam = 2 * sum(1 for g in alls)
-    nder = sum(alls)
-    
-    if nsam == 0:
-        print chrom, pos, 'NA', 'NA'
-    else:
-        print chrom, pos, nsam - nder, nder
+    if chrom in inc_chr:
+        
+        gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp['GT'] != './.')
+        alls = [int(gt[0]) + int(gt[1]) for gt in gts]
+        
+        nsam = 2 * sum(1 for g in alls)
+        nder = sum(alls)
+        
+        if nsam == 0:
+            print chrom, pos, 'NA', 'NA'
+        else:
+            print chrom, pos, nsam - nder, nder
     #print row
     #smp = row.smap(str, 'DP')
     #print chrom, pos, ' '.join(smp)
