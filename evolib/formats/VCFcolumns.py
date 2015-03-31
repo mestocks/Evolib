@@ -84,6 +84,9 @@ class SAMPLE(COL_BASECLASS):
                 item = self.SAMPLE_parse[key](item)
             
         return item
+
+    def __str__(self):
+        return self.chr_value
     
     def is_het(self):
         
@@ -110,3 +113,11 @@ class SAMPLE(COL_BASECLASS):
             item = self.split_value[self.Format[self.Format.value][key]]
 
         return item
+
+    def genotype_str(self, ref, alt):
+        possibleAlleles = [ref] + alt.split(',')
+        GT = self['GT'].split('/')
+        
+        one, two = possibleAlleles[int(GT[0])], possibleAlleles[int(GT[1])]
+        
+        return one + two

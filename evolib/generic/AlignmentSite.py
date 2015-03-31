@@ -36,11 +36,12 @@ class FastaSite(Site):
 
 
 class VCFSite(Site):
-
-    def alleles(self):
-        if str(self['ALT']) == ".":
-            alleles = ''.join([str(self['REF']) + str(self['REF']) for i in self.iter_samples()])
-        else:
-            alleles = ''.join([s.genotype_str(str(self['REF']), str(self['ALT'])) for s in self.iter_samples()])
-
-        return alleles
+    pass
+    # Not indel safe
+    #def alleles(self):
+    #    if str(self['ALT']) == ".":
+    #        alleles = ''.join([str(self['REF']) + str(self['REF']) for i in self.iter_samples()])
+    #    else:
+    #        alleles = ''.join([s.genotype_str(str(self['REF']), str(self['ALT'])) for s in self.iter_samples()])
+    #
+    #   return alleles
