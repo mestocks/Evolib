@@ -76,11 +76,14 @@ class SAMPLE(COL_BASECLASS):
         else:
             if isinstance(self.value, str):
                 self.value = self.chr_value.split(':')
+                # problems may occur if the number of items in the
+                # FORMAT column != number items in the sample
                 self.SAMPLE_parse = {'DP': int}
                 
             item = self.value[self.Format[self.Format.value][key]]
             
             if key in self.SAMPLE_parse:
+                print key, value
                 item = self.SAMPLE_parse[key](item)
             
         return item
