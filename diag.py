@@ -39,7 +39,7 @@ for row in vcf_iter(sys.stdin):
     alt2 = pop2.count('1/1')
 
     # ind conditions
-    if het1 == 0 and hom1 * alt1 == 0 and n1 > 0 and (n1 + n2) == sum([hom1, het1, alt1, hom2, het2, alt2]):
+    if n1 == 1 and n2 == 4 and het1 == 0 and hom1 * alt1 == 0 and (n1 + n2) == sum([hom1, het1, alt1, hom2, het2, alt2]):
         
         # sat & fae het conditions
         if hom2 + alt2 == 0 and het2 > 0:
