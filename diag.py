@@ -24,7 +24,7 @@ for row in vcf_iter(sys.stdin):
         names1 = [value for value in row.header.names[9:] if morph[value] in str1]
         names2 = [value for value in row.header.names[9:] if morph[value] in str2]
         
-    #print row
+    print row
     pop1 = list((row[ind1]['GT'] for ind1 in names1 if row[ind1]['DP'] > 7))
     pop2 = list((row[ind2]['GT'] for ind2 in names2 if row[ind2]['DP'] > 7))
 
