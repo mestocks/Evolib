@@ -46,17 +46,24 @@ for row in vcf_iter(sys.stdin):
 
             chrom, pos = row['CHROM'], row['POS']
 
-            print chrom, pos,
+            printlst = [chrom,
+                        str(pos),
+                        str(2 * hom1 + het1),
+                        str(2 * hom2 + het2),
+                        str(2 * alt1 + het1),
+                        str(2 * alt2 + het2)]
+
+            print '\t'.join(printlst)
             
-            for i in pop1:
-                print i,
-            print hom1, het1, alt1,
-            print "|",
-            for i in pop2:
-                print i,
-            print hom2, het2, alt2,
+            #for i in pop1:
+            #    printstr += i,
+            #print hom1, het1, alt1,
+            #print "|",
+            #for i in pop2:
+            #    print i,
+            #print hom2, het2, alt2,
             
-            print ""
+            #print ""
     #alleles = row.alleles()
     #print chrom, pos, alleles
     #pop1 = ''.join([alleles[2 * f] + alleles[(2 * f) + 1] for f in Findices if int(row[f + 9]['DP']) > 7]).replace('N','')
