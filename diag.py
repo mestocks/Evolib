@@ -48,6 +48,7 @@ for row in vcf_iter(sys.stdin):
 
             printlst = [chrom,
                         str(pos),
+                        str(pos + 1),
                         str(2 * hom1 + het1),
                         str(2 * hom2 + het2),
                         str(2 * alt1 + het1),
