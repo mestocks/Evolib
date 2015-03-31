@@ -83,7 +83,7 @@ class SAMPLE(COL_BASECLASS):
             item = self.value[self.Format[self.Format.value][key]]
             
             if key in self.SAMPLE_parse:
-                print key, self.value
+                print key, self.value, item
                 item = self.SAMPLE_parse[key](item)
             
         return item
