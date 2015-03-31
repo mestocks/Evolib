@@ -21,7 +21,7 @@ for row in vcf_iter(sys.stdin):
                     str(2 * ref + het),
                     str(2 * alt + het)]
         
-        print '\t'.join(printlst)
+        print ' '.join(printlst)
         
         #for i in pop1:
         #    printstr += i,
