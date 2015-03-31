@@ -1,0 +1,87 @@
+import sys
+
+from evolib.stats.PopGenStats import Dxy
+from evolib.iterators import vcf_iter
+
+morph = {'2014_SOL_MB8684': 'i',
+         '2014_SOL_MB8685': 's',
+         '2014_SOL_MB8686': 's',
+         '2014_SOL_MB8687': 'f',
+         '2014_SOL_MB8688': 'f'}
+
+
+#morph = dict([(m.split("\t")[0], m.split("\t")[4]) for m in open('/home/mist/current/ruffProject/pugnax_gwas/gwas/phe_r1bm_RUFFv0.2.txt', 'r')])
+
+str1 = ['f']
+str2 = ['s', 'i']
+
+names1 = None
+names2 = None
+
+for row in vcf_iter(sys.stdin):
+    
+    if names1 is None:
+        names1 = [value for value in row.header.names[9:] if morph[value] in str1]
+        names2 = [value for value in row.header.names[9:] if morph[value] in str2]
+        
+    pop1 = list((row[ind1]['GT'] for ind1 in names1 if row[ind1]['GT'] != './.' and row[ind1]['DP'] > 7))
+    pop2 = list((row[ind2]['GT'] for ind2 in names2 if row[ind2]['GT'] != './.' and row[ind2]['DP'] > 7))
+
+    n1 = len(pop1)
+    n2 = len(pop2)
+
+    hom1 = pop1.count('0/0')
+    het1 = pop1.count('0/1')
+    alt1 = pop1.count('1/1')
+
+    hom2 = pop2.count('0/0')
+    het2 = pop2.count('0/1')
+    alt2 = pop2.count('1/1')
+
+    # ind conditions
+    if n1 == 1 and n2 == 4 and het1 == 0 and hom1 * alt1 == 0 and (n1 + n2) == sum([hom1, het1, alt1, hom2, het2, alt2]):
+        
+        # sat & fae het conditions
+        if hom2 + alt2 == 0 and het2 > 0:
+
+            chrom, pos = row['CHROM'], row['POS']
+
+            printlst = [chrom,
+                        str(pos),
+                        str(pos + 1),
+                        str(2 * hom1 + het1),
+                        str(2 * hom2 + het2),
+                        str(2 * alt1 + het1),
+                        str(2 * alt2 + het2)]
+
+            print '\t'.join(printlst)
+            
+            #for i in pop1:
+            #    printstr += i,
+            #print hom1, het1, alt1,
+            #print "|",
+            #for i in pop2:
+            #    print i,
+            #print hom2, het2, alt2,
+            
+            #print ""
+    #alleles = row.alleles()
+    #print chrom, pos, alleles
+    #pop1 = ''.join([alleles[2 * f] + alleles[(2 * f) + 1] for f in Findices if int(row[f + 9]['DP']) > 7]).replace('N','')
+    #pop2 = ''.join([alleles[2 * i] + alleles[(2 * i) + 1] for i in Iindices if int(row[i + 9]['DP']) > 7]).replace('N','')
+    
+    #uall = list(set(pop1 + pop2))
+
+    #if len(pop1) > 0 and len(pop2) > 0:
+    #    if len(uall) == 2:
+    #        a = uall[0]
+    #        b = uall[1]
+    #        xa = pop1.count(a)
+    #        xb = pop1.count(b)
+    #        ya = pop2.count(a)
+    #        yb = pop2.count(b)
+    #        dxy = Dxy(xa, xb, ya, yb)
+    #        print chrom, pos, dxy
+        
+
+    
