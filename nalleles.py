@@ -6,7 +6,7 @@ for row in vcf_iter(sys.stdin):
             
     gts = list((smp['GT'] for smp in row.iter_samples() if smp['GT'] != './.' and smp['DP'] > 7))
 
-    nsam = len(pop)
+    nsam = len(gts)
     ref = gts.count('0/0')
     het = gts.count('0/1')
     alt = gts.count('1/1')
