@@ -79,12 +79,15 @@ class SAMPLE(COL_BASECLASS):
                 # problems may occur if the number of items in the
                 # FORMAT column != number items in the sample
                 self.SAMPLE_parse = {'DP': int}
+                self.SAMPLE_default = {'DP': 0}
                 
             item = self.value[self.Format[self.Format.value][key]]
             
             if key in self.SAMPLE_parse:
-                print key, self.value, item
-                item = self.SAMPLE_parse[key](item)
+                try:
+                    item = self.SAMPLE_parse[key](item)
+                except ValueError:
+                    item = self.SAMPLE_default[key]
             
         return item
 
