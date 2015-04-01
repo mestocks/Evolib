@@ -38,12 +38,11 @@ for row in vcf_iter(sys.stdin):
     het2 = pop2.count('0/1')
     alt2 = pop2.count('1/1')
 
-    # ind conditions
-    if n1 == 1 and n2 == 4 and het1 == 0 and hom1 * alt1 == 0 and (n1 + n2) == sum([hom1, het1, alt1, hom2, het2, alt2]):
-        
-        # sat & fae het conditions
-        if hom2 + alt2 == 0 and het2 > 0:
-
+    if n1 == 2 and n2 == 3 and (n1 + n2) == sum([hom1, het1, alt1, hom2, het2, alt2]):
+        # fae/non-fae conditions
+        # ((0/0 + 0/1 > 0) and (1/1 + 0/1 == 0)) or ((1/1 + 0/1 > 0) and (0/0 + 0/1 == 0))
+        if ((hom1 + het1 > 0) and (hom2 + het2 == 0)) or ((alt1 + het1 > 0) and (alt2 + het2 == 0)):
+            
             chrom, pos = row['CHROM'], row['POS']
 
             printlst = [chrom,
