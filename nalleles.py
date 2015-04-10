@@ -1,10 +1,13 @@
 import sys
 
+names = ['2014_SOL_MB8687', '2014_SOL_MB8688']
+#names = ['2014_SOL_MB8685', '2014_SOL_MB8686']
+
 from evolib.iterators import vcf_iter
 
 for row in vcf_iter(sys.stdin):
-            
-    gts = list((smp['GT'] for smp in row.iter_samples() if smp['GT'] != './.' and smp['DP'] > 7))
+    
+    gts = list((smp['GT'] for smp in row.iter_samples() if smp.name in names and smp['DP'] > 7 and smp['GT'] != './.' and smp['GT'] is not None))
 
     nsam = len(gts)
     ref = gts.count('0/0')
@@ -12,7 +15,7 @@ for row in vcf_iter(sys.stdin):
     alt = gts.count('1/1')
 
     # ind conditions
-    if nsam == 5 and nsam == sum([ref, het, alt]):
+    if nsam == 2 and nsam == sum([ref, het, alt]):
         
         chrom, pos = row['CHROM'], row['POS']
         

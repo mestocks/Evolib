@@ -74,7 +74,7 @@ for row in vcfstream:
     
     if chrom in inc_chr:
         
-        gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp['GT'] != './.')
+        gts = (smp['GT'].split('/') for smp in row.iter_samples() if smp['GT'] != './.' and smp['DP'] > 7)
         alls = [int(gt[0]) + int(gt[1]) for gt in gts]
         
         nsam = 2 * sum(1 for g in alls)

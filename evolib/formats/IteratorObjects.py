@@ -67,7 +67,7 @@ class VCFrow(VCFSite):
         SampleClass, index = self.header.int_item[9]
 
         for i in xrange(9, maxRange):
-            yield SampleClass(self.values[i], self.Format)
+            yield SampleClass(self.values[i], self.Format, self.header.names[i])
         
 
 

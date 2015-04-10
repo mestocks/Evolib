@@ -62,12 +62,13 @@ class FORMAT(COL_BASECLASS):
 ###### ######
 
 class SAMPLE(COL_BASECLASS):
-    __slots__ = ['chr_value', 'value', 'Format']
+    __slots__ = ['chr_value', 'value', 'Format', 'name']
     
-    def __init__(self, value, Format):
+    def __init__(self, value, Format, name = None):
         self.chr_value = value
         self.value = value
         self.Format = Format
+        self.name = name
         
     def __getitem__(self, key):
         
@@ -79,9 +80,12 @@ class SAMPLE(COL_BASECLASS):
                 # problems may occur if the number of items in the
                 # FORMAT column != number items in the sample
                 self.SAMPLE_parse = {'DP': int}
-                self.SAMPLE_default = {'DP': 0}
+                self.SAMPLE_default = {'DP': 0, 'GT': None}
                 
-            item = self.value[self.Format[self.Format.value][key]]
+            try:
+                item = self.value[self.Format[self.Format.value][key]]
+            except KeyError:
+                item = self.SAMPLE_default[key]
             
             if key in self.SAMPLE_parse:
                 try:
