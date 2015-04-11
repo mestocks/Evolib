@@ -84,7 +84,7 @@ class SAMPLE(COL_BASECLASS):
                 self.SAMPLE_parse = {'DP': int}
                 self.SAMPLE_default = {'DP': 0, 'GT': None}
 
-            nvalues = len(self.values)
+            nvalues = len(self.value)
             findex = self.Format[self.Format.value][key]
             if findex >= nvalues:
                 item = None
