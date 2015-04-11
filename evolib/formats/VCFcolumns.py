@@ -90,7 +90,7 @@ class SAMPLE(COL_BASECLASS):
                 item = None
             else:
                 try:
-                    item = self.value[self.Format[self.Format.value][key]]
+                    item = self.value[findex]
                 except KeyError:
                     item = self.SAMPLE_default[key]
             
