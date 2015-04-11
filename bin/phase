@@ -8,6 +8,7 @@ for row in vcf_iter(sys.stdin):
 
     chrom, pos = row['CHROM'], row['POS']
     print row
+    print "*"
     print chrom, pos,
     try:
         hp = [r['HP'] for r in row.iter_samples()]
