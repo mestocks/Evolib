@@ -2,7 +2,7 @@
 
 import sys
 
-from evolib.iterators import vcf_iter
+from Evolib.evolib.iterators import vcf_iter
 
 for row in vcf_iter(sys.stdin):
 
