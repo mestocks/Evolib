@@ -81,7 +81,7 @@ class SAMPLE(COL_BASECLASS):
                 # FORMAT column != number items in the sample
                 self.SAMPLE_parse = {'DP': int}
                 self.SAMPLE_default = {'DP': 0, 'GT': None}
-            print len(self.value), len(self.Format.format_dict.keys())
+            print len(self.value), len(self.Format.value.split(':'))
             if len(self.value) != len(self.Format.format_dict.keys()):
                 item = None
                 
