@@ -71,7 +71,9 @@ class SAMPLE(COL_BASECLASS):
         self.name = name
         
     def __getitem__(self, key):
+        """
         
+        """
         if self.chr_value == './.':
             item = None
         else:
@@ -81,7 +83,10 @@ class SAMPLE(COL_BASECLASS):
                 # FORMAT column != number items in the sample
                 self.SAMPLE_parse = {'DP': int}
                 self.SAMPLE_default = {'DP': 0, 'GT': None}
-            print len(self.value), len(self.Format.value.split(':'))
+
+            findex = self.Format[self.Format.value][key]
+
+            print len(self.value), len(self.Format.value.split(':')), findex
             if len(self.value) != len(self.Format.format_dict.keys()):
                 item = None
                 
