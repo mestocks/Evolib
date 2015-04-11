@@ -90,6 +90,7 @@ class SAMPLE(COL_BASECLASS):
                 item = None
             else:
                 try:
+                    print findex, nformat, self.value
                     item = self.value[findex]
                 except KeyError:
                     item = self.SAMPLE_default[key]
