@@ -7,9 +7,9 @@ from evolib.iterators import vcf_iter
 for row in vcf_iter(sys.stdin):
 
     chrom, pos = row['CHROM'], row['POS']
-    print row,
+    print chrom, pos, row
     try:
         hp = [r['HP'] for r in row.iter_samples()]
-        print hp
+        print chrom, pos, hp
     except KeyError:
         pass
