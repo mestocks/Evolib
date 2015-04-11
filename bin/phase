@@ -2,6 +2,7 @@
 
 import sys
 
+print sys.path
 from evolib.iterators import vcf_iter
 
 for row in vcf_iter(sys.stdin):
