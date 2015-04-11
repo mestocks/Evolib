@@ -84,13 +84,12 @@ class SAMPLE(COL_BASECLASS):
                 self.SAMPLE_parse = {'DP': int}
                 self.SAMPLE_default = {'DP': 0, 'GT': None}
 
-            nformat = len(self.Format.value.split(':'))
+            nvalues = len(self.values)
             findex = self.Format[self.Format.value][key]
-            if findex >= nformat:
+            if findex >= nvalues:
                 item = None
             else:
                 try:
-                    print findex, nformat, self.value
                     item = self.value[findex]
                 except KeyError:
                     item = self.SAMPLE_default[key]
