@@ -82,7 +82,9 @@ class SAMPLE(COL_BASECLASS):
                 self.SAMPLE_parse = {'DP': int}
                 self.SAMPLE_default = {'DP': 0, 'GT': None}
 
-            print self.value, key, self.Format.value
+            if len(self.value) != len(self.Format.format_dict.keys()):
+                item = None
+                
             try:
                 item = self.value[self.Format[self.Format.value][key]]
             except KeyError:
