@@ -9,7 +9,8 @@ if args[0] == "F_SI":
     str1 = ['f']
     str2 = ['s', 'i']
 
-dataset = "wgs11"
+
+dataset = args[1]
 
 #2014_SOL_TB8858__S05318_1  2014_SOL_TB8860__S05328_1  2014_SOL_TB8862__1509615_S  2014_SOL_TB8864__1560702_S  2014_SOL_TB8866__1458775_F  2014_SOL_TB8868__1415786_F
 
