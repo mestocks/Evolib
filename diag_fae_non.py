@@ -6,8 +6,8 @@ from evolib.iterators import vcf_iter
 from evolib.stats.PopGenStats import Dxy
 
 if args[0] == "F_SI":
-    str1 = ['f']
-    str2 = ['s', 'i']
+    str1 = ['s', 'i']
+    str2 = ['f']
 
 dataset = "wgs11"
 
