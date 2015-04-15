@@ -75,6 +75,8 @@ for row in vcf_iter(sys.stdin):
                         str(2 * alt1 + het1),
                         str(2 * alt2 + het2)]
 
+            print hom1, het1, alt1
+            print hom2, het2, alt2
             print '\t'.join(printlst)
             
     
