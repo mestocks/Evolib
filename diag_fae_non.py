@@ -6,8 +6,8 @@ from evolib.iterators import vcf_iter
 from evolib.stats.PopGenStats import Dxy
 
 if args[0] == "F_SI":
-    str1 = ['s', 'i']
-    str2 = ['f']
+    str1 = ['f']
+    str2 = ['s', 'i']
 
 dataset = "wgs11"
 
@@ -62,6 +62,7 @@ for row in vcf_iter(sys.stdin):
     if n1 == len(names1) and n2 == len(names2) and (n1 + n2) == sum([hom1, het1, alt1, hom2, het2, alt2]):
         # fae/non-fae conditions
         # ((0/0 + 0/1 > 0) and (1/1 + 0/1 == 0)) or ((1/1 + 0/1 > 0) and (0/0 + 0/1 == 0))
+        
         if ((hom1 + het1 > 0) and (hom2 + het2 == 0)) or ((alt1 + het1 > 0) and (alt2 + het2 == 0)):
             
             chrom, pos = row['CHROM'], row['POS']
