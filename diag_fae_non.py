@@ -63,7 +63,7 @@ for row in vcf_iter(sys.stdin):
         # fae/non-fae conditions
         # ((0/0 + 0/1 > 0) and (1/1 + 0/1 == 0)) or ((1/1 + 0/1 > 0) and (0/0 + 0/1 == 0))
         
-        if ((hom1 + het1 > 0) and (hom2 + het2 == 0)) or ((alt1 + het1 > 0) and (alt2 + het2 == 0)):
+        if (alt1 == 0 and (hom1 + het1 > 0) and (hom2 + het2 == 0)) or (hom1 == 0 and (alt1 + het1 > 0) and (alt2 + het2 == 0)):
             
             chrom, pos = row['CHROM'], row['POS']
 
