@@ -8,6 +8,9 @@ from evolib.stats.PopGenStats import Dxy
 if args[0] == "F_SI":
     str1 = ['f']
     str2 = ['s', 'i']
+elif args[0] == "S_I":
+    str1 = ['s']
+    str2 = ['i']
 
 
 dataset = args[1]
