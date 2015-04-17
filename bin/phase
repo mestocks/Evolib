@@ -1,5 +1,8 @@
 #! /usr/bin/python
 
+# 0----0----0
+# 1----1----1
+
 import sys
 
 from evolib.iterators import vcf_iter

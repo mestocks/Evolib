@@ -1,3 +1,5 @@
+#! /usr/bin/python
+
 import sys
 
 args = sys.argv[1:]
@@ -62,7 +64,7 @@ from evolib.iterators import vcf_iter
 from evolib.stats.PopGenStats import Dxy
 
 for row in vcf_iter(sys.stdin):
-    print row
+
     refgts = list((r['GT'] for r in row.iter_samples() if r.name in ref and r['DP'] > 7 and r['GT'] != './.' and r['GT'] is not None))
     
     altgts = list((a['GT'] for a in row.iter_samples() if a.name in alt and a['DP'] > 7 and a['GT'] != './.' and a['GT'] is not None))
