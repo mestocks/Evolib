@@ -97,7 +97,7 @@ class SAMPLE(COL_BASECLASS):
             if key in self.SAMPLE_parse:
                 try:
                     item = self.SAMPLE_parse[key](item)
-                except ValueError:
+                except TypeError:
                     item = self.SAMPLE_default[key]
             
         return item
