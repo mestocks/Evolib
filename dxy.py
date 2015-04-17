@@ -62,7 +62,7 @@ from evolib.iterators import vcf_iter
 from evolib.stats.PopGenStats import Dxy
 
 for row in vcf_iter(sys.stdin):
-
+    print row
     refgts = list((r['GT'] for r in row.iter_samples() if r.name in ref and r['DP'] > 7 and r['GT'] != './.' and r['GT'] is not None))
     
     altgts = list((a['GT'] for a in row.iter_samples() if a.name in alt and a['DP'] > 7 and a['GT'] != './.' and a['GT'] is not None))
@@ -78,7 +78,7 @@ for row in vcf_iter(sys.stdin):
     altalt = altgts.count('1/1')
 
     chrom, pos = row['CHROM'], row['POS']
-
+    
     # ind conditions
     if nsamref == nref and nsamalt == nalt and nsamref == sum([refref, refhet, refalt]) and nsamalt == sum([altref, althet, altalt]):
         
@@ -93,7 +93,7 @@ for row in vcf_iter(sys.stdin):
                   2 * refalt + refhet,
                   2 * altref + althet,
                   2 * altalt + althet)
-                  
+        
         print ' '.join(printlst + [str(dxy)])
 
     else:
