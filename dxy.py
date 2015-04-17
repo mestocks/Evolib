@@ -13,7 +13,7 @@ sat12 = ['2014_SOL_TB8862', '2014_SOL_TB8863',
          '2014_SOL_TB8864', '2014_SOL_TB8865']
 
 fae12 =  ['2014_SOL_TB8866', '2014_SOL_TB8867',
-          '2014_SOL_TB8868', '2014_SOL_TB8869'}
+          '2014_SOL_TB8868', '2014_SOL_TB8869']
 
 ind17 = ind5 + ind12
 sat17 = sat5 + sat12
