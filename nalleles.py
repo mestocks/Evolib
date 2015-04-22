@@ -1,7 +1,9 @@
 import sys
 
-#names = ['2014_SOL_MB8687', '2014_SOL_MB8688']
-names = ['2014_SOL_MB8685', '2014_SOL_MB8686']
+
+
+names = ['2014_SOL_MB8687', '2014_SOL_MB8688']
+#names = ['2014_SOL_MB8685', '2014_SOL_MB8686']
 
 from evolib.iterators import vcf_iter
 
