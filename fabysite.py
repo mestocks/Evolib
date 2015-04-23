@@ -2,9 +2,25 @@ import sys
 
 from evolib.SequenceFormats import FastaFormat
 
-fileObject = open(sys.argv[1], 'r')
+fileName = sys.argv[1]
+fileObject = open(fileName, 'r')
 
 F = FastaFormat(fileObject)
 
+chrom = fileName[:10]
+
+dna = set(['A', 'T', 'G', 'C'])
+bp = 1
 for site in F.iter_sites():
-    print site
+    if len(list(set(site.upper()) - dna)) > 0:
+        print chrom, bp, 'NA', 'NA'
+    else:
+        ref = site[-1].upper()
+        print chrom, bp, ref,
+        for i in site[:-1]:
+            if i.upper() == ref:
+                print '0',
+            else:
+                print '1',
+        print ""
+    bp += 1
