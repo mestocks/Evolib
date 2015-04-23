@@ -6,4 +6,5 @@ fileObject = open(sys.argv[1], 'r')
 
 F = FastaFormat(fileObject)
 
-print F.ids()
+for site in F.iter_sites():
+    print site
