@@ -7,7 +7,7 @@ fileObject = open(fileName, 'r')
 
 F = FastaFormat(fileObject)
 
-chrom = fileName[:10]
+chrom = fileName[9:19]
 
 dna = set(['A', 'T', 'G', 'C'])
 bp = 1
