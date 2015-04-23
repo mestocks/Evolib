@@ -13,7 +13,7 @@ dna = set(['A', 'T', 'G', 'C'])
 bp = 1
 for site in F.iter_sites():
     if len(list(set(site.upper()) - dna)) > 0:
-        print chrom, bp, 'NA', 'NA'
+        print chrom, bp, 'NA', 'NA', 'NA', 'NA', 'NA', 'NA'
     else:
         ref = site[-1].upper()
         print chrom, bp, ref,
