@@ -17,7 +17,7 @@ for row in vcf_iter(sys.stdin):
     alt = gts.count('1/1')
 
     # ind conditions
-    if nsam == 2 and nsam == sum([ref, het, alt]):
+    if nsam == len(names) and nsam == sum([ref, het, alt]):
         
         chrom, pos = row['CHROM'], row['POS']
         
