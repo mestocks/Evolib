@@ -7,7 +7,7 @@ fileObject = open(fileName, 'r')
 
 F = FastaFormat(fileObject)
 
-chrom = fileName[2:6]
+chrom = "Contig" + fileName[2:6]
 
 dna = set(['A', 'T', 'G', 'C'])
 bp = 1
