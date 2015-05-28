@@ -28,7 +28,13 @@ if dataset == "wgs11":
              '2014_SOL_TB8864': 's', '2014_SOL_TB8865': 's',
              '2014_SOL_TB8866': 'f', '2014_SOL_TB8867': 'f',
              '2014_SOL_TB8868': 'f'}
-elif dataset == "wgs":
+elif dataset == "wgs5":
+    morph = {'2014_SOL_MB8684': 'i',
+             '2014_SOL_MB8685': 's',
+             '2014_SOL_MB8686': 's',
+             '2014_SOL_MB8687': 'f',
+             '2014_SOL_MB8688': 'f'}
+elif dataset == "wgs17":
     morph = {'2014_SOL_MB8684': 'i',
              '2014_SOL_MB8685': 's',
              '2014_SOL_MB8686': 's',

@@ -114,6 +114,16 @@ def WakeleyHey(io, pop_nsam):
         
     return s1, s2, ss, sf
         
-        
-    
-    
+def neutral_replacements(Ps, Pn, Ls, Ln):
+
+    if Ls == 0 or Ln == 0 or Ps == 0:
+        f = None
+    else:
+        if Pn == 0:
+            f = 0.0
+        else:
+            N = float(Pn) / Ln
+            S = float(Ps) / Ls
+            f = N / S
+
+    return f

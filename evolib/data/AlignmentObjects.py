@@ -143,7 +143,9 @@ class DnaPopulationData(IOstats):
             if nmiss > 0:
                 # contains non-ATGC data
                 pass
-            
+            elif len(codons[0]) != 3:
+                # number of bases in codon != 3
+                pass
             else:
                 
                 ucodons = list(set(codons))

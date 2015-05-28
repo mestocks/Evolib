@@ -22,6 +22,7 @@ def fasta_iter(file_paths):
         
         FileObject = open(fpath, 'r')
         FsaFormat = FastaAlignment(FileObject)
+        FsaFormat.filepath = fpath
         
         yield FsaFormat
         
