@@ -1,3 +1,13 @@
+"""
+... | python casecontrol.py <key> <file>
+
+where <file> takes the form:
+
+<key>:case:<id1>,<id2>,...
+<key>:control:<id3>,<id4>,...
+
+"""
+
 import sys
 
 args = sys.argv[1:]

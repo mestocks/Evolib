@@ -1,4 +1,4 @@
-import numpy
+#import numpy
 
 def block_iter(itr, size = 3, start = 1):
     """
@@ -114,26 +114,28 @@ def loopByColumn(array, start = 0, size = 1):
         yield column
 
 
-def member_iter(ranges, start = 1, end = 1000000):
+#re-implement without numpy?
+        
+#def member_iter(ranges, start = 1, end = 1000000):
     
-    rng = numpy.array(ranges)
+#    rng = numpy.array(ranges)
     
-    for i in range(start, end + 1):
+#    for i in range(start, end + 1):
         #if ranges == []:
         #    yield False
         #else:
-        equal = i == rng
+#        equal = i == rng
         
-        if sum(equal) == 1:
-            yield True
+#        if sum(equal) == 1:
+#            yield True
             
-        else:
-            state = i >= rng
+#        else:
+#            state = i >= rng
             
-            if sum(state) % 2 == 0:
-                yield False
-            else:
-                yield True
+#            if sum(state) % 2 == 0:
+#                yield False
+#            else:
+#                yield True
                 
 
 def non_overlapping_iter(seq, size, start = 0):
