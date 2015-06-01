@@ -24,9 +24,9 @@ for k in open(filename, 'r'):
     ksplit = k.rstrip().split(":")
     if ksplit[0] == key:
         if ksplit[1] == "case":
-            cases += ksplit[2].split(",")
+            names1 += ksplit[2].split(",")
         elif ksplit[1] == "control":
-            controls += ksplit[2].split(",")
+            names2 += ksplit[2].split(",")
 
 for row in vcf_iter(sys.stdin):
             
