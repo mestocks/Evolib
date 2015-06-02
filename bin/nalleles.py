@@ -1,7 +1,12 @@
 import sys
 
+args = sys.argv[1:]
 
-names = ['2014_SOL_MB8684']
+print args
+
+names = args[0].split(",")
+print names
+#names = ['2014_SOL_MB8684']
 #names = ['2014_SOL_MB8687', '2014_SOL_MB8688']
 #names = ['2014_SOL_MB8685', '2014_SOL_MB8686']
 
