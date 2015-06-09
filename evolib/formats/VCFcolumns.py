@@ -34,7 +34,7 @@ class INFO(COL_BASECLASS):
         if isinstance(self.value, str):
             self.value = dict([tuple(i.split('=')) for i in self.chr_value.split(';') if '=' in i])
         
-        INFO_parse = {'DP': int, 'MQ': int}
+        INFO_parse = {'DP': int}#, 'MQ': int}
         
         value = self.value[index]
         
