@@ -9,3 +9,23 @@ def parse_fasta_alignment(fileObject):
     seq_names = [part.partition('\n')[0].replace('>', '') for part in step2]
 
     return seq_table, seq_names
+
+def idsets(fileObject):
+    """
+    File format:
+
+        <key1>:<id1>,<id2>,...
+        <key2>:<id1>,<id2>,...
+
+    Returns:
+
+        {<key1>: [<id1>, <id2>, ...], 
+         <key2>: [<id1>, <id2>, ...]}
+    
+    """
+    rdict = {}
+    for line in fileObject:
+        ksplit = line.rstrip().split(":")
+        rdict.update({ksplit[0]: ksplit[1].split(',')})
+
+    return rdict
