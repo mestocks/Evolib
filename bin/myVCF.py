@@ -17,7 +17,7 @@ for row in vcf_iter(sys.stdin):
     print chrom, pos,
 
     for col in cols:
-        colobj = row[col]
+        colobj = row['INFO'][col]
         print colobj,
     print "\n",
 
