@@ -32,7 +32,7 @@ class INFO(COL_BASECLASS):
         DP=1;AF=0;AC1=0;DP4=1,0,0,0;MQ=25;FQ=-24.3
         """
         if isinstance(self.value, str):
-            self.value = dict([tuple(i.split('=')) for i in chr_value.split(';') if '=' in i])
+            self.value = dict([tuple(i.split('=')) for i in self.chr_value.split(';') if '=' in i])
         
         INFO_parse = {'DP': int, 'MQ': int}
         
