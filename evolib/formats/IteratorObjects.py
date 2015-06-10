@@ -19,9 +19,10 @@ class FastqRead():
 
 ###### ######
 
-from evolib.generic.AlignmentSite import VCFSite
+# Site object inheritance not compatible
+#from evolib.generic.AlignmentSite import VCFSite
 
-class VCFrow(VCFSite):
+class VCFrow(object):
     # row["CHROM"]
     # row[:2] -> refers only to samples
 
