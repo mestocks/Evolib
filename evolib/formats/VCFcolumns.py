@@ -30,18 +30,32 @@ class INFO(COL_BASECLASS):
         value separated by '='. E.g:
         INFO
         DP=1;AF=0;AC1=0;DP4=1,0,0,0;MQ=25;FQ=-24.3
+
+        * There are many vcf files that may have an INFO field 
+        that is present on some rows but not others. There are 
+        two ways to deal with this:
+          1) allow __getitem__ to throw an IndexError when a field
+             is absent. The problem with this is that there is not 
+             a satisfying, efficient way to either check for this 
+             absence, or to safely Except the IndexError. Things get
+             messy.
+          2) make __getitem__ return None when a field is absent.
+        Probably best to go with option 2.
         """
         if isinstance(self.value, str):
             self.value = dict([tuple(i.split('=')) for i in self.chr_value.split(';') if '=' in i])
         
         INFO_parse = {'DP': int}#, 'MQ': int}
+
+        # Return None is field is not present in INFO
+        if index not in self.value:
+            item = None
+        else:
+            item = self.value[index]
+            if index in INFO_parse:
+                item = INFO_parse[index](item)
         
-        value = self.value[index]
-        
-        if index in INFO_parse:
-            value = INFO_parse[index](value)
-        
-        return value
+        return item
         
         
 ###### ######
