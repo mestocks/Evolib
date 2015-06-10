@@ -18,7 +18,10 @@ for row in vcf_iter(sys.stdin):
 
     for col in cols:
         colobj = row['INFO'][col]
-        print colobj,
+        if colobj is None:
+            print "NA",
+        else:
+            print colobj,
     print "\n",
 
     
