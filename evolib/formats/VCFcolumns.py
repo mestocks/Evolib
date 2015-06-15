@@ -44,16 +44,12 @@ class INFO(COL_BASECLASS):
         """
         if isinstance(self.value, str):
             self.value = dict([tuple(i.split('=')) for i in self.chr_value.split(';') if '=' in i])
-        
-        INFO_parse = {'DP': int}#, 'MQ': int}
 
         # Return None is field is not present in INFO
         if index not in self.value:
             item = None
         else:
             item = self.value[index]
-            if index in INFO_parse:
-                item = INFO_parse[index](item)
         
         return item
         
@@ -85,9 +81,7 @@ class SAMPLE(COL_BASECLASS):
         self.name = name
         
     def __getitem__(self, key):
-        """
         
-        """
         if self.chr_value == './.':
             item = None
         else:
