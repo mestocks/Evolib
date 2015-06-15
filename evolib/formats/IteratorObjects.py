@@ -16,11 +16,26 @@ class FastqRead():
     def __len__(self):
         return len(self.seq)
 
-
+    
 ###### ######
 
-# Site object inheritance not compatible
-#from evolib.generic.AlignmentSite import VCFSite
+from evolib.formats.VCFcolumns import INFO, SAMPLE
+
+class VCFheader(object):
+    
+    def __init__(self, header):
+        self.names = header
+        self.nsamples = len(header) - 9
+        self.classes = [str, int, str, str, str, float, str, INFO, None] + [SAMPLE] * self.nsamples
+        self.str_item = dict([(key, (self.classes[index], index)) for index, key in enumerate(header)])
+        self.int_item = dict([(index, (self.classes[index], index)) for index, key in enumerate(header)])
+        self.preamble = ''
+
+    def __str__(self):
+        return self.preamble
+
+    
+###### ######
 
 class VCFrow(object):
     # row["CHROM"]
@@ -225,3 +240,4 @@ class FastaAlignment(DnaPopulationData):
 
 
     
+

@@ -1,10 +1,8 @@
-from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment
-
-from evolib.formats.VCFcolumns import INFO, FORMAT, SAMPLE
-
 import os
 import collections
 
+from evolib.formats.VCFcolumns import FORMAT
+from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment, VCFheader
 
 ###### ######
 
@@ -81,22 +79,6 @@ def gff_iter(FileObject):
     yield Gff
 
 
-
-###### ######
-
-class Header(object):
-    
-    def __init__(self, header):
-        self.names = header
-        self.nsamples = len(header) - 9
-        self.classes = [str, int, str, str, str, float, str, INFO, None] + [SAMPLE] * self.nsamples
-        self.str_item = dict([(key, (self.classes[index], index)) for index, key in enumerate(header)])
-        self.int_item = dict([(index, (self.classes[index], index)) for index, key in enumerate(header)])
-        self.preamble = ''
-
-    def __str__(self):
-        return self.preamble
-
 ###### ######
 
 def vcf_iter(FileObject):
@@ -118,13 +100,13 @@ def vcf_iter(FileObject):
         else:
             preamble += line.rstrip()
             header = line[1:].rstrip().split('\t')
-            headerClass = Header(header)
+            headerClass = VCFheader(header)
             Format = FORMAT()
             headerClass.preamble = preamble
             Row = VCFrow([None] * len(header), headerClass, Format)
+
             
 ###### ######
-
 
 def ms_iter(fileObject):
     
