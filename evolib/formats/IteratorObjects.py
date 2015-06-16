@@ -27,8 +27,8 @@ class VCFheader(object):
         self.names = header
         self.nsamples = len(header) - 9
         self.classes = [str, int, str, str, str, float, str, INFO, None] + [SAMPLE] * self.nsamples
-        self.str_item = dict([(key, (self.classes[index], index)) for index, key in enumerate(header)])
-        self.int_item = dict([(index, (self.classes[index], index)) for index, key in enumerate(header)])
+        self.str_item = dict(((key, (self.classes[index], index)) for index, key in enumerate(header)))
+        self.int_item = dict(((index, (self.classes[index], index)) for index, key in enumerate(header)))
         self.preamble = ''
 
     def __str__(self):

@@ -43,7 +43,7 @@ class INFO(COL_BASECLASS):
         Probably best to go with option 2.
         """
         if isinstance(self.value, str):
-            self.value = dict([tuple(i.split('=')) for i in self.chr_value.split(';') if '=' in i])
+            self.value = dict((tuple(i.split('=')) for i in self.chr_value.split(';') if '=' in i))
 
         # Return None if field is not present in INFO
         if index not in self.value:
@@ -64,7 +64,7 @@ class FORMAT(COL_BASECLASS):
     def __getitem__(self, value):
         
         if value not in self.format_dict:
-            new_value = dict([(j, i) for (i, j) in enumerate(value.split(":"))])
+            new_value = dict(((j, i) for (i, j) in enumerate(value.split(":"))))
             self.format_dict.update({value: new_value})
 
         return self.format_dict[value]

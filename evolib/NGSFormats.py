@@ -19,7 +19,7 @@ class VariantCallFormat(object):
         >>> openFile = open("myData.vcf", 'r')
         >>> myVCF = VariantCallFormat(openFile)
         >>> for bp in myVCF:
-        >>>     print bp['CHROM'], bp['POS'], bp['REF'], bp.genotypes(), bp.heterozygosity()
+        >>>     print bp['CHROM'], bp['POS'], bp['REF']
     """
     
     def __init__(self, FileObject):
