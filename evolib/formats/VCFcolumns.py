@@ -45,7 +45,7 @@ class INFO(COL_BASECLASS):
         if isinstance(self.value, str):
             self.value = dict([tuple(i.split('=')) for i in self.chr_value.split(';') if '=' in i])
 
-        # Return None is field is not present in INFO
+        # Return None if field is not present in INFO
         if index not in self.value:
             item = None
         else:
@@ -72,7 +72,7 @@ class FORMAT(COL_BASECLASS):
 ###### ######
 
 class SAMPLE(COL_BASECLASS):
-    __slots__ = ['chr_value', 'value', 'Format', 'name']
+    __slots__ = ['chr_value', 'value', 'Format', 'name', 'nvalues']
     
     def __init__(self, value, Format, name = None):
         self.chr_value = value
@@ -87,64 +87,16 @@ class SAMPLE(COL_BASECLASS):
         else:
             if isinstance(self.value, str):
                 self.value = self.chr_value.split(':')
-                # problems may occur if the number of items in the
-                # FORMAT column != number items in the sample
-                self.SAMPLE_parse = {'DP': int}
-                self.SAMPLE_default = {'DP': 0, 'GT': None}
+                self.nvalues = len(self.value)
 
-            nvalues = len(self.value)
             findex = self.Format[self.Format.value][key]
-            if findex >= nvalues:
+            if findex >= self.nvalues:
                 item = None
             else:
-                try:
-                    item = self.value[findex]
-                except KeyError:
-                    item = self.SAMPLE_default[key]
-            
-            if key in self.SAMPLE_parse:
-                try:
-                    item = self.SAMPLE_parse[key](item)
-                except ValueError:
-                    item = self.SAMPLE_default[key]
-                except TypeError:
-                    item = self.SAMPLE_default[key]
+                item = self.value[findex]
             
         return item
 
     def __str__(self):
         return self.chr_value
-    
-    def is_het(self):
-        
-        gt = self['GT']
-        
-        if gt is None:
-            het = None
-        else:
-            if gt == '0/1' or gt == '1/0':
-                het = True
-            else: 
-                het = False
-            
-        return het
-    
-    def str_fetch(self, key):        
 
-        if self.chr_value == "./.":
-            item = 'NA'
-        else:
-            #if self.split_value is None:
-            self.split_value = self.chr_value.split(":")
-                
-            item = self.split_value[self.Format[self.Format.value][key]]
-
-        return item
-
-    def genotype_str(self, ref, alt):
-        possibleAlleles = [ref] + alt.split(',')
-        GT = self['GT'].split('/')
-        
-        one, two = possibleAlleles[int(GT[0])], possibleAlleles[int(GT[1])]
-        
-        return one + two
