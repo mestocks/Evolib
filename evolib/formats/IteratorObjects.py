@@ -58,7 +58,7 @@ class VCFrow(object):
     def __getitem__(self, item):
         
         # 1 item costs 0.7s per 1 million rows (str lookup)
-        # if statement along costs 0.5s per 1 million row (str lookup)
+        # if statement alone costs 0.5s per 1 million row (str lookup)
         if isinstance(item, str):
             itemClass, index = self.header.str_item[item]
         elif isinstance(item, int):
@@ -73,9 +73,10 @@ class VCFrow(object):
 
         return value
 
-    def smap(self, mode, key):
+    # currently broken as None items cannot be mapped
+    #def smap(self, mode, key):
         # currently ~ 8,500 rows/second (inc. CHROM and POS)
-        return map(mode, (col.str_fetch(key) for col in self.iter_samples()))
+    #    return map(mode, (col[key] for col in self.iter_samples()))
 
     def iter_samples(self):
         
