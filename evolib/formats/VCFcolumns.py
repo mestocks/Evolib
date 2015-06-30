@@ -97,7 +97,7 @@ class SAMPLE(COL_BASECLASS):
                 else:
                     item = self.value[findex]
             else:
-                item
+                item = None
             
         return item
 
