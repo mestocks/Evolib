@@ -9,7 +9,10 @@ names = args[0].split(",")
 
 for row in vcf:
     chrom, pos = row['CHROM'], row['POS']
-    GTs = list((smp['GT'] for smp in row.iter_samples() if smp.name in names and smp['GT'] != "./." and smp['DP'] != "." and smp['DP'] is not None and int(smp['DP']) > 7))
+    try:
+        GTs = list((smp['GT'] for smp in row.iter_samples() if smp.name in names and smp['GT'] != "./." and smp['DP'] != "." and smp['DP'] is not None and int(smp['DP']) > 7))
+    except KeyError:
+        GTS = []
 
     ngts = len(GTs)
     nhet = GTs.count("0/1")
