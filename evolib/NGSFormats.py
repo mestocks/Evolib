@@ -1,5 +1,5 @@
 #from evolib.data.DataObjects import SequenceData
-from evolib.formats.Iterators import fastq_iter, vcf_iter
+from evolib.iterators import fastq_iter, vcf_iter
 
 ###### ######
 
