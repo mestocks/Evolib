@@ -17,4 +17,4 @@ for row in vcf:
     if ngts == 0:
         print chrom, pos, "NA"
     else:
-        print chrom, pos, nhet, ngts, nhet / float(ngts)
+        print chrom, pos, nhet / float(ngts)
