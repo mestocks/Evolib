@@ -89,11 +89,15 @@ class SAMPLE(COL_BASECLASS):
                 self.value = self.chr_value.split(':')
                 self.nvalues = len(self.value)
 
-            findex = self.Format[self.Format.value][key]
-            if findex >= self.nvalues:
-                item = None
+            fdict = self.Format[self.Format.value]
+            if key in fdict:
+                findex = fdict[key]
+                if findex >= self.nvalues:
+                    item = None
+                else:
+                    item = self.value[findex]
             else:
-                item = self.value[findex]
+                item
             
         return item
 
