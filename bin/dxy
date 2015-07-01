@@ -137,23 +137,45 @@ for row in vcf_iter(sys.stdin):
 
     chrom, pos = row['CHROM'], row['POS']
     
-    # ind conditions
-    if nsamref == nref and nsamalt == nalt and nsamref == sum([refref, refhet, refalt]) and nsamalt == sum([altref, althet, altalt]):
+    if args[1] == "wildrad":
+        # ind conditions
+        if nsamref >= 4 and nsamalt >= 4 and nsamref == sum([refref, refhet, refalt]) and nsamalt == sum([altref, althet, altalt]):
+            
+            printlst = [chrom,
+                        str(pos),
+                        str(2 * refref + refhet),
+                        str(2 * refalt + refhet),
+                        str(2 * altref + althet),
+                        str(2 * altalt + althet)]
+            #print row
+            dxy = Dxy(2 * refref + refhet,
+                      2 * refalt + refhet,
+                      2 * altref + althet,
+                    2 * altalt + althet)
         
-        printlst = [chrom,
-                    str(pos),
-                    str(2 * refref + refhet),
-                    str(2 * refalt + refhet),
-                    str(2 * altref + althet),
-                    str(2 * altalt + althet)]
-        #print row
-        dxy = Dxy(2 * refref + refhet,
-                  2 * refalt + refhet,
-                  2 * altref + althet,
-                  2 * altalt + althet)
-        
-        print ' '.join(printlst + [str(dxy)])
-
+            print ' '.join(printlst + [str(dxy)])
+            
+        else:
+            
+            print chrom, pos, "NA", "NA", "NA", "NA", "NA" 
     else:
+        # ind conditions
+        if nsamref == nref and nsamalt == nalt and nsamref == sum([refref, refhet, refalt]) and nsamalt == sum([altref, althet, altalt]):
+            
+            printlst = [chrom,
+                        str(pos),
+                        str(2 * refref + refhet),
+                        str(2 * refalt + refhet),
+                        str(2 * altref + althet),
+                        str(2 * altalt + althet)]
+            #print row
+            dxy = Dxy(2 * refref + refhet,
+                      2 * refalt + refhet,
+                      2 * altref + althet,
+                    2 * altalt + althet)
+        
+            print ' '.join(printlst + [str(dxy)])
+            
+        else:
 
-        print chrom, pos, "NA", "NA", "NA", "NA", "NA"
+            print chrom, pos, "NA", "NA", "NA", "NA", "NA"
