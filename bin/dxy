@@ -17,6 +17,50 @@ sat12 = ['2014_SOL_TB8862', '2014_SOL_TB8863',
 fae12 =  ['2014_SOL_TB8866', '2014_SOL_TB8867',
           '2014_SOL_TB8868', '2014_SOL_TB8869']
 
+wildind = ['/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACACTGAC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACGTAGCA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CACACAGT.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACGTGCTG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACTGATAC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CATGCGAC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CGATACTA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACTGCTCA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CAGTCTCA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTACTCGT.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTCATGTG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGCATCGT.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGTGACTG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACACGACA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACGTCTAC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CAGTGTGT.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CATGATCA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTACGCTG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTCAGTGT.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGTGTGAC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGTGCAGT.bam']
+         
+wildsat = ['/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_AGAGCTAG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CTGACATC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GATCATAG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TCAGCATC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TCGATGTC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_AGAGTCGA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_AGCTATAG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CTCTCTAG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CTGAGCAG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GAGAGCTC.bam']
+         
+wildfae = ['/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACTGTGTG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CATGTCGT.bam,', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CGATCAGC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTCACTCA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTGTCAGT.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TATAGCAT.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGCAGCTG.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_AGCTGTGA.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CTCTGCTC.bam', 
+         '/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GATCTGTC.bam']
+
 ind17 = ind5 + ind12
 sat17 = sat5 + sat12
 fae17 = fae5 + fae12
@@ -47,6 +91,16 @@ elif args[1] == "wgs17":
     elif args[0] == "F_SI":
         ref = sat17 + ind17
         alt = fae17
+elif args[1] == "wildrad":
+    if args[0] == "F_I":
+        ref = wildind
+        alt = wildfae
+    elif args[0] == "F_S":
+        ref = wildsat
+        alt = wildfae
+    elif args[0] == "S_I":
+        ref = wildind
+        alt = wildsat
     
     
 #print ref, alt
@@ -103,6 +157,3 @@ for row in vcf_iter(sys.stdin):
     else:
 
         print chrom, pos, "NA", "NA", "NA", "NA", "NA"
-zcat /fastdata/bo1mesx/hetdxy/all_RUFFv0.2.vcf.gz | python ~/lib/Evolib/bin/het.py /data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACTGTGTG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CATGTCGT.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CGATCAGC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTCACTCA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTGTCAGT.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TATAGCAT.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGCAGCTG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_AGCTGTGA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CTCTGCTC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GATCTGTC.bam | gzip > /fastdata/bo1mesx/hetdxy/het_wild_fae.txt.gz
-zcat /fastdata/bo1mesx/hetdxy/all_RUFFv0.2.vcf.gz | python ~/lib/Evolib/bin/het.py /data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_AGAGCTAG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CTGACATC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GATCATAG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TCAGCATC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TCGATGTC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_AGAGTCGA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_AGCTATAG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CTCTCTAG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CTGAGCAG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GAGAGCTC.bam | gzip > /fastdata/bo1mesx/hetdxy/het_wild_sat.txt.gz
-zcat /fastdata/bo1mesx/hetdxy/all_RUFFv0.2.vcf.gz | python ~/lib/Evolib/bin/het.py /data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACACTGAC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACGTAGCA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CACACAGT.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACGTGCTG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACTGATAC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CATGCGAC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CGATACTA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACTGCTCA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CAGTCTCA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTACTCGT.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTCATGTG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGCATCGT.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGTGACTG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACACGACA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_ACGTCTAC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CAGTGTGT.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_CATGATCA.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTACGCTG.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_GTCAGTGT.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGTGTGAC.bam,/data/bo1mesx/ruff/pugnax_gwas/RADseq/call_snps/snps02/filtered_bam/bm_RUFFv0.2_TGTGCAGT.bam | gzip > het_wild_ind.txt.gz
