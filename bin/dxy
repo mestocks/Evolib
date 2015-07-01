@@ -117,12 +117,26 @@ nalt = len(alt)
 from evolib.iterators import vcf_iter
 from evolib.stats.PopGenStats import Dxy
 
-for row in vcf_iter(sys.stdin):
+def gtiter(row, names):
+    for samp in row.iter_samples():
+        if samp.name in names:
+            dp = samp['DP']
+            if dp != "." and dp is not None and int(dp) > 7:
+                gt = samp['GT']
+                if gt is None or gt == "./.":
+                    yield '0/0'
+                else:
+                    yield gt
 
-    refgts = list((r['GT'] for r in row.iter_samples() if r.name in ref and r['GT'] is not None and r['GT'] != "./." and r['DP'] != "." and r['DP'] is not None and int(r['DP']) > 7))
+
+for row in vcf_iter(sys.stdin):
+    
+    refgts = list(gtiter(row, ref))
+    altgts = list(gtiter(row, alt))
+
     #r['DP'] > 7 and r['GT'] != './.' and r['GT'] is not None))
     
-    altgts = list((a['GT'] for a in row.iter_samples() if a.name in alt and a['GT'] is not None and a['GT'] != "./." and a['DP'] != "." and a['DP'] is not None and int(a['DP']) > 7))
+    #altgts = list((a['GT'] for a in row.iter_samples() if a.name in alt and a['GT'] is not None and a['GT'] != "./." and a['DP'] != "." and a['DP'] is not None and int(a['DP']) > 7))
     #a['DP'] > 7 and a['GT'] != './.' and a['GT'] is not None))
 
     nsamref = len(refgts)
