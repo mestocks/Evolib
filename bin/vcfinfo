@@ -1,7 +1,7 @@
 #! /usr/bin/python2
 
 """
-...| vcfINFO <col1>,<col2>
+...| vcfinfo <col1>,<col2>
 """
 
 import sys
