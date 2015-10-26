@@ -1,5 +1,7 @@
+#! /usr/bin/python2
+
 """
-...| python myVCF.py <col1>,<col2>
+...| vcfINFO <col1>,<col2>
 """
 
 import sys
