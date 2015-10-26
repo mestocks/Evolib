@@ -1,11 +1,13 @@
-
 import sys
-
 from evolib.iterators import vcf_iter
 
-cols = ["FS", "MQ", "MQRankSum", "QD", "ReadPosRankSum"]
-cutoff = [60, 40, -12.5, 2, -8]
-direction = ["lt", "gt", "gt", "gt", "gt"]
+config_file = open(sys.argv[1], 'r')
+cols, direction, cutoff = [], [], []
+for line in config_file:
+    cfg_list = line.rstrip().split(",")
+    cols.append(cfg_list[0])
+    direction.append(cfg_list[1])
+    cutoff.append(float(cfg_list[2]))
 
 n = 0
 for row in vcf_iter(sys.stdin):
