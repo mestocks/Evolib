@@ -1,3 +1,59 @@
+class COL_BASECLASS_NEW(object):
+    def __init__(self, value):
+        """
+        The original string version (as it appeared in the .vcf file) 
+        of 'value' is preserved, with type 'string', as 'self.chr_value'. 
+        The "working" version of 'value' is stored as 'self.value'. This allows 
+        the type to change depending on the data type whilst maintaining the 
+        original formatting.
+        """
+        self.chr_value = value
+        self.dinfo = {}
+    
+    def __str__(self):
+        return self.chr_value
+    
+    
+class INFO(COL_BASECLASS_NEW):
+    __slots__ = ['chr_value', 'value']
+    
+    def __getitem__(self, index):
+        """
+        The actual parsing of the INFO line only occurs when 
+        __getitem__ is called. This is to save on unnecesary 
+        processing of the VCF file that occurs when not all 
+        columns are used. The same also applies to each item 
+        within INFO.
+        
+        Each INFO entry is delimited by ';'. Each entry consist of the descriptor and 
+        value separated by '='. E.g:
+        INFO
+        DP=1;AF=0;AC1=0;DP4=1,0,0,0;MQ=25;FQ=-24.3
+
+        * There are many vcf files that may have an INFO field 
+        that is present on some rows but not others. There are 
+        two ways to deal with this:
+          1) allow __getitem__ to throw an IndexError when a field
+             is absent. The problem with this is that there is not 
+             a satisfying, efficient way to either check for this 
+             absence, or to safely Except the IndexError. Things get
+             messy.
+          2) make __getitem__ return None when a field is absent.
+        Probably best to go with option 2.
+        """
+        #if isinstance(self.value, str):
+        if self.dinfo == {}:
+            self.dinfo = dict((tuple(i.split('=')) for i in self.chr_value.split(';') if '=' in i))
+
+        # Return None if field is not present in INFO
+        if index not in self.dinfo:
+            item = None
+        else:
+            item = self.dinfo[index]
+        
+        return item
+
+#######################
 
 class COL_BASECLASS(object):
     def __init__(self, value):
@@ -8,14 +64,15 @@ class COL_BASECLASS(object):
         the type to change depending on the data type whilst maintaining the 
         original formatting.
         """
-        self.chr_value, self.value = value, value
+        self.chr_value = value
+        self.value = value
     
     def __str__(self):
         return self.chr_value
 
 #######################
     
-class INFO(COL_BASECLASS):
+class INFO_OLD(COL_BASECLASS):
     __slots__ = ['chr_value', 'value']
     
     def __getitem__(self, index):
@@ -54,8 +111,8 @@ class INFO(COL_BASECLASS):
         return item
         
         
-###### ######
-    
+###### FORMAT ######
+
 class FORMAT(COL_BASECLASS):
 
     def __init__(self):
@@ -69,7 +126,7 @@ class FORMAT(COL_BASECLASS):
 
         return self.format_dict[value]
 
-###### ######
+###### SAMPLE ######
 
 class SAMPLE(COL_BASECLASS):
     __slots__ = ['chr_value', 'value', 'Format', 'name', 'nvalues']

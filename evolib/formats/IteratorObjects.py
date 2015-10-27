@@ -1,4 +1,4 @@
-###### ######
+
 
 class FastqRead():
     def __init__(self, seq, seqid, qual):
@@ -17,7 +17,7 @@ class FastqRead():
         return len(self.seq)
 
     
-###### ######
+###### VCFheader ######
 
 from evolib.formats.VCFcolumns import INFO, SAMPLE
 
@@ -35,7 +35,7 @@ class VCFheader(object):
         return self.preamble
 
     
-###### ######
+###### VCFrow ######
 
 class VCFrow(object):
     # row["CHROM"]

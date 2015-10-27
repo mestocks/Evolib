@@ -3,7 +3,7 @@ import sys
 from evolib.iterators import vcf_iter
 
 for row in vcf_iter(sys.stdin):
-            
+    
     dp = map(str, (smp['DP'] for smp in row.iter_samples()))
 
     chrom, pos = row['CHROM'], row['POS']

@@ -2,7 +2,9 @@ import os
 import collections
 
 from evolib.formats.VCFcolumns import FORMAT
-from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment, VCFheader
+#from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, VCFrow, FastaAlignment, VCFheader
+from evolib.iterobj.VCFobjects import VCFheader, VCFrow
+from evolib.formats.IteratorObjects import FastqRead, GFFRecord, msFormat, FastaAlignment
 
 ###### ######
 
