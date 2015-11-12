@@ -1,6 +1,16 @@
 import re
 import sys
 
+#from libc.string cimport const_char
+#typedef const char specialChar
+
+from cython cimport array
+
+def split_iter2(rowstring):#, ncols, delim = '\t'):
+    #str crowstring = rowstring
+    for i in rowstring:
+        print i
+
 def split_iter(string, delim = '\t'):
     for col in re.finditer(r'[^' + delim + ']+', string.rstrip()):
         yield col.group(0)
@@ -71,6 +81,9 @@ class VariantCallFormat(object):
     
 if __name__ == "__main__":
 
+    for line in sys.stdin:
+        split_iter2(line)
+    """
     myVCF = VariantCallFormat(sys.stdin)
 
     for row in myVCF:
@@ -85,4 +98,5 @@ if __name__ == "__main__":
         #info1 = info['AC']
         #frm1 = frm[0]
         
-        #print chrom, pos, ID, ref, s1[0], frm1, info1
+        #print chrom, pos, ID, ref, s1[0]#, frm1, info1
+    """
