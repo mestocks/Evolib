@@ -3,10 +3,12 @@ Evolib
 
 **Evolib** is a python library for analysing DNA sequence data. It consists of a number of objects that abstract common sequence formats so that cleaner, simpler code can written.
 
+Note that the library should be considered an early alpha release. 
+
 Quick guide
 -------------
 
-VCF files can be efficiently iterated:
+Iterating VCF files:
 ```python
 import sys
 
@@ -15,10 +17,14 @@ from evolib.NGSFormats import VariantCallFormat
 myVCF = VariantCallFormat(sys.stdin)
 
 for row in myVCF:
-    print row['CHROM'], row['POS']
+    chrom = row['CHROM']
+    pos = int(row['POS'])
+    dps = map(int, (smp['DP'] for smp in row.iter_samples()))
+    print chrom, pos, sum((dp for dp in dps if dp > 8))
+    
 ```
 
-Similarily, for data stored in fasta format:
+Similarily, for alignments stored in fasta format:
 ```python
 from evolib.SequenceFormats import FastaFormat
 
