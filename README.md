@@ -17,9 +17,10 @@ from evolib.NGSFormats import VariantCallFormat
 myVCF = VariantCallFormat(sys.stdin)
 
 for row in myVCF:
-    chrom = row['CHROM']
-    pos = int(row['POS'])
+    
+    chrom, pos = row['CHROM'], int(row['POS'])
     dps = map(int, (smp['DP'] for smp in row.iter_samples()))
+    
     print chrom, pos, len([dp for dp in dps if dp > 8])
     
 ```
