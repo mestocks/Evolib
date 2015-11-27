@@ -213,6 +213,9 @@ class IOPopulationData(IOstats):
         
         return IO
 
+    def nsamples(self):
+        return len(self.IOdata[0])
+    
     def nonsyn_sample_sites(self, p):
 
         n = len(self.IOdata)
