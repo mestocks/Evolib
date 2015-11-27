@@ -10,4 +10,4 @@ for row in vcf_iter(sys.stdin):
 
     chrom, pos = row['CHROM'], row['POS']
 
-    print ' '.join([chrom, pos]), ' '.join(dp) 
+    print ' '.join([chrom, str(pos)]), ' '.join(dp) 
