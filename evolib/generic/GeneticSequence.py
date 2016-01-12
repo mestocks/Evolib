@@ -42,7 +42,7 @@ class FastaAminoAcidSequence(AminoAcidSequence):
     
     def __str__(self):
         
-        n = 70
+        n = 60
         IDstring = '>' + self.name + '\n'
         sequence = '\n'.join([self.sequence[i: i + n] for i in range(0, len(self.sequence), n)])
         
@@ -95,7 +95,7 @@ class FastaSequence(DNAsequence):
     
     def __str__(self):
         
-        n = 70
+        n = 60
         IDstring = '>' + self.name + '\n'
         sequence = '\n'.join([self.sequence[i: i + n] for i in range(0, len(self.sequence), n)])
         
