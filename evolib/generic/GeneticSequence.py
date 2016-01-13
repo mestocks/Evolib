@@ -74,9 +74,9 @@ class DNAsequence(GeneticSequence):
         aas = ''
         for codon in codons:
             if '-' in codon or 'N' in codon:
-                aas += '-'
+                aas += 'X'
             elif len(codon) != 3:
-                aas += '-'
+                aas += 'X'
             else:
                 aas += dna_to_amino[codon]
 
