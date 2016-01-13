@@ -1,0 +1,17 @@
+#! /usr/bin/python2
+
+import sys
+
+from evolib.iterators import vcf_iter
+
+for row in vcf_iter(sys.stdin):
+
+    chrom, pos = row['CHROM'], row['POS']
+    strrow = chrom + ' ' + str(pos)
+
+    for smp in row.iter_samples():
+        if smp['GQ'] is None:
+            strrow += ' NA'
+        else:
+            strrow += ' ' + smp['GQ']
+    print strrow
