@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
     
     if (buffer[0] == '#' && buffer[1] != '#') {
       ncols = count_columns(buffer, delim);
-      printf("%d\n", ncols);
+      //printf("%d\n", ncols);
       array = calloc(ncols, sizeof (char*));
     } else if (buffer[0] != '#') {
       tmp = buffer;
