@@ -2,24 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <levo_vcf.h>
+
 struct FORMAT {
   int nitems;
   char **parray;
-};
-
-struct VariantCallFormat {
-  char *CHROM;
-  int POS;
-  char *ID;
-  char *REF;
-  char *ALT;
-  char *QUAL;
-  char *FILTER;
-  char *INFO;
-  char *FORMAT;
-  char **SAMPLES;
-
-  int nsamples;
 };
 
 int count_columns(char *buffer, char delim) {
@@ -77,9 +64,25 @@ int main(int argc, char **argv) {
       VCF.SAMPLES = &array[9];
       VCF.nsamples = ncols - 9;
       
-      printf("%s\t%d", VCF.CHROM, VCF.POS);
-      for (int i = 0; i < VCF.nsamples; i++) { printf("\t%s", VCF.SAMPLES[i]); }
-      printf("\n");
+      printf("%s %d", VCF.CHROM, VCF.POS);
+      char GT[10];
+      int ref = 0;
+      int alt = 0;
+      for (int i = 0; i < VCF.nsamples; i++) {
+	GT[0] = '\0';
+	getGT(GT, VCF.SAMPLES[i]);
+	if (strcmp("0/1", GT) == 0) {
+	  ref++;
+	  alt++;
+	} else if (strcmp("1/1", GT) == 0) {
+	  alt += 2;
+	} else if (strcmp("0/0", GT) == 0) {
+	  ref += 2;
+	}
+	printf(" %s", GT);
+      }
+      //for (int i = 0; i < VCF.nsamples; i++) { printf("\t%s", VCF.SAMPLES[i]); }
+      printf(" %d %d\n", ref, alt);
     }
   }
   //
