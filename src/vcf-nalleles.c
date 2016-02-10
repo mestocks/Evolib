@@ -20,6 +20,7 @@ int count_columns(char *buffer, char delim) {
 int main(int argc, char **argv) {
 
   struct VariantCallFormat VCF;
+  VCF.attach = _vcf_attach;
   int coln;
   int ncols;
   int lwidth = 100000;
@@ -52,17 +53,7 @@ int main(int argc, char **argv) {
       }
       *tmp = '\0';
 
-      VCF.CHROM = array[0];
-      VCF.POS = atoi(array[1]);
-      VCF.ID = array[2];
-      VCF.REF = array[3];
-      VCF.ALT = array[4];
-      VCF.QUAL = array[5];
-      VCF.FILTER = array[6];
-      VCF.INFO = array[7];
-      VCF.FORMAT = array[8];
-      VCF.SAMPLES = &array[9];
-      VCF.nsamples = ncols - 9;
+      VCF.attach(&VCF, array, ncols);
       
       printf("%s %d", VCF.CHROM, VCF.POS);
       char GT[10];
@@ -79,7 +70,7 @@ int main(int argc, char **argv) {
 	} else if (strcmp("0/0", GT) == 0) {
 	  ref += 2;
 	}
-	printf(" %s", GT);
+	//printf(" %s", GT);
       }
       //for (int i = 0; i < VCF.nsamples; i++) { printf("\t%s", VCF.SAMPLES[i]); }
       printf(" %d %d\n", ref, alt);
