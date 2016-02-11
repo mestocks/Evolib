@@ -35,7 +35,6 @@ int main(int argc, char **argv) {
     
     if (buffer[0] == '#' && buffer[1] != '#') {
       ncols = count_columns(buffer, delim);
-      //printf("%d\n", ncols);
       array = calloc(ncols, sizeof (char*));
     } else if (buffer[0] != '#') {
       tmp = buffer;
@@ -55,7 +54,7 @@ int main(int argc, char **argv) {
 
       VCF.attach(&VCF, array, ncols);
       
-      printf("%s %d", VCF.CHROM, VCF.POS);
+      printf("%s\t%d\t%d", VCF.CHROM, VCF.POS - 1, VCF.POS);
       char GT[10];
       int ref = 0;
       int alt = 0;
@@ -73,7 +72,7 @@ int main(int argc, char **argv) {
 	//printf(" %s", GT);
       }
       //for (int i = 0; i < VCF.nsamples; i++) { printf("\t%s", VCF.SAMPLES[i]); }
-      printf(" %d %d\n", ref, alt);
+      printf("\t%d\t%d\n", ref, alt);
     }
   }
   //
