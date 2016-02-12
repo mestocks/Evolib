@@ -4,11 +4,6 @@
 
 #include <levo_vcf.h>
 
-struct FORMAT {
-  int nitems;
-  char **parray;
-};
-
 int count_columns(char *buffer, char delim) {
   char *tmp = buffer;
   int count = 0;
@@ -19,6 +14,7 @@ int count_columns(char *buffer, char delim) {
 
 int main(int argc, char **argv) {
 
+  struct VCFsample SMP;
   struct VariantCallFormat VCF;
   VCF.attach = _vcf_attach;
   int coln;
@@ -53,26 +49,29 @@ int main(int argc, char **argv) {
       *tmp = '\0';
 
       VCF.attach(&VCF, array, ncols);
+      int DPpos;
+      int GTpos;
       
-      printf("%s\t%d\t%d", VCF.CHROM, VCF.POS - 1, VCF.POS);
-      char GT[10];
+      printf("%s\t%d\t%d\t%s", VCF.CHROM, VCF.POS - 1, VCF.POS, VCF.FORMAT);
+      //char GT[10];
       int ref = 0;
       int alt = 0;
       for (int i = 0; i < VCF.nsamples; i++) {
-	GT[0] = '\0';
-	getGT(GT, VCF.SAMPLES[i]);
-	if (strcmp("0/1", GT) == 0) {
+	parse_sample(&SMP, VCF.FORMAT, VCF.SAMPLES[i]);
+	SMP.GT[0] = '\0';
+	getGT(&SMP, VCF.SAMPLES[i]);
+	if (strcmp("0/1", SMP.GT) == 0) {
 	  ref++;
 	  alt++;
-	} else if (strcmp("1/1", GT) == 0) {
+	} else if (strcmp("1/1", SMP.GT) == 0) {
 	  alt += 2;
-	} else if (strcmp("0/0", GT) == 0) {
+	} else if (strcmp("0/0", SMP.GT) == 0) {
 	  ref += 2;
 	}
 	//printf(" %s", GT);
       }
       //for (int i = 0; i < VCF.nsamples; i++) { printf("\t%s", VCF.SAMPLES[i]); }
-      printf("\t%d\t%d\n", ref, alt);
+      printf("\t%d\t%d\t%s\t%s\t%d\n", ref, alt, SMP.GT, VCF.SAMPLES[VCF.nsamples - 1], SMP.DP);
     }
   }
   //
