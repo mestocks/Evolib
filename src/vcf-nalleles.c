@@ -52,12 +52,12 @@ int main(int argc, char **argv) {
       int DPpos;
       int GTpos;
       
-      printf("%s\t%d\t%d\t%s", VCF.CHROM, VCF.POS - 1, VCF.POS, VCF.FORMAT);
+      printf("%s\t%d\t%d", VCF.CHROM, VCF.POS - 1, VCF.POS);
       //char GT[10];
       int ref = 0;
       int alt = 0;
       for (int i = 0; i < VCF.nsamples; i++) {
-	parse_sample(&SMP, VCF.FORMAT, VCF.SAMPLES[i]);
+	//parse_sample(&SMP, VCF.FORMAT, VCF.SAMPLES[i]);
 	SMP.GT[0] = '\0';
 	getGT(&SMP, VCF.SAMPLES[i]);
 	if (strcmp("0/1", SMP.GT) == 0) {
@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
 	//printf(" %s", GT);
       }
       //for (int i = 0; i < VCF.nsamples; i++) { printf("\t%s", VCF.SAMPLES[i]); }
-      printf("\t%d\t%d\t%s\t%s\t%d\n", ref, alt, SMP.GT, VCF.SAMPLES[VCF.nsamples - 1], SMP.DP);
+      printf("\t%d\t%d\n", ref, alt);
     }
   }
   //
