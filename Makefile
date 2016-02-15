@@ -8,7 +8,7 @@ src = src/
 #SRC = $(addprefix $(HOME),$(src))
 
 .PHONY:	all
-all:	$(bin)popstats
+all:	$(bin)popstats $(bin)vcf-nalleles
 
 $(bin)%:	$(src)%.c
 	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ -o $@ $^ -lrawk -lm

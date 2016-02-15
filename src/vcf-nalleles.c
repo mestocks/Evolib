@@ -4,6 +4,8 @@
 
 #include <levo_vcf.h>
 
+#include <rwk_parse.h>
+
 int count_columns(char *buffer, char delim) {
   char *tmp = buffer;
   int count = 0;
@@ -33,26 +35,13 @@ int main(int argc, char **argv) {
       ncols = count_columns(buffer, delim);
       array = calloc(ncols, sizeof (char*));
     } else if (buffer[0] != '#') {
-      tmp = buffer;
-      array[0] = tmp;
-      coln = 0;
-      while (*tmp && newline != *tmp) {
-	if (delim == *tmp) {
-	  *tmp = '\0';
-	  coln++;
-	  tmp++;
-	  array[coln] = tmp;
-	} else {
-	  tmp++;
-	}
-      }
-      *tmp = '\0';
-
+      rwkStrtoArray(array, buffer, &delim);
       VCF.attach(&VCF, array, ncols);
+      
       int DPpos;
       int GTpos;
       
-      printf("%s\t%d\t%d", VCF.CHROM, VCF.POS - 1, VCF.POS);
+      printf("%s\t%d\t%d\t%s", VCF.CHROM, VCF.POS - 1, VCF.POS, "nalleles");
       //char GT[10];
       int ref = 0;
       int alt = 0;
