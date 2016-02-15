@@ -2,16 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#include <rawkfunc.h>
-//#include <dynamory.h>
-
 #include <rwk_stats.h>
+#include <rwk_parse.h>
 #include <rwk_popstats.h>
 
 int main(int argc, char **argv) {
 
-  int nsam = 10;
-  char factor[] "chr";
+  //... | popstats nsam [-w <lwin>]
+  
+  int nsam = atoi(argv[1]);
+  char factor[] = "chr";
   int winsize = 10000;
   
   // expects stdin in bed format, with the 4th and 5th columns
@@ -48,79 +48,69 @@ int main(int argc, char **argv) {
   rwkThetaWInit(&thetaW, nsam);
   rwkThetaPiInit(&thetaPi, nsam);
   
-
+  int coln;
   char *tmp;
   int iwin = 1;
   int startindex = 0;
   while (fgets(buffer, sizeof(buffer), stdin)) {
-    coln = 0;
-    tmp = buffer;
-    array[0] = tmp;
-    while (*tmp && newline != *tmp) {
-      if (delim == *tmp) {
-	*tmp = '\0';
-	coln++;
-	tmp++;
-	array[coln] = tmp;
-      } else {
-	tmp++;
-      }
-      *tmp = '\0';
-
-      if (startindex == 0) {
-	strcpy(chr, array[0]);
-	startindex = 1;
-      }
-      startpos = atoll(array[1]);
-      stoppos = atoll(array[2]);
-      nref = atoi(array[3]);
-      nalt = atoi(array[4]);
-
-      if (strcmp(array[0], chr) != 0) {
-	printf("%s\t%lld\t%lld\t%d\t%d\t%d", chr, startpos, stoppos, thetaW.nsam, thetaW.nsites, thetaW.s);
-	tw_val = thetaW.eval(&thetaW);
-	pi_val = thetaPi.eval(&thetaPi);
-	printf("\t%lf\t%lf", tw_val / thetaW.nsites, pi_val / thetaPi.nsites);
-	printf("\t%lf\n", rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
-	thetaW.reset(&thetaW);
-	thetaPi.reset(&thetaPi);
-	strcpy(chr, array[0]);
-	iwin = 1;
-	startregion = 0;
-      } else if (iwin >= winsize) {
-	printf("%s\t%lld\t%lld\t%d\t%d\t%d", chr, startpos, stoppos, thetaW.nsam, thetaW.nsites, thetaW.s);
-	tw_val = thetaW.eval(&thetaW);
-	pi_val = thetaPi.eval(&thetaPi);
-	printf("\t%lf\t%lf", tw_val / thetaW.nsites, pi_val / thetaPi.nsites);
-	printf("\t%lf\n", rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
-	thetaW.reset(&thetaW);
-	thetaPi.reset(&thetaPi);
-	iwin = 1;
-	startregion = startpos;
-      }
-
-      if (nref > 0 && nalt > 0) {
-	s = 1;
-	pi = nref;
-      } else {
-	s = 0;
-	pi = 0;
-      }    
-      thetaW.add(&thetaW, s);
-      thetaPi.add(&thetaPi, pi);
-      iwin++;
-      stopregion = stoppos;
+    rwkStrtoArray(array, buffer, &delim);
+    if (startindex == 0) {
+      strcpy(chr, array[0]);
+      startindex = 1;
+    }
+    startpos = atoll(array[1]);
+    stoppos = atoll(array[2]);
+    nref = atoi(array[3]);
+    nalt = atoi(array[4]);
+    
+    if (strcmp(array[0], chr) != 0) {
+      tw_val = thetaW.eval(&thetaW);
+      pi_val = thetaPi.eval(&thetaPi);
+      printf("%s\t%lld\t%lld\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	     chr, start_region, stop_region,
+	     thetaW.nsam, thetaW.nsites, thetaW.s,
+	     tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
+	     rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
+      
+      thetaW.reset(&thetaW);
+      thetaPi.reset(&thetaPi);
+      strcpy(chr, array[0]);
+      iwin = 1;
+      start_region = 0;
+    } else if (iwin >= winsize) {
+      tw_val = thetaW.eval(&thetaW);
+      pi_val = thetaPi.eval(&thetaPi);
+      printf("%s\t%lld\t%lld\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	     chr, start_region, stop_region,
+	     thetaW.nsam, thetaW.nsites, thetaW.s,
+	     tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
+	     rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
+      thetaW.reset(&thetaW);
+      thetaPi.reset(&thetaPi);
+      iwin = 1;
+      start_region = startpos;
     }
     
-    printf("%s\t%lld\t%lld\t%d\t%d\t%d", chr, startpos, stoppos, thetaW.nsam, thetaW.nsites, thetaW.s);
-    tw_val = thetaW.eval(&thetaW);
-    pi_val = thetaPi.eval(&thetaPi);
-    printf("\t%lf\t%lf", tw_val / thetaW.nsites, pi_val / thetaPi.nsites);
-    printf("\t%lf\n", rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
-    
+    if (nref > 0 && nalt > 0) {
+      s = 1;
+      pi = nref;
+    } else {
+      s = 0;
+      pi = 0;
+    }    
+    thetaW.add(&thetaW, s);
+    thetaPi.add(&thetaPi, pi);
+    iwin++;
+    stop_region = stoppos;
   }
-
-    
+  
+  tw_val = thetaW.eval(&thetaW);
+  pi_val = thetaPi.eval(&thetaPi);
+  printf("%s\t%lld\t%lld\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	 chr, start_region, stop_region,
+	 thetaW.nsam, thetaW.nsites, thetaW.s,
+	 tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
+	 rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
 
   // Free memory
   free(array);
