@@ -3,6 +3,13 @@ struct VCFsample {
   char GT[10];
 };
 
+/*
+
+  GT:DP
+
+  
+
+ */
 
 struct VariantCallFormat {
   char *CHROM;
@@ -22,7 +29,6 @@ struct VariantCallFormat {
 };
 
 void _vcf_attach(struct VariantCallFormat *pvcf, char **array, int ncols) {
-
   pvcf->CHROM = array[0];
   pvcf->POS = atoi(array[1]);
   pvcf->ID = array[2];
@@ -33,8 +39,7 @@ void _vcf_attach(struct VariantCallFormat *pvcf, char **array, int ncols) {
   pvcf->INFO = array[7];
   pvcf->FORMAT = array[8];
   pvcf->SAMPLES = &array[9];
-  pvcf->nsamples = ncols - 9;
-  
+  pvcf->nsamples = ncols - 9;  
 }
 
 void parse_sample(struct VCFsample *SMP, char *format, char *sample) {

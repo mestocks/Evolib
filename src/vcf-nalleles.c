@@ -41,7 +41,6 @@ int main(int argc, char **argv) {
       int DPpos;
       int GTpos;
       
-      printf("%s\t%d\t%d\t%s", VCF.CHROM, VCF.POS - 1, VCF.POS, "nalleles");
       //char GT[10];
       int ref = 0;
       int alt = 0;
@@ -60,7 +59,13 @@ int main(int argc, char **argv) {
 	//printf(" %s", GT);
       }
       //for (int i = 0; i < VCF.nsamples; i++) { printf("\t%s", VCF.SAMPLES[i]); }
-      printf("\t%d\t%d\n", ref, alt);
+      if (strlen(VCF.REF) == 1 && strlen(VCF.ALT) == 1) {
+	printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
+	       "nalleles", ref, alt);
+      } else {
+	printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
+	       "nalleles", 0, 0);
+      }
     }
   }
   //

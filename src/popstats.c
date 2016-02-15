@@ -8,7 +8,7 @@
 
 int main(int argc, char **argv) {
 
-  //... | popstats nsam fcol [-w <lwin>]
+  //... | popstats nsam fcol
   
   int nsam = atoi(argv[1]);
   int fcol = atoi(argv[2]) - 1;
@@ -90,11 +90,13 @@ int main(int argc, char **argv) {
     } else {
       s = 0;
       pi = 0;
-    }    
-    thetaW.add(&thetaW, s);
-    thetaPi.add(&thetaPi, pi);
-    iwin++;
+    }
+
+    if (nref + nalt == nsam) {
+      thetaW.add(&thetaW, s);
+      thetaPi.add(&thetaPi, pi);
     stop_region = stoppos;
+    }
   }
   
   tw_val = thetaW.eval(&thetaW);
