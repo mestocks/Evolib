@@ -1,24 +1,43 @@
+/*
+
+  ... | popstats nsam [fcol]
+
+  expects stdin in bed format, with the 5th and 6th columns
+  representing the number of ref and alt alleles respectively:
+  chrom    pos-1    pos    name    nref    nalt
+
+  nsam - total number of alleles in the population
+  fcol - column number (1-indexed) of the factor over which 
+  the stats should be calculated. The default is to output 
+  stats per chromosome, but the fourth name column could be used 
+  instead to calculate over some group of features. [default = 0]
+  
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <rwk_stats.h>
 #include <rwk_parse.h>
 #include <rwk_popstats.h>
 
 int main(int argc, char **argv) {
 
-  //... | popstats nsam fcol
-  
-  int nsam = atoi(argv[1]);
-  int fcol = atoi(argv[2]) - 1;
-  
-  //char factor[1000];
-  int winsize = 10000;
-  
-  // expects stdin in bed format, with the 4th and 5th columns
-  // representing the number of ref and alt alleles respectively:
-  // chrom    pos-1    pos    nref    nalt
+char help[] = "  ... | popstats nsam [fcol]";
+ 
+  int nsam, fcol;
+
+  if (argc == 1) {
+    printf("%s\n", help);
+  } else if (argc == 2) {
+    nsam = atoi(argv[1]);
+    fcol = 0;
+  } else if (argc == 3) {
+    nsam = atoi(argv[1]);
+    fcol = atoi(argv[2]) - 1;
+  } else {
+    printf("%s\n", help);
+  }
 
   int ncols = 6;
   int lcols = 1024;
@@ -31,17 +50,12 @@ int main(int argc, char **argv) {
   array = calloc(ncols, sizeof (char*));
   
   char chr[lcols];
-  long long int startpos;
-  long long int stoppos;
-  int nref;
-  int nalt;
-  
-  long long int start_region;
-  long long int stop_region;
+  char factor[lcols];
+  long long int startpos, stoppos;
+  long long int start_region, stop_region;
 
-  
-  int s,pi;
-
+  int s, pi;
+  int nref, nalt;
   double tw_val, pi_val;
   
   struct rwkThetaW thetaW;
@@ -52,7 +66,6 @@ int main(int argc, char **argv) {
   
   int coln;
   char *tmp;
-  int iwin = 1;
   int startindex = 0;
   while (fgets(buffer, sizeof(buffer), stdin)) {
     rwkStrtoArray(array, buffer, &delim);
@@ -63,24 +76,24 @@ int main(int argc, char **argv) {
     nalt = atoi(array[5]);
 
     if (startindex == 0) {
-      strcpy(chr, array[fcol]);
+      strcpy(chr, array[0]);
+      strcpy(factor, array[fcol]);
       start_region = startpos;
       startindex = 1;
     }
     
-    if (strcmp(array[fcol], chr) != 0) {
+    if (strcmp(array[fcol], factor) != 0) {
       tw_val = thetaW.eval(&thetaW);
       pi_val = thetaPi.eval(&thetaPi);
-      printf("%s\t%lld\t%lld\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
-	     chr, start_region, stop_region,
+      printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	     chr, start_region, stop_region, factor,
 	     thetaW.nsam, thetaW.nsites, thetaW.s,
 	     tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
 	     rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
       
       thetaW.reset(&thetaW);
       thetaPi.reset(&thetaPi);
-      strcpy(chr, array[fcol]);
-      iwin = 1;
+      strcpy(factor, array[fcol]);
       start_region = startpos;
     }
     
@@ -97,17 +110,17 @@ int main(int argc, char **argv) {
       thetaPi.add(&thetaPi, pi);
     stop_region = stoppos;
     }
+    strcpy(chr, array[0]);
   }
-  
+
   tw_val = thetaW.eval(&thetaW);
   pi_val = thetaPi.eval(&thetaPi);
-  printf("%s\t%lld\t%lld\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
-	 chr, start_region, stop_region,
+  printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+	 chr, start_region, stop_region, factor,
 	 thetaW.nsam, thetaW.nsites, thetaW.s,
 	 tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
 	 rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
 
-  // Free memory
   free(array);
   
   return 0; }

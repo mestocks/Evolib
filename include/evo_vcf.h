@@ -1,15 +1,5 @@
-struct VCFsample {
-  int DP;
-  char GT[10];
-};
-
-/*
-
-  GT:DP
-
-  
-
- */
+#ifndef evo_vcf_h__
+#define evo_vcf_h__
 
 struct VariantCallFormat {
   char *CHROM;
@@ -28,7 +18,11 @@ struct VariantCallFormat {
   void (*attach)(struct VariantCallFormat *, char **, int);
 };
 
-void _vcf_attach(struct VariantCallFormat *pvcf, char **array, int ncols) {
+
+
+//extern void evoVcfAttach(struct VariantCallFormat *pvcf, char **array, int ncols);
+
+void evoVcfAttach(struct VariantCallFormat *pvcf, char **array, int ncols) {
   pvcf->CHROM = array[0];
   pvcf->POS = atoi(array[1]);
   pvcf->ID = array[2];
@@ -41,6 +35,22 @@ void _vcf_attach(struct VariantCallFormat *pvcf, char **array, int ncols) {
   pvcf->SAMPLES = &array[9];
   pvcf->nsamples = ncols - 9;  
 }
+
+struct VCFsample {
+  int DP;
+  char GT[10];
+};
+
+/*
+
+  GT:DP
+
+  
+
+ */
+
+
+
 
 void parse_sample(struct VCFsample *SMP, char *format, char *sample) {
 
@@ -162,3 +172,5 @@ char *old_getGT(char *GT, char *ptr) {
   }
   //return GT;
 }
+
+#endif
