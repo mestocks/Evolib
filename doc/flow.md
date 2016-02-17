@@ -1,7 +1,7 @@
 
 Per chromosome stats:
 ```bash
-zcat <file.vcf.gz> | vcf-nalleles | popstats <nsam> > <out.bed>
+zcat aln.vcf.gz | vcf-nalleles | popstats 10 > pstats.bed
 ```
 
 Per window stats:
