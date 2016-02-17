@@ -41,16 +41,6 @@ struct VCFsample {
   char GT[10];
 };
 
-/*
-
-  GT:DP
-
-  
-
- */
-
-
-
 
 void parse_sample(struct VCFsample *SMP, char *format, char *sample) {
 

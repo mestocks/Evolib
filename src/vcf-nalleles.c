@@ -7,59 +7,75 @@
 #include <rwk_parse.h>
 #include <rwk_htable.h>
 
-int count_columns(char *buffer, char delim) {
-  char *tmp = buffer;
-  int count = 0;
-  while (*tmp) {
-    if (delim == *tmp) { count++; }
-    tmp++; }
-  return count + 1; }
-
 int main(int argc, char **argv) {
+
+  char f0[] = "GT:AD:DP";
+  char f1[] = "GT:AD:DP:GQ:PL";
+  char f2[] = "GT:DP";
+
+  int minDP = 8;
+
+  
+  int dpi;
+  char smpl[1024];
+  char **samparray;
+  samparray = calloc(24, sizeof (char*));
+  char smpdel = ':';
+  
+  char delim = '\t';
+  char newline = '\n';
+  int lwidth = 100000;
+  char buffer[lwidth];
+
+  char **array;
+  int coln, ncols;
+  int nref, nalt;
   
   struct VCFsample SMP;
   struct VariantCallFormat VCF;
   VCF.attach = evoVcfAttach;
-  int coln;
-  int ncols;
-  int lwidth = 100000;
-  char delim = '\t';
-  char newline = '\n';
-  char buffer[lwidth];
 
-  char *tmp;
-  char **array;
-  
   while (fgets(buffer, sizeof(buffer), stdin)) {
     
-    if (buffer[0] == '#' && buffer[1] != '#') {
-      ncols = count_columns(buffer, delim);
+    if (buffer[0] == '#' && buffer[1] != '#') {      
+      ncols = rwkCountCols(buffer, delim);
       array = calloc(ncols, sizeof (char*));
+
     } else if (buffer[0] != '#') {
       rwkStrtoArray(array, buffer, &delim);
       VCF.attach(&VCF, array, ncols);
-    
-      int ref = 0;
-      int alt = 0;
-      for (int i = 0; i < VCF.nsamples; i++) {
-	SMP.GT[0] = '\0';
-	getGT(&SMP, VCF.SAMPLES[i]);
-	if (strcmp("0/1", SMP.GT) == 0) {
-	  ref++;
-	  alt++;
-	} else if (strcmp("1/1", SMP.GT) == 0) {
-	  alt += 2;
-	} else if (strcmp("0/0", SMP.GT) == 0) {
-	  ref += 2;
+
+      if (strcmp(f0, VCF.FORMAT) == 0) {
+	dpi = 2;
+      } else if (strcmp(f1, VCF.FORMAT) == 0) {
+	dpi = 2;
+      } else if (strcmp(f2, VCF.FORMAT) == 0) {
+	dpi = 1;
+      }
+      
+      nref = 0;
+      nalt = 0;
+      if (strlen(VCF.REF) == 1 && strlen(VCF.ALT) == 1) {
+	
+	for (int i = 0; i < VCF.nsamples; i++) {
+	  strcpy(smpl, VCF.SAMPLES[i]);
+	  rwkStrtoArray(samparray, smpl, &smpdel);
+	  if (atoi(samparray[dpi]) >= minDP) {
+	    SMP.GT[0] = '\0';
+	    getGT(&SMP, VCF.SAMPLES[i]);
+	    if (strcmp("0/1", SMP.GT) == 0) {
+	      nref++;
+	      nalt++;
+	    } else if (strcmp("1/1", SMP.GT) == 0) {
+	      nalt += 2;
+	    } else if (strcmp("0/0", SMP.GT) == 0) {
+	      nref += 2;
+	    }
+	  }
 	}
       }
-      if (strlen(VCF.REF) == 1 && strlen(VCF.ALT) == 1) {
-	printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
-	       "nalleles", ref, alt);
-      } else {
-	printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
-	       "nalleles", 0, 0);
-      }
+      printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
+	     "nalleles", nref, nalt);
     }
   }
   
