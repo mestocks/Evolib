@@ -14,3 +14,8 @@ Per gene:
 ```bash
 zcat aln.vcf.gz | vcf-nalleles | bedtools intersect -wo -a stdin -b ann.genes.gff | awk -F'\t' ' BEGIN { OFS="\t" }; { print $1,$2,$3,$15,$5,$6 } ' | popstats 10 4 > pstats_genes.bed
 ```
+
+```bash
+bblast gene.fa outgroup_genome.fa > outgroup_seq.bed
+zcat aln.vcf.gz | bedtools intersect -wo -a stdin -b outgroup_seq.bed 
+```
