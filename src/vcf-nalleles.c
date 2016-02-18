@@ -11,7 +11,7 @@
 
 int main(int argc, char **argv) {
 
-  int minDP = 8;
+  int minDP = 1;
   
   int dpi;
   int nformat;
