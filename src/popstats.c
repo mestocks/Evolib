@@ -105,11 +105,11 @@ char help[] = "  ... | popstats nsam [fcol]";
       pi = 0;
     }
 
-    if (nref + nalt == nsam) {
-      thetaW.add(&thetaW, s);
-      thetaPi.add(&thetaPi, pi);
+    //if (nref + nalt == nsam) {
+    thetaW.add(&thetaW, s);
+    thetaPi.add(&thetaPi, pi);
     stop_region = stoppos;
-    }
+      //}
     strcpy(chr, array[0]);
   }
 
