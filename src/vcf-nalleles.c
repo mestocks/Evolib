@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 
 	nformat = rwkCountCols(VCF.FORMAT, smpdel);
 	rwkStrtoArray(farray, VCF.FORMAT, &smpdel);
-	for (int d; d < nformat; d++) {
+	for (int d = 0; d < nformat; d++) {
 	  if (strcmp(farray[d], "DP") == 0) {
 	    dpi = d;
 	  }
