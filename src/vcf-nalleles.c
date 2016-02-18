@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
       array = calloc(ncols, sizeof (char*));
 
     } else if (buffer[0] != '#') {
-      printf("%s", buffer);
+      //printf("%s", buffer);
       rwkStrtoArray(array, buffer, &delim);
       VCF.attach(&VCF, array, ncols);
 
@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
 	  if (atoi(samparray[dpi]) >= 1) {
 	    SMP.GT[0] = '\0';
 	    getGT(&SMP, VCF.SAMPLES[i]);
-	    //printf("%s ", SMP.GT);
+	    printf("%s %s ", SMP.GT, VCF.SAMPLES[i]);
 	    if (strcmp("0/1", SMP.GT) == 0) {
 	      nref++;
 	      nalt++;
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 	}
 	//printf("\n");
       }
-      printf(" %s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
+      printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
 	     "nalleles", nref, nalt);
     }
   }
