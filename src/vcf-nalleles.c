@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 	for (int i = 0; i < VCF.nsamples; i++) {
 	  strcpy(smpl, VCF.SAMPLES[i]);
 	  rwkStrtoArray(samparray, smpl, &smpdel);
-	  if (atoi(samparray[dpi]) >= 1) {
+	  if (atoi(samparray[dpi]) >= 0) {
 	    SMP.GT[0] = '\0';
 	    getGT(&SMP, VCF.SAMPLES[i]);
 	    //printf("%s %s ", SMP.GT, VCF.SAMPLES[i]);
