@@ -64,6 +64,7 @@ int main(int argc, char **argv) {
 	  if (atoi(samparray[dpi]) >= 1) {
 	    SMP.GT[0] = '\0';
 	    getGT(&SMP, VCF.SAMPLES[i]);
+	    print("%s ", SMP.GT);
 	    if (strcmp("0/1", SMP.GT) == 0) {
 	      nref++;
 	      nalt++;
@@ -73,6 +74,7 @@ int main(int argc, char **argv) {
 	      nref += 2;
 	    }
 	  }
+	  print("\n");
 	}
       }
       printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
