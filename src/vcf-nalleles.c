@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
       array = calloc(ncols, sizeof (char*));
 
     } else if (buffer[0] != '#') {
+      printf("%s", buffer);
       rwkStrtoArray(array, buffer, &delim);
       VCF.attach(&VCF, array, ncols);
 
