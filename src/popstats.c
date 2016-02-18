@@ -115,11 +115,11 @@ char help[] = "  ... | popstats nsam [fcol]";
 
   tw_val = thetaW.eval(&thetaW);
   pi_val = thetaPi.eval(&thetaPi);
-  printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\n",
+  printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\t%lld\n",
 	 chr, start_region, stop_region, factor,
 	 thetaW.nsam, thetaW.nsites, thetaW.s,
 	 tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
-	 rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
+	 rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val), thetaPi.nsites);
 
   free(array);
   
