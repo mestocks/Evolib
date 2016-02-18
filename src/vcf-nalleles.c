@@ -7,16 +7,16 @@
 #include <rwk_parse.h>
 #include <rwk_htable.h>
 
+
+
 int main(int argc, char **argv) {
 
-  char f0[] = "GT:AD:DP";
-  char f1[] = "GT:AD:DP:GQ:PL";
-  char f2[] = "GT:DP";
-
   int minDP = 8;
-
   
   int dpi;
+  int nformat;
+  char **farray;
+  farray = calloc(128, sizeof (char*));
   char smpl[1024];
   char **samparray;
   samparray = calloc(24, sizeof (char*));
@@ -42,29 +42,27 @@ int main(int argc, char **argv) {
       array = calloc(ncols, sizeof (char*));
 
     } else if (buffer[0] != '#') {
-      //printf("%s", buffer);
       rwkStrtoArray(array, buffer, &delim);
       VCF.attach(&VCF, array, ncols);
-
-      if (strcmp(f0, VCF.FORMAT) == 0) {
-	dpi = 2;
-      } else if (strcmp(f1, VCF.FORMAT) == 0) {
-	dpi = 2;
-      } else if (strcmp(f2, VCF.FORMAT) == 0) {
-	dpi = 1;
-      }
       
       nref = 0;
       nalt = 0;
       if (strlen(VCF.REF) == 1 && strlen(VCF.ALT) == 1) {
+
+	nformat = rwkCountCols(VCF.FORMAT, smpdel);
+	rwkStrtoArray(farray, VCF.FORMAT, &smpdel);
+	for (int d; d < nformat; d++) {
+	  if (strcmp(farray[d], "DP") == 0) {
+	    dpi = d;
+	  }
+	}
 	
 	for (int i = 0; i < VCF.nsamples; i++) {
 	  strcpy(smpl, VCF.SAMPLES[i]);
 	  rwkStrtoArray(samparray, smpl, &smpdel);
-	  if (atoi(samparray[dpi]) >= 0) {
+	  if (atoi(samparray[dpi]) >= minDP) {
 	    SMP.GT[0] = '\0';
 	    getGT(&SMP, VCF.SAMPLES[i]);
-	    //printf("%s %s ", SMP.GT, VCF.SAMPLES[i]);
 	    if (strcmp("0/1", SMP.GT) == 0) {
 	      nref++;
 	      nalt++;
@@ -75,13 +73,14 @@ int main(int argc, char **argv) {
 	    }
 	  }
 	}
-	//printf("\n");
       }
       printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
 	     "nalleles", nref, nalt);
     }
   }
-  
+
+  free(farray);
+  free(samparray);
   free(array);
   
   return 0; }
