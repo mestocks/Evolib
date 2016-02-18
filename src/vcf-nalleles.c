@@ -74,8 +74,8 @@ int main(int argc, char **argv) {
 	      nref += 2;
 	    }
 	  }
-	  printf("\n");
 	}
+	printf("\n");
       }
       printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
 	     "nalleles", nref, nalt);
