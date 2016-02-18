@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 	for (int i = 0; i < VCF.nsamples; i++) {
 	  strcpy(smpl, VCF.SAMPLES[i]);
 	  rwkStrtoArray(samparray, smpl, &smpdel);
-	  if (atoi(samparray[dpi]) >= minDP) {
+	  if (atoi(samparray[dpi]) >= 0) {
 	    SMP.GT[0] = '\0';
 	    getGT(&SMP, VCF.SAMPLES[i]);
 	    if (strcmp("0/1", SMP.GT) == 0) {
