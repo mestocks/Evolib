@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
 	  if (atoi(samparray[dpi]) >= 1) {
 	    SMP.GT[0] = '\0';
 	    getGT(&SMP, VCF.SAMPLES[i]);
-	    printf("%s %s ", SMP.GT, VCF.SAMPLES[i]);
+	    //printf("%s %s ", SMP.GT, VCF.SAMPLES[i]);
 	    if (strcmp("0/1", SMP.GT) == 0) {
 	      nref++;
 	      nalt++;
