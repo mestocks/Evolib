@@ -11,7 +11,13 @@
 
 int main(int argc, char **argv) {
 
-  int minDP = 1;
+  int minDP;
+  
+  if (argc == 1) {
+    minDP = 0;
+  } else {
+    minDP = atoi(argv[1]);
+  }
   
   int dpi;
   int nformat;
