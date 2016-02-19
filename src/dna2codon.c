@@ -1,3 +1,11 @@
+/*
+
+... | dna2codon
+
+chr    pos-1    pos    nuc
+
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
