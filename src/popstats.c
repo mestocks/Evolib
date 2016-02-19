@@ -108,7 +108,6 @@ char help[] = "  ... | popstats nsam [fcol]";
     if (nref + nalt == nsam) {
       thetaW.add(&thetaW, s);
       thetaPi.add(&thetaPi, pi);
-      //printf("%d %d %d %lld %f\n", nref, nalt, pi, thetaPi.pisum, (double)thetaPi.pisum);
       stop_region = stoppos;
     }
     strcpy(chr, array[0]);
@@ -121,11 +120,6 @@ char help[] = "  ... | popstats nsam [fcol]";
 	 thetaW.nsam, thetaW.nsites, thetaW.s,
 	 tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
 	 rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val));
-  //printf("%s\t%lld\t%lld\t%s\t%d\t%d\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lld\n",
-  //	 chr, start_region, stop_region, factor,
-  //	 thetaW.nsam, thetaW.nsites, thetaW.s,
-  //	 tw_val / thetaW.nsites, pi_val / thetaPi.nsites,
-  //	 rwkTajD(thetaW.nsam, thetaW.s, tw_val, pi_val), tw_val, pi_val, thetaPi.nsites);
 
   free(array);
   
