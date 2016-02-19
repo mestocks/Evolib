@@ -1,4 +1,4 @@
-bins = popstats vcf-nalleles
+bins = dna2codon popstats vcf-nalleles
 
 HOME = $(shell echo $$HOME)
 BASE = $(HOME)/.local/
