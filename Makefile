@@ -1,3 +1,5 @@
+bins = popstats vcf-nalleles
+
 HOME = $(shell echo $$HOME)
 BASE = $(HOME)/.local/
 
@@ -6,13 +8,15 @@ BASE = $(HOME)/.local/
 bin = bin/
 src = src/
 
-BIN = $(addprefix $(HOME),$(bin))
-SRC = $(addprefix $(HOME),$(src))
+BINS = $(addprefix $(bin),$(bins))
 
 .PHONY:	all
-all:	$(bin)popstats $(bin)vcf-nalleles
+all:	$(BINS)
 
 $(bin)%:	$(src)%.c
 	mkdir -p $(bin)
 	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ -o $@ $^ -lrawk -lm
 
+.PHONY:	clean
+clean:
+	-rm $(BINS)
