@@ -108,7 +108,7 @@ char help[] = "  ... | popstats nsam [fcol]";
     if (nref + nalt == nsam) {
       thetaW.add(&thetaW, s);
       thetaPi.add(&thetaPi, pi);
-      //printf("%d %d %d %lld %f\n", nref, nalt, pi, thetaPi.pisum, (double)thetaPi.pisum);
+      printf("%d %d %d %lld %f\n", nref, nalt, pi, thetaPi.pisum, (double)thetaPi.pisum);
       stop_region = stoppos;
     }
     strcpy(chr, array[0]);
