@@ -13,5 +13,6 @@ SRC = $(addprefix $(HOME),$(src))
 all:	$(bin)popstats $(bin)vcf-nalleles
 
 $(bin)%:	$(src)%.c
+	mkdir -p $(bin)
 	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ -o $@ $^ -lrawk -lm
 
