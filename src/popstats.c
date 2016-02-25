@@ -38,7 +38,7 @@ char help[] = "  ... | popstats nsam [fcol]";
   } else {
     printf("%s\n", help);
   }
-
+  
   int ncols = 6;
   int lcols = 1024;
   int lwidth = 2048;
@@ -108,6 +108,7 @@ char help[] = "  ... | popstats nsam [fcol]";
     if (nref + nalt == nsam) {
       thetaW.add(&thetaW, s);
       thetaPi.add(&thetaPi, pi);
+      //printf("%d %lld %lld %lf\n", pi, thetaPi.pisum, thetaPi.nsites, thetaPi.eval(&thetaPi));
       stop_region = stoppos;
     }
     strcpy(chr, array[0]);

@@ -1,6 +1,9 @@
 #ifndef evo_vcf_h__
 #define evo_vcf_h__
 
+// Contig0    1    .    A    .    .    .    NCC=17    GT:DP    0/0:0
+// 
+
 struct VariantCallFormat {
   char *CHROM;
   int POS;
@@ -17,6 +20,12 @@ struct VariantCallFormat {
 
   void (*attach)(struct VariantCallFormat *, char **, int);
 };
+
+void new_attach(struct VariantCallFormat *pvcf, char *buffer) {
+
+  
+  
+}
 
 
 
