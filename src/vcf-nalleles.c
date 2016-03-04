@@ -18,75 +18,85 @@ int main(int argc, char **argv) {
   } else {
     minDP = atoi(argv[1]);
   }
-  
-  int dpi;
-  int nformat;
-  char **farray;
-  farray = calloc(128, sizeof (char*));
-  char smpl[1024];
-  char **samparray;
-  samparray = calloc(24, sizeof (char*));
-  char smpdel = ':';
-  
+    
   char delim = '\t';
   char newline = '\n';
   int lwidth = 100000;
   char buffer[lwidth];
-
-  char **array;
+  
   int coln, ncols;
   int nref, nalt;
   
   struct VCFsample SMP;
   struct VariantCallFormat VCF;
-  VCF.attach = evoVcfAttach;
-
+  VCF.attach = new_attach;
+  
   while (fgets(buffer, sizeof(buffer), stdin)) {
-    
+  
     if (buffer[0] == '#' && buffer[1] != '#') {      
       ncols = rwkCountCols(buffer, delim);
-      array = calloc(ncols, sizeof (char*));
 
-    } else if (buffer[0] != '#') {
-      rwkStrtoArray(array, buffer, &delim);
-      VCF.attach(&VCF, array, ncols);
+      // Create pool of nodes
       
-      nref = 0;
-      nalt = 0;
-      if (strlen(VCF.REF) == 1 && strlen(VCF.ALT) == 1) {
+      struct VCFSample *head;
+      struct VCFSample *curr;
+      struct VCFSample *new_node;
 
-	nformat = rwkCountCols(VCF.FORMAT, smpdel);
-	rwkStrtoArray(farray, VCF.FORMAT, &smpdel);
-	for (int d = 0; d < nformat; d++) {
-	  if (strcmp(farray[d], "DP") == 0) {
-	    dpi = d;
-	  }
-	}
-	
-	for (int i = 0; i < VCF.nsamples; i++) {
-	  strcpy(smpl, VCF.SAMPLES[i]);
-	  rwkStrtoArray(samparray, smpl, &smpdel);
-	  if (atoi(samparray[dpi]) >= minDP) {
-	    SMP.GT[0] = '\0';
-	    getGT(&SMP, VCF.SAMPLES[i]);
-	    if (strcmp("0/1", SMP.GT) == 0) {
-	      nref++;
-	      nalt++;
-	    } else if (strcmp("1/1", SMP.GT) == 0) {
-	      nalt += 2;
-	    } else if (strcmp("0/0", SMP.GT) == 0) {
-	      nref += 2;
-	    }
-	  }
-	}
+      int nrecs = 10;      
+      head = create_pool(nrecs);
+
+      print_pool(head);
+
+      printf("######\n");
+
+      // Cleave nodes from pool
+      
+      struct VCFSample *new_head;
+      struct VCFSample *new_tail;
+      struct VCFSample *new_curr;
+      
+      int nnodes = 2;
+      new_head = head;
+      new_curr = new_head;
+
+      while (nnodes > 1) {
+	new_curr = new_curr->next;
+	new_tail = new_curr;
+	head = new_curr->next;
+	nnodes--;
       }
-      printf("%s\t%d\t%d\t%s\t%d\t%d\n", VCF.CHROM, VCF.POS - 1, VCF.POS,
-	     "nalleles", nref, nalt);
+      new_curr->next = NULL;
+
+      print_pool(new_head);
+      
+      printf("######\n");
+
+      print_pool(head);
+
+      printf("######\n");
+
+      // Return nodes to pool
+      
+      new_tail->next = head;
+      head = new_head;
+      
+      printf("######\n");
+
+      print_pool(head);
+      
+      free_pool(head);
+      //free_pool(new_curr);
+
+      
+      //VCF.SAMPLES = calloc(ncols, sizeof (struct VCFSample*));
+      
+    } else if (buffer[0] != '#') {
+      
+      
+      //printf("%s", buffer);
+      //VCF.attach(&VCF, buffer, ncols);
+      //printf("%p %p - %s\n", VCF.FORMAT->id, VCF.SAMPLES[0]->id, VCF.SAMPLES[0]->value);
     }
   }
-
-  free(farray);
-  free(samparray);
-  free(array);
   
   return 0; }

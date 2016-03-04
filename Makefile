@@ -6,6 +6,7 @@ BASE = $(HOME)/.local/
 ##
 
 bin = bin/
+inc = include/
 src = src/
 
 BINS = $(addprefix $(bin),$(bins))
@@ -13,7 +14,7 @@ BINS = $(addprefix $(bin),$(bins))
 .PHONY:	all
 all:	$(BINS)
 
-$(bin)%:	$(src)%.c
+$(bin)%:	$(src)%.c 
 	mkdir -p $(bin)
 	gcc -I include/ -I $(BASE)include/librawk/ -L $(BASE)lib/ -o $@ $^ -lrawk -lm
 
