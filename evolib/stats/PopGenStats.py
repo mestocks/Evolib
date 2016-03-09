@@ -83,15 +83,16 @@ def WakeleyHey(io, pop_nsam):
     n1, n2 = pop_nsam[0], pop_nsam[1]
     
     s1, s2, ss, sf = 0, 0, 0, 0
-    for index in range(nsites):
+    for index in xrange(nsites):
         site = io[index]
         site1 = site[: n1]
         site2 = site[n1: n1 + n2]
         
-        zero1 = '0' in site1
-        zero2 = '0' in site2
-        one1 = '1' in site1
-        one2 = '1' in site2
+        zero1 = sum(site1) < len(site1)
+        zero2 = sum(site2) < len(site2)
+
+        one1 = sum(site1) > 0
+        one2 = sum(site2) > 0
         
         both1 = zero1 and one1
         both2 = zero2 and one2
@@ -99,18 +100,18 @@ def WakeleyHey(io, pop_nsam):
         assert zero1 or zero2
         assert one1 or one2
         
-        if both1 is True and both2 is False:
+        if both1 and not both2:
             s1 += 1
-        elif both1 is False and both2 is True:
+        elif not both1 and both2:
             s2 += 1
         elif both1 and both2:
             ss += 1
-        elif both1 is False and both2 is False:
+        elif not both1 and not both2:
             assert zero1 is not zero2
             assert one1 is not one2
             sf += 1
         else:
-            raise TypeError, 'Unknown category ' + site1 + ' ' + site2
+            raise TypeError, 'Unknown category'
         
     return s1, s2, ss, sf
         
