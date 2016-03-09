@@ -114,6 +114,17 @@ class DnaPopulationData(IOstats):
         
         return DNAsequence(seq, seqid)
 
+    def subset(self, ids):
+        allids = self.ids()
+        allseqs = self.sequences()
+        seqs = []
+        for i in xrange(self.nsamples()):
+            if allids[i] in ids:
+                seqs.append(allseqs[i])
+
+        return type(self)(seqs, ids)
+
+        
     ######
 
     def coding(self, refseq):
