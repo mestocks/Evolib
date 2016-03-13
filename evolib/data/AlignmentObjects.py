@@ -50,7 +50,18 @@ class DnaPopulationData(IOstats):
         self.IOdata = self._get_IOdata(self.DNAdata)
 
     ######
+
+    def __getitem__(self, item):
         
+        if isinstance(item, str):
+            seq = DNAequence(self.DNAdata[item], item)
+        elif isinstance(item, int):
+            seq = DNAequence(self.DNAdata[item], self.DNAdata.ids[item])
+        else:
+            raise TypeError, "String or integer required"
+        
+        return seq
+    
     def __len__(self):
         return len(self.DNAdata)
         
@@ -114,6 +125,14 @@ class DnaPopulationData(IOstats):
         
         return DNAsequence(seq, seqid)
 
+    def sort(self):
+        new_ids = sorted(self.ids())
+        new_seqs = []
+        for i in new_ids:
+            new_seqs.append(self[i].sequence)
+        self._attach_data(new_seqs, new_ids)
+            
+    
     def subset(self, ids):
         allids = self.ids()
         allseqs = self.sequences()
