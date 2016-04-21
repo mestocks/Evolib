@@ -1,3 +1,5 @@
+import random
+
 from evolib.tools.GeneralMethods import create_ids
 
 from evolib.stats.StatObjects import IOstats
@@ -125,6 +127,16 @@ class DnaPopulationData(IOstats):
         
         return DNAsequence(seq, seqid)
 
+    def sample(self, n, replace = False):
+        rids = random.sample(self.ids(), n)
+        rseqs = []
+        seqs = self.sequences()
+        for rid in rids:
+            i = self.index(rid)
+            rseqs.append(seqs[i])
+
+        return type(self)(rseqs, rids)
+    
     def sort(self):
         new_ids = sorted(self.ids())
         new_seqs = []
